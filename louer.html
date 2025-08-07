@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Louer - Annonces de biens à louer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+             font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: #D4AF37;
+            color: white;
+        }
+        
+        .gold-border {
+            border-color: #D4AF37;
+        }
+        
+        .property-image {
+            transition: all 0.5s ease;
+        }
+        
+        .card-hover:hover .property-image {
+            transform: scale(1.05);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .search-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+     <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2" style="font-family: 'Times New Roman', Times, serif;">K</div>
+                <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+                <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+                <a href="louer.html" class="text-blue-800 font-medium hover:text-blue-500 transition">Louer</a>
+                <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+                <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+            </nav>
+
+             <a href="connexion.html">
+            <div class="flex items-center space-x-4">
+                <button class="hidden md:block text-gray-600 hover:text-blue-500 transition">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+               
+                <button  class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+
+                    <i class="fas fa-user mr-2"></i>Connexion
+                </button>
+                
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Trouvez votre logement idéal</h1>
+            <p class="text-xl max-w-2xl mx-auto mb-8">Des milliers de biens à louer : maisons, appartements, studios et terrains</p>
+        </div>
+    </section>
+
+    <!-- Filtres de recherche -->
+    <section class="py-8 bg-white sticky top-0 z-10 search-shadow">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap gap-3 w-full md:w-auto">
+                    <div class="relative">
+                        <input type="text" placeholder="Ville, quartier, code postal..." class="border border-gray-300 rounded-lg py-3 px-4 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <i class="fas fa-search absolute right-3 top-4 text-gray-400"></i>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <div class="relative">
+                            <select class="border border-gray-300 rounded-lg py-3 px-4 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Budget min</option>
+                                <option>500 €</option>
+                                <option>800 €</option>
+                                <option>1200 €</option>
+                                <option>1500 €</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-4 text-gray-400"></i>
+                        </div>
+                        
+                        <div class="relative">
+                            <select class="border border-gray-300 rounded-lg py-3 px-4 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Budget max</option>
+                                <option>800 €</option>
+                                <option>1200 €</option>
+                                <option>1500 €</option>
+                                <option>2000 €</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-3 top-4 text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <select class="border border-gray-300 rounded-lg py-3 px-4 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>Type de bien</option>
+                            <option>Maison</option>
+                            <option>Appartement</option>
+                            <option>Studio</option>
+                            <option>Terrain</option>
+                            <option>Courte durée</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3 top-4 text-gray-400"></i>
+                    </div>
+                    
+                    <div class="relative">
+                        <select class="border border-gray-300 rounded-lg py-3 px-4 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>Chambres</option>
+                            <option>1 chambre</option>
+                            <option>2 chambres</option>
+                            <option>3 chambres</option>
+                            <option>4+ chambres</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3 top-4 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition duration-300 filter-btn">
+                    <i class="fas fa-filter mr-2"></i>Filtrer
+                </button>
+            </div>
+            
+            <div class="flex flex-wrap gap-3 mt-4">
+                <div class="flex items-center">
+                    <input type="checkbox" id="meuble" class="mr-2 h-5 w-5 text-blue-500 rounded">
+                    <label for="meuble" class="text-gray-700">Meublé</label>
+                </div>
+                
+                <div class="flex items-center">
+                    <input type="checkbox" id="animaux" class="mr-2 h-5 w-5 text-blue-500 rounded">
+                    <label for="animaux" class="text-gray-700">Animaux acceptés</label>
+                </div>
+                
+                <div class="flex items-center">
+                    <input type="checkbox" id="courte-duree" class="mr-2 h-5 w-5 text-blue-500 rounded">
+                    <label for="courte-duree" class="text-gray-700">Courte durée</label>
+                </div>
+                
+                <div class="flex items-center">
+                    <input type="checkbox" id="longue-duree" class="mr-2 h-5 w-5 text-blue-500 rounded">
+                    <label for="longue-duree" class="text-gray-700">Longue durée</label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section principale -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold text-blue-900">Offres de location</h2>
+            <div class="text-gray-600">
+                <span>168 annonces trouvées</span>
+            </div>
+        </div>
+        
+        <!-- Message d'information -->
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-blue-700">
+                        Créez un compte ou connectez-vous pour consulter les détails de cette location et contacter le propriétaire.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Grille des annonces -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Annonce 1 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover transition duration-300 fade-in">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Appartement moderne" class="w-full h-64 object-cover property-image">
+                    <div class="badge bg-blue-500 text-white">Appartement</div>
+                    <button class="absolute top-3 left-3 text-white bg-black bg-opacity-30 rounded-full p-2 hover:bg-opacity-50">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Appartement moderne</h3>
+                            <p class="text-gray-600 flex items-center mt-1">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Paris, 8ème arrondissement
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-blue-500">1 200 €</p>
+                            <p class="text-gray-600">/ mois</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bed mr-2"></i> 2 chambres
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> 65 m²
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bath mr-2"></i> 1 salle de bain
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button id="ButD" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition duration-300">
+                            Voir les détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Annonce 2 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover transition duration-300 fade-in">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Maison avec jardin" class="w-full h-64 object-cover property-image">
+                    <div class="badge bg-blue-500 text-white">Maison</div>
+                    <button class="absolute top-3 left-3 text-white bg-black bg-opacity-30 rounded-full p-2 hover:bg-opacity-50">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Maison avec jardin</h3>
+                            <p class="text-gray-600 flex items-center mt-1">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Lyon, 69006
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-blue-500">1 800 €</p>
+                            <p class="text-gray-600">/ mois</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bed mr-2"></i> 3 chambres
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> 120 m²
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-tree mr-2"></i> Jardin
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button id="ButD2" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition duration-300">
+                            Voir les détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Annonce 3 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover transition duration-300 fade-in">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1575517111839-3a3843ee7f5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Studio meublé" class="w-full h-64 object-cover property-image">
+                    <div class="badge bg-blue-500 text-white">Studio</div>
+                    <button class="absolute top-3 left-3 text-white bg-black bg-opacity-30 rounded-full p-2 hover:bg-opacity-50">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Studio meublé</h3>
+                            <p class="text-gray-600 flex items-center mt-1">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Bordeaux, Centre ville
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-blue-500">750 €</p>
+                            <p class="text-gray-600">/ mois</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bed mr-2"></i> 1 chambre
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> 30 m²
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-utensils mr-2"></i> Cuisine équipée
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button id="ButD3" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition duration-300">
+                            Voir les détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Annonce 4 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover transition duration-300 fade-in">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Terrain constructible" class="w-full h-64 object-cover property-image">
+                    <div class="badge bg-blue-500 text-white">Terrain</div>
+                    <button class="absolute top-3 left-3 text-white bg-black bg-opacity-30 rounded-full p-2 hover:bg-opacity-50">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Terrain constructible</h3>
+                            <p class="text-gray-600 flex items-center mt-1">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Marseille, 13010
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-blue-500">250 000 €</p>
+                            <p class="text-gray-600">Prix total</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> 800 m²
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-home mr-2"></i> Constructible
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-water mr-2"></i> Accès eau
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button id="ButD4" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition duration-300">
+                            Voir les détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Annonce 5 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover transition duration-300 fade-in">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Villa de prestige" class="w-full h-64 object-cover property-image">
+                    <div class="badge bg-blue-500 text-white">Maison</div>
+                    <button class="absolute top-3 left-3 text-white bg-black bg-opacity-30 rounded-full p-2 hover:bg-opacity-50">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Villa de prestige</h3>
+                            <p class="text-gray-600 flex items-center mt-1">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Cannes, Croisette
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-blue-500">5 500 €</p>
+                            <p class="text-gray-600">/ mois</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bed mr-2"></i> 5 chambres
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> 300 m²
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-swimming-pool mr-2"></i> Piscine
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button id="ButD5" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition duration-300">
+                            Voir les détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Annonce 6 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover transition duration-300 fade-in">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Appartement vue mer" class="w-full h-64 object-cover property-image">
+                    <div class="badge bg-blue-500 text-white">Court séjour</div>
+                    <button class="absolute top-3 left-3 text-white bg-black bg-opacity-30 rounded-full p-2 hover:bg-opacity-50">
+                        <i class="far fa-heart"></i>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900">Appartement vue mer</h3>
+                            <p class="text-gray-600 flex items-center mt-1">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-500"></i>Nice, Promenade des Anglais
+                            </p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-blue-500">150 €</p>
+                            <p class="text-gray-600">/ nuit</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-bed mr-2"></i> 1 chambre
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> 45 m²
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-water mr-2"></i> Vue mer
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button id="ButD6" class="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 rounded-lg font-medium transition duration-300">
+                            Voir les détails
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12">
+            <nav class="flex items-center space-x-2">
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition duration-300">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-blue-500 text-white">1</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition duration-300">2</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition duration-300">3</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition duration-300">...</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition duration-300">10</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition duration-300">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xl">L</div>
+                        <h2 class="ml-3 text-2xl font-bold">KA<span class="text-blue-500">MA</span></h2>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Votre partenaire de confiance pour trouver le logement idéal à louer partout en France.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Navigation</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Accueil</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Louer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Acheter</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Vendre</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Recherche avancée</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Alertes personnalisées</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Visites virtuelles</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Évaluation de bien</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-blue-500">Conseils locatifs</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-500"></i>
+                            <span>123 Avenue des Champs-Élysées, 75008 Paris</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-blue-500"></i>
+                            <span>01 23 45 67 89</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-blue-500"></i>
+                            <span>contact@localux.fr</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500">
+                <p>&copy; 2025 KAMA. Tous droits réservés.</p>
+            </div>
+        </div>
+
+
+            <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="text-center mb-8">
+                <div class="mx-auto bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-lock text-blue-600 text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Accès restreint</h2>
+                <p class="text-gray-600 mt-2">Connectez-vous ou créez un compte pour consulter les détails de cette offre et contacter le vendeur.</p>
+            </div>
+            
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="email">
+                        Adresse email
+                    </label>
+                    <input id="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: black;" placeholder="votre@email.com">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="password">
+                        Mot de passe
+                    </label>
+                    <input id="password" type="password"  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" style="color: black;"   placeholder="••••••••">
+                </div>
+                
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <input id="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="mdp.html" class="font-medium text-blue-600 hover:text-blue-500">
+                            Mot de passe oublié?
+                        </a>
+                    </div>
+                </div>
+                <a href="connexion.html">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition duration-300">
+                    Se connecter
+                </button>
+                </a>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Vous n'avez pas de compte? 
+                    <a href="créeruncompte.html" class="font-medium text-blue-600 hover:text-blue-500">
+                        Créez-en un
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    </footer>
+
+    <script>
+        // Animation des cartes au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Gestion des filtres
+            const filterBtn = document.querySelector('.filter-btn');
+            filterBtn.addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Recherche en cours...';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-filter mr-2"></i>Filtrer';
+                }, 1500);
+            });
+            
+            // Gestion des favoris
+            const heartIcons = document.querySelectorAll('.fa-heart');
+            heartIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    this.classList.toggle('far');
+                    this.classList.toggle('fas');
+                    this.classList.toggle('text-red-500');
+                });
+            });
+        });
+
+
+ 
+        // Toggle mobile filters
+        const ButD = document.getElementById("ButD");
+        const ButD2 = document.getElementById("ButD2");
+        const ButD3 = document.getElementById("ButD3");
+        const ButD4 = document.getElementById("ButD4");
+        const ButD5 = document.getElementById("ButD5");
+        const ButD6 = document.getElementById("ButD6");
+        
+        
+       
+        
+        // Show login modal
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+        
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('login-modal').classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('login-modal');
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+        
+        
+        
+    ButD.addEventListener('click', showLoginModal);
+    ButD2.addEventListener('click', showLoginModal);
+    ButD3.addEventListener('click', showLoginModal);
+    ButD4.addEventListener('click', showLoginModal);
+    ButD5.addEventListener('click', showLoginModal);
+    ButD6.addEventListener('click', showLoginModal);
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            // Implementation for mobile menu if needed
+        });
+    
+
+    </script>
+</body>
+</html>

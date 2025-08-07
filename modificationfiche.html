@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modifier Annonce Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      .gold-border {
+        border: 1px solid #376ed4;
+      }
+
+      .gold-text {
+        color: #3776d4;
+      }
+
+      .gold-bg {
+        background-color: #377bd4;
+      }
+
+      .gold-hover:hover {
+        background-color: #2a74c9;
+      }
+
+      .dark-card {
+        background-color: #f7f7f7;
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5);
+      }
+
+      .photo-placeholder {
+        background: linear-gradient(45deg, #ebebeb, #e2e2e2);
+        border: 2px dashed #dfdfdf;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #eeeeee;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: rgb(0, 0, 0);
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #376ed4;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      .photo-container {
+        transition: all 0.3s ease;
+      }
+
+      .photo-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(55, 162, 212, 0.2);
+      }
+
+      .section-title {
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #378dd4;
+      }
+
+      .drop-area {
+        border: 2px dashed #c0c0c0;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .drop-area.active {
+        border-color: #3776d4;
+        background-color: rgba(55, 162, 212, 0.1);
+      }
+
+      .animate-pulse-slow {
+        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+      <!-- Header -->
+      <header class="mb-10 text-center">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2"
+              style="font-family: 'Times New Roman', Times, serif">
+              K
+            </div>
+            <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+          </div>
+
+          <nav class="hidden md:flex space-x-8">
+            <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+            <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+            <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+            <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+            <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+          </nav>
+
+          <div class="flex items-center space-x-4">
+            <div class="hidden md:block">
+              <p class="text-secondary font-medium">Bonjour, <span class="text-primary">Jean Dupont</span></p>
+            </div>
+            <a href="tableaudebord.html">
+              <div class="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80"
+                  alt="Profile"
+                  class="w-10 h-10 rounded-full object-cover border-2 border-primary" />
+                <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"></span>
+              </div>
+            </a>
+
+            <div class="hidden md:flex space-x-2">
+              <button class="text-sm text-gray-600 hover:text-primary"><i class="fas fa-user-edit mr-1"></i>Modifier le profil</button>
+              <button class="text-sm text-gray-600 hover:text-red-500"><i class="fas fa-sign-out-alt mr-1"></i>Déconnexion</button>
+            </div>
+
+            <button class="md:hidden text-gray-600">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold gold-text mb-2">Modifier Votre Annonce Immobilière</h1>
+        <p class="text-gray-400">Mettez à jour les détails de votre bien pour maximiser sa visibilité</p>
+      </header>
+
+      <!-- Main Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Photos Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier les photos du bien</h2>
+
+            <div class="mb-6">
+              <div class="flex flex-wrap gap-4 mb-4">
+                <!-- Existing Photos -->
+                <div class="photo-container relative group">
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Propriété"
+                    class="w-32 h-32 object-cover rounded-lg" />
+                  <button
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-times text-xs"></i>
+                  </button>
+                </div>
+
+                <div class="photo-container relative group">
+                  <img
+                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Salon"
+                    class="w-32 h-32 object-cover rounded-lg" />
+                  <button
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-times text-xs"></i>
+                  </button>
+                </div>
+
+                <div class="photo-container relative group">
+                  <img
+                    src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Cuisine"
+                    class="w-32 h-32 object-cover rounded-lg" />
+                  <button
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-times text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-400 mb-4">Minimum 1 photo requise – 10 maximum</p>
+              <p class="text-xs text-gray-500">Format conseillé : JPEG / PNG – Taille max : 5Mo</p>
+            </div>
+
+            <!-- Add Photo Area -->
+            <div class="drop-area p-8 text-center cursor-pointer" id="dropArea">
+              <i class="fas fa-cloud-upload-alt text-3xl gold-text mb-3"></i>
+              <p class="mb-2">Glissez-déposez vos photos ici</p>
+              <p class="text-sm text-gray-400 mb-4">ou</p>
+              <button class="gold-bg text-black px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition">
+                <i class="fas fa-plus mr-2"></i> Ajouter une photo
+              </button>
+              <input type="file" id="fileInput" class="hidden" accept="image/*" />
+            </div>
+          </section>
+
+          <!-- Characteristics Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier les caractéristiques du bien</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2">Titre de l'annonce</label>
+                <input
+                  type="text"
+                  value="Villa moderne à Bonapriso"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Lieu / Quartier</label>
+                <input
+                  type="text"
+                  value="Bonapriso"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Type de bien</label>
+                <select class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                  <option>Maison</option>
+                  <option>Appartement</option>
+                  <option>Terrain</option>
+                  <option>Villa</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Superficie (m²)</label>
+                <input
+                  type="number"
+                  value="250"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de chambres</label>
+                <input
+                  type="number"
+                  value="4"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de salons</label>
+                <input
+                  type="number"
+                  value="2"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de douches</label>
+                <input
+                  type="number"
+                  value="3"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de cuisines</label>
+                <input
+                  type="number"
+                  value="1"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <!-- Toggle Features -->
+              <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
+                  <span>Terrasse</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
+                  <span>Piscine</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
+                  <span>Parking</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-2">État du bien</label>
+                <select class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                  <option>Neuf</option>
+                  <option>Bon état</option>
+                  <option>À rénover</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Description Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier la description</h2>
+
+            <div class="mb-4">
+              <p class="text-sm text-gray-400 mb-3">Soyez clair, précis et honnête. Une bonne description augmente vos chances !</p>
+              <textarea
+                class="w-full h-40 bg-dark-700 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                placeholder="Décrivez votre bien en détail...">
+Magnifique villa moderne située dans le quartier résidentiel de Bonapriso. Cette propriété offre un espace de vie spacieux avec 4 chambres, 2 salons, 3 salles de bains et une cuisine entièrement équipée. La villa dispose également d'une terrasse spacieuse, d'un jardin bien entretenu et d'un parking privé. Proche des commodités et des écoles, cette villa est idéale pour une famille recherchant un cadre de vie confortable et sécurisé.</textarea
+              >
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-bold mr-1"></i> Gras</button>
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-italic mr-1"></i> Italic</button>
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-list-ul mr-1"></i> Liste</button>
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-link mr-1"></i> Lien</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-8">
+          <!-- Price Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier le prix</h2>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">Prix</label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">FCFA</span>
+                <input
+                  type="number"
+                  value="45000000"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 pl-12 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-3">Type de prix</label>
+              <div class="space-y-3">
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" checked />
+                  <span class="ml-2">Vente</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                  <span class="ml-2">Location mensuelle</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                  <span class="ml-2">Prix à discuter</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                  <span class="ml-2">Gratuit</span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- Status Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">État de l'annonce</h2>
+
+            <div class="space-y-4">
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" checked />
+                <span class="ml-2">Annonce active</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                <span class="ml-2">Annonce en cours de négociation</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                <span class="ml-2">Annonce temporairement indisponible</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                <span class="ml-2">Annonce déjà vendue / louée</span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Boost Section -->
+          <section class="dark-card rounded-xl p-6 gold-border border-2 border-gold-500">
+            <div class="text-center">
+              <div class="w-16 h-16 rounded-full bg-gold-500 bg-opacity-20 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-fire text-2xl gold-text"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">Booster cette annonce</h3>
+              <p class="text-gray-300 mb-4">Pour qu'elle apparaisse en tête des résultats</p>
+
+              <ul class="text-left space-y-2 mb-6">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-gold-500 mt-1 mr-2"></i>
+                  <span>Plus de visibilité</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-gold-500 mt-1 mr-2"></i>
+                  <span>Apparaît en premier pendant 7 jours</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-gold-500 mt-1 mr-2"></i>
+                  <span>Badge "À ne pas rater" ajouté</span>
+                </li>
+              </ul>
+
+              <button
+                onclick="window.location.href='sponso.html'"
+                class="w-full gold-bg text-black py-3 rounded-lg font-bold hover:bg-opacity-90 transition flex items-center justify-center">
+                <i class="fas fa-rocket mr-2"></i> Booster l'annonce
+              </button>
+            </div>
+          </section>
+
+          <!-- Save Button -->
+          <div class="sticky bottom-6">
+            <button id="saveButton" class="w-full gold-bg text-black py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition animate-pulse-slow">
+              <i class="fas fa-save mr-2"></i> Enregistrer les modifications
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+      <div class="dark-card rounded-xl p-8 max-w-md w-full mx-4 text-center">
+        <div class="w-20 h-20 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-check text-4xl text-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">Annonce mise à jour !</h3>
+        <p class="text-gray-300 mb-6">Vos modifications ont été enregistrées avec succès.</p>
+        <button id="closeModal" class="gold-bg text-black px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition">Continuer</button>
+      </div>
+    </div>
+
+    <script>
+      // Drag and drop functionality
+      const dropArea = document.getElementById("dropArea");
+      const fileInput = document.getElementById("fileInput");
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        dropArea.classList.add("active");
+      }
+
+      function unhighlight() {
+        dropArea.classList.remove("active");
+      }
+
+      dropArea.addEventListener("drop", handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      }
+
+      dropArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", () => {
+        handleFiles(fileInput.files);
+      });
+
+      function handleFiles(files) {
+        [...files].forEach(uploadFile);
+      }
+
+      function uploadFile(file) {
+        if (!file.type.match("image.*")) {
+          alert("Veuillez sélectionner uniquement des images.");
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert("La taille de l'image ne doit pas dépasser 5Mo.");
+          return;
+        }
+
+        // In a real app, you would upload the file to a server here
+        // For demo purposes, we'll just show a success message
+        console.log("Fichier prêt à être uploadé:", file.name);
+      }
+
+      // Save button functionality
+      const saveButton = document.getElementById("saveButton");
+      const successModal = document.getElementById("successModal");
+      const closeModal = document.getElementById("closeModal");
+
+      saveButton.addEventListener("click", function () {
+        // Simulate saving process
+        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enregistrement...';
+        this.disabled = true;
+
+        setTimeout(() => {
+          successModal.classList.remove("hidden");
+          this.innerHTML = '<i class="fas fa-save mr-2"></i> Enregistrer les modifications';
+          this.disabled = false;
+        }, 1500);
+      });
+
+      closeModal.addEventListener("click", function () {
+        successModal.classList.add("hidden");
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener("click", function (event) {
+        if (event.target === successModal) {
+          successModal.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acheter - Marketplace Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+             font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .filter-sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .filter-sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        
+        .filter-sidebar.visible {
+            transform: translateX(0);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .blue-gradient {
+            background: linear-gradient(90deg, #D4AF37 0%, #B8860B 100%);
+        }
+        
+        .property-image {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: #D4AF37;
+            color: white;
+        }
+        
+      
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .property-card {
+            transition: all 0.3s ease;
+        }
+        
+        .property-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2" style="font-family: 'Times New Roman', Times, serif;">K</div>
+                <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+                <a href="acheter.html" class="text-blue-800 font-medium hover:text-blue-500 transition">Acheter</a>
+                <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+                <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+                <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+            </nav>
+
+             <a href="connexion.html">
+            <div class="flex items-center space-x-4">
+                <button class="hidden md:block text-gray-600 hover:text-blue-500 transition">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+               
+                <button  class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+
+                    <i class="fas fa-user mr-2"></i>Connexion
+                </button>
+                
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Trouvez votre bien immobilier idéal</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Découvrez notre sélection de maisons et terrains à vendre dans toute la France</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Filtres de recherche</h2>
+                <button id="toggle-filters" class="md:hidden bg-gray-100 hover:bg-gray-200 p-2 rounded-lg">
+                    <i class="fas fa-sliders-h"></i> Filtres
+                </button>
+            </div>
+            
+            <div id="mobile-filters" class="mobile-filters md:block">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Lieu / Ville / Code postal</label>
+                        <input type="text" placeholder="Paris, Lyon, 75000..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Budget (€)</label>
+                        <div class="flex space-x-2">
+                            <input type="number" placeholder="Min" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" placeholder="Max" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type de bien</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Tous les types</option>
+                            <option value="maison">Maison</option>
+                            <option value="terrain">Terrain</option>
+                            <option value="appartement">Appartement</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pièces / Surface</label>
+                        <div class="flex space-x-2">
+                            <input type="number" placeholder="Pièces" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="number" placeholder="m²" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Disponibilité</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Toutes</option>
+                            <option value="immediate">Immédiate</option>
+                            <option value="future">Futur</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center mt-6">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300 flex items-center">
+                        <i class="fas fa-search mr-2"></i> Filtrer les résultats
+                    </button>
+                </div>
+            </div>
+        </div>
+             
+            <!-- Properties Grid -->
+            <div class="flex-1">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Annonces à la vente</h2>
+                    <div class="text-gray-600">42 résultats</div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Property Card 1 -->
+                    <div class="property-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="showLoginModal()">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Maison" class="w-full property-image">
+                            <div class="badge bg-blue-600 text-white">Maison à vendre</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Maison individuelle</h3>
+                                    <p class="text-gray-600 text-sm flex items-center mt-1">
+                                        <i class="fas fa-map-marker-alt text-blue-600 mr-1"></i> Paris 16ème, France
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-lg text-blue-600">750 000 €</div>
+                                    <div class="text-gray-500 text-sm">1 200 €/m²</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between mt-4 text-gray-700">
+                                <div class="flex items-center">
+                                    <i class="fas fa-bed text-blue-600 mr-1"></i> 4 chambres
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-bath text-blue-600 mr-1"></i> 2 salles de bain
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-blue-600 mr-1"></i> 180 m²
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Property Card 2 -->
+                    <div class="property-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="showLoginModal()">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Terrain" class="w-full property-image">
+                            <div class="badge bg-blue-600 text-white">Terrain à vendre</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Terrain constructible</h3>
+                                    <p class="text-gray-600 text-sm flex items-center mt-1">
+                                        <i class="fas fa-map-marker-alt text-blue-600 mr-1"></i> Lyon 5ème, France
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-lg text-blue-600">320 000 €</div>
+                                    <div class="text-gray-500 text-sm">2 133 €/m²</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between mt-4 text-gray-700">
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-blue-600 mr-1"></i> 150 m²
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-tree text-blue-600 mr-1"></i> Quartier calme
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Property Card 3 -->
+                    <div class="property-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="showLoginModal()">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Maison" class="w-full property-image">
+                            <div class="badge bg-blue-600 text-white">Maison à vendre</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Villa avec piscine</h3>
+                                    <p class="text-gray-600 text-sm flex items-center mt-1">
+                                        <i class="fas fa-map-marker-alt text-blue-600 mr-1"></i> Cannes, France
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-lg text-blue-600">1 250 000 €</div>
+                                    <div class="text-gray-500 text-sm">2 500 €/m²</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between mt-4 text-gray-700">
+                                <div class="flex items-center">
+                                    <i class="fas fa-bed text-blue-600 mr-1"></i> 5 chambres
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-swimming-pool text-blue-600 mr-1"></i> Piscine
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-blue-600 mr-1"></i> 500 m²
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Property Card 4 -->
+                    <div class="property-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="showLoginModal()">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1575517111839-3a3843ee7f5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Maison" class="w-full property-image">
+                            <div class="badge bg-blue-600 text-white">Maison à vendre</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Maison de ville</h3>
+                                    <p class="text-gray-600 text-sm flex items-center mt-1">
+                                        <i class="fas fa-map-marker-alt text-blue-600 mr-1"></i> Bordeaux, France
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-lg text-blue-600">650 000 €</div>
+                                    <div class="text-gray-500 text-sm">1 300 €/m²</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between mt-4 text-gray-700">
+                                <div class="flex items-center">
+                                    <i class="fas fa-bed text-blue-600 mr-1"></i> 3 chambres
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-car text-blue-600 mr-1"></i> Garage
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-blue-600 mr-1"></i> 150 m²
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Property Card 5 -->
+                    <div class="property-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="showLoginModal()">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Terrain" class="w-full property-image">
+                            <div class="badge bg-blue-600 text-white">Terrain à vendre</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Terrain agricole</h3>
+                                    <p class="text-gray-600 text-sm flex items-center mt-1">
+                                        <i class="fas fa-map-marker-alt text-blue-600 mr-1"></i> Dijon, France
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-lg text-blue-600">180 000 €</div>
+                                    <div class="text-gray-500 text-sm">1 800 €/m²</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between mt-4 text-gray-700">
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-blue-600 mr-1"></i> 100 m²
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-tractor text-blue-600 mr-1"></i> Agricole
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Property Card 6 -->
+                    <div class="property-card bg-white rounded-xl shadow-md overflow-hidden cursor-pointer" onclick="showLoginModal()">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Maison" class="w-full property-image">
+                            <div class="badge bg-blue-600 text-white">Maison à vendre</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Maison contemporaine</h3>
+                                    <p class="text-gray-600 text-sm flex items-center mt-1">
+                                        <i class="fas fa-map-marker-alt text-blue-600 mr-1"></i> Nice, France
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-lg text-blue-600">950 000 €</div>
+                                    <div class="text-gray-500 text-sm">1 900 €/m²</div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between mt-4 text-gray-700">
+                                <div class="flex items-center">
+                                    <i class="fas fa-bed text-blue-600 mr-1"></i> 4 chambres
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-sun text-blue-600 mr-1"></i> Vue mer
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-ruler-combined text-blue-600 mr-1"></i> 200 m²
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="flex justify-center mt-10">
+                    <nav class="inline-flex rounded-md shadow">
+                        <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            Précédent
+                        </a>
+                        <a href="#" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-blue-600 hover:bg-gray-50">
+                            1
+                        </a>
+                        <a href="#" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            2
+                        </a>
+                        <a href="#" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            3
+                        </a>
+                        <a href="#" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            Suivant
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="text-center mb-8">
+                <div class="mx-auto bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-lock text-blue-600 text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Accès restreint</h2>
+                <p class="text-gray-600 mt-2">Connectez-vous ou créez un compte pour consulter les détails de cette offre et contacter le vendeur.</p>
+            </div>
+            
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="email">
+                        Adresse email
+                    </label>
+                    <input id="email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="votre@email.com">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-2" for="password">
+                        Mot de passe
+                    </label>
+                    <input id="password" type="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="••••••••">
+                </div>
+                
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <input id="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="mdp.html" class="font-medium text-blue-600 hover:text-blue-500">
+                            Mot de passe oublié?
+                        </a>
+                    </div>
+                </div>
+                <a href="connexion.html">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition duration-300">
+                    Se connecter
+                </button>
+                </a>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Vous n'avez pas de compte? 
+                    <a href="créeruncompte.html" class="font-medium text-blue-600 hover:text-blue-500">
+                        Créez-en un
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">KA<span class="text-blue-500">MA</span></h3>
+                    <p class="text-gray-400">Votre partenaire de confiance pour l'achat et la vente de biens immobiliers en France.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="kama.html" class="text-gray-400 hover:text-white">Accueil</a></li>
+                        <li><a href="acheter.html" class="text-gray-400 hover:text-white">Acheter</a></li>
+                        <li><a href="louer.html" class="text-gray-400 hover:text-white">Louer</a></li>
+                        <li><a href="vendre.html" class="text-gray-400 hover:text-white">Vendre</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Estimation gratuite</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Visites virtuelles</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Financement</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Assurance</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Conseils juridiques</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-500"></i>
+                            <span>123 Avenue des Champs-Élysées, 75008 Paris</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-blue-500"></i>
+                            <span>01 23 45 67 89</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-blue-500"></i>
+                            <span>contact@immopremium.fr</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 ImmoPremium. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile filters
+        document.getElementById('toggle-filters').addEventListener('click', function() {
+            const filters = document.getElementById('mobile-filters');
+            filters.classList.toggle('expanded');
+        });
+        
+        // Show login modal
+        function showLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+        
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('login-modal').classList.add('hidden');
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('login-modal');
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            // Implementation for mobile menu if needed
+        });
+    </script>
+</body>
+</html>

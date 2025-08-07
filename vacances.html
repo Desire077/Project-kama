@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacances - Locations Saisonnières</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+       <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+             font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(10, 37, 64, 0.7), rgba(10, 37, 64, 0.7)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: #0ea5e9;
+            color: white;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3788d4;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .availability-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .dot-available {
+            background-color: #10b981;
+        }
+        
+        .dot-unavailable {
+            background-color: #ef4444;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .calendar-day {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .calendar-day:hover {
+            background-color: #e0f2fe;
+        }
+        
+        .calendar-day.selected {
+            background-color: #0ea5e9;
+            color: white;
+        }
+        
+        .calendar-day.unavailable {
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2" style="font-family: 'Times New Roman', Times, serif;">K</div>
+                <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+                <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+                <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+                <a href="vacances.html" class="text-blue-800 font-medium hover:text-blue-500 transition">Vacances</a>
+                <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+            </nav>
+
+             <a href="connexion.html">
+            <div class="flex items-center space-x-4">
+                <button class="hidden md:block text-gray-600 hover:text-blue-500 transition">
+                    <i class="fas fa-bell text-xl"></i>
+                </button>
+               
+                <button  class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+
+                    <i class="fas fa-user mr-2"></i>Connexion
+                </button>
+                
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Trouvez votre séjour parfait</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Des locations saisonnières pour des vacances inoubliables, des week-ends romantiques ou des déplacements professionnels</p>
+            <div class="bg-white rounded-xl p-6 max-w-4xl mx-auto shadow-xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                    <div class="lg:col-span-2">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Destination</label>
+                        <div class="relative">
+                            <input type="text" placeholder="Où allez-vous ?" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Arrivée</label>
+                        <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Départ</label>
+                        <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Voyageurs</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent">
+                            <option>1 voyageur</option>
+                            <option>2 voyageurs</option>
+                            <option>3 voyageurs</option>
+                            <option>4 voyageurs</option>
+                            <option>5+ voyageurs</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button class="w-full bg-accent hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition">
+                            Rechercher
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-2 justify-center">
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Appartement</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Maison</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Bungalow</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Chalet</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Villa</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Animaux acceptés</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Piscine</button>
+                    <button class="filter-btn bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">Vue mer</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-primary">Séjours à la Une</h2>
+                <div class="flex space-x-2">
+                    <button class="bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1615529162924-f8605388463a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Villa avec piscine" class="w-full h-60 object-cover">
+                        <div class="badge">Vue mer</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary">Villa Méditerranée</h3>
+                                <p class="text-gray-600"><i class="fas fa-map-marker-alt text-accent mr-2"></i>Côte d'Azur, France</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-primary">180€<span class="text-sm font-normal">/nuit</span></p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-bed mr-2"></i> 4 chambres
+                                <i class="fas fa-user-friends ml-4 mr-2"></i> 8 voyageurs
+                            </div>
+                            <div>
+                                <span class="availability-dot dot-available"></span>
+                                <span class="text-sm">Disponible</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <div class="flex space-x-2">
+                                <i class="fas fa-swimming-pool text-gray-500" title="Piscine"></i>
+                                <i class="fas fa-wifi text-gray-500" title="Wi-Fi"></i>
+                                <i class="fas fa-utensils text-gray-500" title="Cuisine"></i>
+                                <i class="fas fa-parking text-gray-500" title="Parking"></i>
+                            </div>
+                            <button class="view-details bg-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition" data-id="1">
+                                Voir détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Chalet montagne" class="w-full h-60 object-cover">
+                        <div class="badge">Week-end détente</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary">Chalet Alpin</h3>
+                                <p class="text-gray-600"><i class="fas fa-map-marker-alt text-accent mr-2"></i>Alpes, France</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-primary">120€<span class="text-sm font-normal">/nuit</span></p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-bed mr-2"></i> 3 chambres
+                                <i class="fas fa-user-friends ml-4 mr-2"></i> 6 voyageurs
+                            </div>
+                            <div>
+                                <span class="availability-dot dot-available"></span>
+                                <span class="text-sm">Disponible</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <div class="flex space-x-2">
+                                <i class="fas fa-fire text-gray-500" title="Cheminée"></i>
+                                <i class="fas fa-wifi text-gray-500" title="Wi-Fi"></i>
+                                <i class="fas fa-utensils text-gray-500" title="Cuisine"></i>
+                                <i class="fas fa-snowflake text-gray-500" title="Climatisation"></i>
+                            </div>
+                            <button class="view-details bg-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition" data-id="2">
+                                Voir détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1615529162924-f8605388463a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Appartement vue mer" class="w-full h-60 object-cover">
+                        <div class="badge">Location vacances</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary">Appartement Vue Mer</h3>
+                                <p class="text-gray-600"><i class="fas fa-map-marker-alt text-accent mr-2"></i>Bretagne, France</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-primary">90€<span class="text-sm font-normal">/nuit</span></p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-bed mr-2"></i> 2 chambres
+                                <i class="fas fa-user-friends ml-4 mr-2"></i> 4 voyageurs
+                            </div>
+                            <div>
+                                <span class="availability-dot dot-unavailable"></span>
+                                <span class="text-sm">Non disponible</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <div class="flex space-x-2">
+                                <i class="fas fa-water text-gray-500" title="Proximité mer"></i>
+                                <i class="fas fa-wifi text-gray-500" title="Wi-Fi"></i>
+                                <i class="fas fa-utensils text-gray-500" title="Cuisine"></i>
+                                <i class="fas fa-bicycle text-gray-500" title="Vélos disponibles"></i>
+                            </div>
+                            <button class="view-details bg-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition" data-id="3">
+                                Voir détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotions Section -->
+    <section class="py-16 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-10 text-center">Offres Spéciales</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                    <h3 class="text-xl font-bold mb-3">Dernière Minute</h3>
+                    <p class="mb-4">Jusqu'à -30% sur les locations de dernière minute</p>
+                    <button class="bg-white text-primary font-bold py-2 px-4 rounded-lg hover:bg-blue-500 transition">Découvrir</button>
+                </div>
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                    <h3 class="text-xl font-bold mb-3">Week-end Romantique</h3>
+                    <p class="mb-4">Séjour de 2 nuits avec champagne et petit-déjeuner</p>
+                    <button class="bg-white text-primary font-bold py-2 px-4 rounded-lg hover:bg-blue-500 transition">Réserver</button>
+                </div>
+                <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm">
+                    <h3 class="text-xl font-bold mb-3">Familles Nombreuses</h3>
+                    <p class="mb-4">-20% pour les séjours de plus de 7 nuits</p>
+                    <button class="bg-white text-primary font-bold py-2 px-4 rounded-lg hover:bg-blue-500 transition">Voir offres</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-primary mb-12">Comment ça marche ?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-search text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">1. Recherchez</h3>
+                    <p class="text-gray-600">Trouvez le logement parfait pour votre séjour grâce à nos filtres avancés</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-calendar-check text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">2. Réservez</h3>
+                    <p class="text-gray-600">Consultez les disponibilités et réservez en quelques clics</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-suitcase text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary mb-3">3. Partez</h3>
+                    <p class="text-gray-600">Profitez de votre séjour dans un logement unique et confortable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">KAMA</h3>
+                    <p class="text-gray-300">Trouvez votre location de vacances idéale pour des séjours inoubliables.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white">Accueil</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Locations</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Légal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white">Conditions générales</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Politique de confidentialité</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Mentions légales</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> Paris, France</li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-2"></i> +33 1 23 45 67 89</li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2"></i> contact@immo-vacances.fr</li>
+                    </ul>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 ImmoVacances. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de connexion -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal float-right text-gray-500 cursor-pointer text-2xl">&times;</span>
+            <h2 class="text-2xl font-bold text-primary mb-4">Accès restreint</h2>
+            <p class="mb-6 text-gray-700">Connectez-vous ou créez un compte pour consulter les disponibilités, les détails de ce logement et contacter l'hôte.</p>
+            <div class="flex flex-col space-y-4">
+                <a href="connexion.html">
+                <button class="bg-accent hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition">Se connecter</button>
+                </a>
+                <a href="créeruncompte.html">
+                <button class="border border-accent text-accent hover:bg-accent hover:text-white font-bold py-3 px-4 rounded-lg transition">Créer un compte</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion des modals
+        const modal = document.getElementById('loginModal');
+        const closeModal = document.querySelector('.close-modal');
+        const viewDetailsButtons = document.querySelectorAll('.view-details');
+        
+        viewDetailsButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modal.style.display = 'flex';
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Animation des cartes au scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card-hover');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

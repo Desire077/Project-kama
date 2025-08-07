@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents en cours de vérification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        light: '#f0f9ff',
+                        dark: '#0c4a6e'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-light min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Header avec animation -->
+        <div class="bg-gradient-to-r from-primary to-secondary p-6 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="relative">
+                    <i class="fas fa-clock text-4xl text-white animate-pulse-slow"></i>
+                    <i class="fas fa-circle-notch absolute top-0 left-0 text-4xl text-blue-300 animate-spin-slow opacity-70"></i>
+                </div>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">Documents en cours de vérification</h1>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="p-6 md:p-8">
+            <div class="flex items-start mb-6">
+                <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-lg text-gray-700">
+                        Merci pour votre soumission. Nos équipes procèdent actuellement à la vérification des documents justificatifs fournis.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start mb-8 bg-blue-50 p-4 rounded-lg border-l-4 border-primary">
+                <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-search text-primary text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-700">
+                        <span class="font-semibold">Ce processus peut prendre jusqu'à 24 heures maximum.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Texte secondaire -->
+            <div class="space-y-4 mb-8">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-shield-alt text-blue-500"></i>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        Soyez assuré que vos documents seront traités avec la plus grande confidentialité.
+                    </p>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-lock text-green-500"></i>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        <span class="font-semibold">Aucune information personnelle</span> ni justificatif ne sera partagé publiquement, ni transmis à des tiers.
+                    </p>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-bell text-yellow-500"></i>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        Une fois la vérification terminée, vous recevrez une notification pour finaliser la publication de votre annonce.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button onclick="window.location.href='tableaudebord.html'" class="flex-1 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-user mr-2"></i>
+                    Accéder à mon compte
+                </button>
+                <button onclick="window.location.href='vendre.html'" class="flex-1 border-2 border-primary text-primary hover:bg-blue-50 font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-plus-circle mr-2"></i>
+                    Créer une nouvelle annonce
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 text-center border-t">
+            <p class="text-gray-500 text-sm">
+                Besoin d'aide ? <a href="/support" class="text-primary hover:underline">Contactez notre support</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animation de chargement continue
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingElements = document.querySelectorAll('.animate-pulse-slow, .animate-spin-slow');
+            loadingElements.forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+        });
+    </script>
+</body>
+</html>

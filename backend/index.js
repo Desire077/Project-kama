@@ -1,16 +1,17 @@
-// 1) Importer express
+// index.js
+require("dotenv").config();
 const express = require("express");
+const connectDB = require("./config/db");
+
 const app = express();
+connectDB();
 
-// 2) Définir le port
+app.use(express.json());
+
+app.use("/api/auth", require("./routes/authRoutes"));
+
+
+app.get("/", (req, res) => res.send("API is running"));
+
 const PORT = process.env.PORT || 5000;
-
-// 3) Route test
-app.get("/", (req, res) => {
-  res.send("Bienvenue sur le backend de Project-Kama 🚀");
-});
-
-// 4) Lancer le serveur
-app.listen(PORT, () => {
-  console.log(`Serveur lancé sur http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

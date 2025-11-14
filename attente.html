@@ -1,0 +1,413 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>En attente de validation - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .status-card {
+            transition: all 0.3s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="floating mb-6">
+                <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                    <i class="fas fa-clock text-blue-600 text-3xl"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Votre annonce est en cours de validation</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Notre équipe examine votre annonce et vérifie les documents fournis. 
+                Vous recevrez une notification par email dès que votre annonce sera validée.
+            </p>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Statut de votre annonce</h2>
+            
+            <div class="space-y-6">
+                <!-- Step 1: Submitted -->
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800">Annonce soumise</h3>
+                        <p class="text-gray-600 text-sm">Votre annonce a été créée avec succès</p>
+                    </div>
+                    <span class="text-green-600 text-sm font-medium">Terminé</span>
+                </div>
+
+                <!-- Step 2: Under Review -->
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4 pulse-animation">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800">En cours de vérification</h3>
+                        <p class="text-gray-600 text-sm">Notre équipe examine vos documents</p>
+                    </div>
+                    <span class="text-blue-600 text-sm font-medium">En cours</span>
+                </div>
+
+                <!-- Step 3: Validation -->
+                <div class="flex items-center opacity-50">
+                    <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 font-bold mr-4">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-gray-800">Validation</h3>
+                        <p class="text-gray-600 text-sm">Votre annonce sera mise en ligne</p>
+                    </div>
+                    <span class="text-gray-500 text-sm font-medium">En attente</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-8">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Progression</span>
+                    <span>66%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="progress-bar h-3 rounded-full" style="width: 66%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Timeline Card -->
+            <div class="status-card bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-clock text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Délai de traitement</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Le délai moyen de validation est de 24 à 48 heures. 
+                    Nous vous tiendrons informé de l'avancement par email.
+                </p>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-blue-800 text-sm">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Délai estimé : <strong>1-2 jours ouvrés</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="status-card bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-headset text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">Besoin d'aide ?</h3>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Notre équipe support est disponible pour vous accompagner 
+                    dans le processus de validation.
+                </p>
+                <div class="space-y-2">
+                    <a href="mailto:support@kama.fr" class="flex items-center text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-envelope mr-2"></i>
+                        support@kama.fr
+                    </a>
+                    <a href="tel:+33123456789" class="flex items-center text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-phone mr-2"></i>
+                        01 23 45 67 89
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h3 class="text-lg font-bold text-gray-800 mb-6">Que pouvez-vous faire maintenant ?</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Edit Property -->
+                <div class="text-center p-6 border border-gray-200 rounded-xl hover:border-blue-300 transition">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-edit text-blue-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Modifier l'annonce</h4>
+                    <p class="text-gray-600 text-sm mb-4">Apportez des modifications à votre annonce</p>
+                    <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                        Modifier
+                    </button>
+                </div>
+
+                <!-- View Property -->
+                <div class="text-center p-6 border border-gray-200 rounded-xl hover:border-green-300 transition">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-eye text-green-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Prévisualiser</h4>
+                    <p class="text-gray-600 text-sm mb-4">Voir à quoi ressemblera votre annonce</p>
+                    <button class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">
+                        Prévisualiser
+                    </button>
+                </div>
+
+                <!-- Dashboard -->
+                <div class="text-center p-6 border border-gray-200 rounded-xl hover:border-purple-300 transition">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tachometer-alt text-purple-600 text-xl"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-800 mb-2">Tableau de bord</h4>
+                    <p class="text-gray-600 text-sm mb-4">Accéder à votre espace personnel</p>
+                    <a href="tableaudebord.html" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition inline-block">
+                        Tableau de bord
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2025 KAMA. Tous droits réservés. | 
+                <a href="#" class="text-blue-600 hover:underline">Conditions générales</a> | 
+                <a href="#" class="text-blue-600 hover:underline">Politique de confidentialité</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh status (simulation)
+        function updateStatus() {
+            // In a real application, this would make an API call to check the status
+            console.log('Checking status...');
+        }
+
+        // Check status every 30 seconds
+        setInterval(updateStatus, 30000);
+
+        // Add some interactivity to the cards
+        document.querySelectorAll('.status-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Simulate progress update (for demo purposes)
+        setTimeout(() => {
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                progressBar.style.width = '75%';
+                // Update the percentage text
+                const percentageText = document.querySelector('.flex.justify-between.text-sm.text-gray-600.mb-2 span:last-child');
+                if (percentageText) {
+                    percentageText.textContent = '75%';
+                }
+            }
+        }, 10000);
+    </script>
+</body>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents en cours de vérification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        light: '#f0f9ff',
+                        dark: '#0c4a6e'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-light min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Header avec animation -->
+        <div class="bg-gradient-to-r from-primary to-secondary p-6 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="relative">
+                    <i class="fas fa-clock text-4xl text-white animate-pulse-slow"></i>
+                    <i class="fas fa-circle-notch absolute top-0 left-0 text-4xl text-blue-300 animate-spin-slow opacity-70"></i>
+                </div>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white">Documents en cours de vérification</h1>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="p-6 md:p-8">
+            <div class="flex items-start mb-6">
+                <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-lg text-gray-700">
+                        Merci pour votre soumission. Nos équipes procèdent actuellement à la vérification des documents justificatifs fournis.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start mb-8 bg-blue-50 p-4 rounded-lg border-l-4 border-primary">
+                <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-search text-primary text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-gray-700">
+                        <span class="font-semibold">Ce processus peut prendre jusqu'à 24 heures maximum.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Texte secondaire -->
+            <div class="space-y-4 mb-8">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-shield-alt text-blue-500"></i>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        Soyez assuré que vos documents seront traités avec la plus grande confidentialité.
+                    </p>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-lock text-green-500"></i>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        <span class="font-semibold">Aucune information personnelle</span> ni justificatif ne sera partagé publiquement, ni transmis à des tiers.
+                    </p>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mt-1">
+                        <i class="fas fa-bell text-yellow-500"></i>
+                    </div>
+                    <p class="ml-3 text-gray-600">
+                        Une fois la vérification terminée, vous recevrez une notification pour finaliser la publication de votre annonce.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button onclick="window.location.href='tableaudebord.html'" class="flex-1 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-user mr-2"></i>
+                    Accéder à mon compte
+                </button>
+                <button onclick="window.location.href='vendre.html'" class="flex-1 border-2 border-primary text-primary hover:bg-blue-50 font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-plus-circle mr-2"></i>
+                    Créer une nouvelle annonce
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 text-center border-t">
+            <p class="text-gray-500 text-sm">
+                Besoin d'aide ? <a href="/support" class="text-primary hover:underline">Contactez notre support</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animation de chargement continue
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingElements = document.querySelectorAll('.animate-pulse-slow, .animate-spin-slow');
+            loadingElements.forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+        });
+    </script>
+</body>
+>>>>>>> main/main
+</html>

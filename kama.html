@@ -1,0 +1,1071 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kama - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      .hero-bg {
+        background: linear-gradient(rgba(30, 64, 175, 0.8), rgba(30, 64, 175, 0.9)),
+          url("https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
+        background-size: cover;
+        background-position: center;
+      }
+
+      .property-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .search-container {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .map-container {
+        height: 500px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+
+      .btn-primary {
+        background: linear-gradient(to right, #1e40af, #3b82f6);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(to right, #1d4ed8, #2563eb);
+        transform: translateY(-2px);
+      }
+
+      .testimonial-card {
+        transition: all 0.3s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: scale(1.02);
+      }
+
+      .property-image {
+        height: 250px;
+        object-fit: cover;
+      }
+
+      .badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+
+      .stats-card {
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2"
+            style="font-family: 'Times New Roman', Times, serif">
+            K
+          </div>
+          <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-8">
+          <a href="kama.html" class="text-blue-800 font-medium hover:text-blue-500 transition">Accueil</a>
+          <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+          <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+          <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+          <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+        </nav>
+
+        <a href="connexion.html">
+          <div class="flex items-center space-x-4">
+            <button class="hidden md:block text-gray-600 hover:text-blue-500 transition">
+              <i class="fas fa-bell text-xl"></i>
+            </button>
+
+            <button class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"><i class="fas fa-user mr-2"></i>Connexion</button>
+
+            <button class="md:hidden text-gray-600">
+              <i class="fas fa-bars text-2xl"></i>
+            </button>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-20">
+      <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Trouvez votre logement idéal en un clin d'œil</h1>
+        <p class="text-xl mb-10 max-w-2xl mx-auto">La plateforme immobilière qui met en relation acheteurs, locataires et propriétaires</p>
+
+        <div class="max-w-4xl mx-auto bg-white rounded-xl p-6 search-container">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="md:col-span-3">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Localisation</label>
+              <div class="relative">
+                <input
+                  type="text"
+                  placeholder="Ville, quartier..."
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style="color: black" />
+                <i class="fas fa-search absolute right-3 top-3.5 text-gray-400"></i>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2">Type</label>
+              <select class="w-full text-gray-700 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option>-Type-</option>
+                <option>Acheter</option>
+                <option>Louer</option>
+                <option>Vacances</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2">Budget</label>
+              <input type="text" placeholder="Minimum" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-center">
+            <button class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg"><i class="fas fa-search mr-2"></i>Rechercher</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="stats-card bg-blue-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-blue-800">15,000+</div>
+            <div class="text-gray-600 mt-2">Biens disponibles</div>
+          </div>
+
+          <div class="stats-card bg-green-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-green-800">8,500+</div>
+            <div class="text-gray-600 mt-2">Transactions réussies</div>
+          </div>
+
+          <div class="stats-card bg-purple-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-purple-800">12,000+</div>
+            <div class="text-gray-600 mt-2">Utilisateurs actifs</div>
+          </div>
+
+          <div class="stats-card bg-yellow-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-yellow-800">98%</div>
+            <div class="text-gray-600 mt-2">Satisfaction clients</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Properties -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Biens à la une</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Découvrez nos dernières offres sélectionnées pour vous</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Property Card 1 -->
+          <div class="property-card bg-white rounded-xl overflow-hidden shadow-md">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Maison"
+                class="w-full property-image" />
+              <div class="badge bg-blue-500 text-white">À vendre</div>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-gray-800">Maison familiale avec jardin</h3>
+                <div class="text-xl font-bold text-blue-600">350 000€</div>
+              </div>
+              <p class="text-gray-600 mt-2 flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Paris, 75016</p>
+
+              <a href="connexion.html">
+                <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Voir les détails</button>
+              </a>
+            </div>
+          </div>
+
+          <!-- Property Card 2 -->
+          <div class="property-card bg-white rounded-xl overflow-hidden shadow-md">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Appartement"
+                class="w-full property-image" />
+              <div class="badge bg-green-500 text-white">À louer</div>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-gray-800">Appartement moderne centre-ville</h3>
+                <div class="text-xl font-bold text-blue-600">1 200€/mois</div>
+              </div>
+              <p class="text-gray-600 mt-2 flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Lyon, 69002</p>
+
+              <a href="connexion.html">
+                <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Voir les détails</button>
+              </a>
+            </div>
+          </div>
+
+          <!-- Property Card 3 -->
+          <div class="property-card bg-white rounded-xl overflow-hidden shadow-md">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Villa"
+                class="w-full property-image" />
+              <div class="badge bg-purple-500 text-white">Séjour court</div>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-gray-800">Villa avec piscine et vue mer</h3>
+                <div class="text-xl font-bold text-blue-600">250€/nuit</div>
+              </div>
+              <p class="text-gray-600 mt-2 flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Cannes, 06400</p>
+
+              <a href="connexion.html">
+                <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Voir les détails</button>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-12">
+          <button class="btn-primary text-white font-bold py-3 px-8 rounded-lg">Voir toutes les offres</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Trouvez votre bien sur la carte</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Explorez les biens disponibles dans votre région</p>
+        </div>
+
+        <div class="map-container bg-gray-200 relative">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center">
+              <i class="fas fa-map-marked-alt text-5xl text-blue-500 mb-4"></i>
+              <p class="text-gray-600">Carte interactive Google Maps</p>
+              <p class="text-gray-500 text-sm mt-2">Intégration Google Maps API</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-blue-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Pourquoi choisir KAMA ?</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Une plateforme complète pour tous vos besoins immobiliers</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Feature 1 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fas fa-search text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Recherche avancée</h3>
+            <p class="text-gray-600">Filtrez par localisation, budget, type de bien et bien plus pour trouver exactement ce que vous cherchez.</p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fas fa-user-shield text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Sécurité garantie</h3>
+            <p class="text-gray-600">Validation des documents de propriété et vérification des identités pour des transactions sécurisées.</p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fas fa-bell text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Alertes personnalisées</h3>
+            <p class="text-gray-600">Recevez des notifications en temps réel dès qu'une offre correspond à vos critères de recherche.</p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fab fa-whatsapp text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Contact direct</h3>
+            <p class="text-gray-600">Communication sécurisée avec les propriétaires via WhatsApp après validation de votre compte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Ils nous font confiance</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Découvrez les témoignages de nos utilisateurs satisfaits</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card bg-blue-50 p-8 rounded-xl">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 font-bold mr-4">MC</div>
+              <div>
+                <h4 class="font-bold text-gray-800">Marie Curie</h4>
+                <p class="text-gray-600 text-sm">Acheteuse</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "Grâce à KAMA, j'ai trouvé mon appartement de rêve en moins de 2 semaines. La recherche avancée m'a permis de filtrer exactement selon mes critères."
+            </p>
+            <div class="flex mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card bg-green-50 p-8 rounded-xl">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center text-green-800 font-bold mr-4">JP</div>
+              <div>
+                <h4 class="font-bold text-gray-800">Jean Pierre</h4>
+                <p class="text-gray-600 text-sm">Propriétaire</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "En tant que vendeur, j'apprécie la validation des documents et la sécurité des transactions. Mes biens se vendent beaucoup plus rapidement grâce à la
+              plateforme."
+            </p>
+            <div class="flex mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card bg-purple-50 p-8 rounded-xl">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 rounded-full bg-purple-200 flex items-center justify-center text-purple-800 font-bold mr-4">SL</div>
+              <div>
+                <h4 class="font-bold text-gray-800">Sophie Lambert</h4>
+                <p class="text-gray-600 text-sm">Locataire</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "Les alertes personnalisées m'ont permis de trouver un appartement parfait pour mes études. La communication directe avec le propriétaire via WhatsApp a été
+              très pratique."
+            </p>
+            <div class="flex mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-700 to-blue-500 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Prêt à trouver votre logement idéal ?</h2>
+        <p class="text-xl mb-10 max-w-2xl mx-auto">Rejoignez des milliers d'utilisateurs qui ont déjà trouvé leur bien avec ImmoConnect</p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+          <a href="créeruncompte.html">
+            <button class="bg-white text-blue-700 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition">
+              <i class="fas fa-user-plus mr-2"></i>Créer un compte
+            </button>
+          </a>
+          <a href="vendre.html">
+            <button class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-blue-700 transition">
+              <i class="fas fa-home mr-2"></i>Déposer une annonce
+            </button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div>
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2">K</div>
+              <h2 class="text-2xl font-bold">Kama</h2>
+            </div>
+            <p class="text-gray-400 mb-6">La plateforme immobilière qui met en relation acheteurs, locataires et propriétaires de manière sécurisée et intuitive.</p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-6">Liens rapides</h3>
+            <ul class="space-y-3">
+              <li><a href="kama.html" class="text-gray-400 hover:text-white transition">Accueil</a></li>
+              <li><a href="acheter.html" class="text-gray-400 hover:text-white transition">Acheter</a></li>
+              <li><a href="louer.html " class="text-gray-400 hover:text-white transition">Louer</a></li>
+              <li><a href="vacances.html" class="text-gray-400 hover:text-white transition">Vacances</a></li>
+              <li><a href="connexion.html" class="text-gray-400 hover:text-white transition">Vendre</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-6">Services</h3>
+            <ul class="space-y-3">
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Estimation gratuite</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Visites virtuelles</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Conseil immobilier</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Financement</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Assurance habitation</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-6">Contact</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3"></i>
+                <span class="text-gray-400">123 Avenue des Champs-Élysées, 75008 Paris</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone text-blue-400 mr-3"></i>
+                <span class="text-gray-400">+33 1 23 45 67 89</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-envelope text-blue-400 mr-3"></i>
+                <span class="text-gray-400">contact@immoconnect.fr</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
+          <p>&copy; 2025 Kama. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition z-50">
+      <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+  </body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kama - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      .hero-bg {
+        background: linear-gradient(rgba(30, 64, 175, 0.8), rgba(30, 64, 175, 0.9)),
+          url("https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80");
+        background-size: cover;
+        background-position: center;
+      }
+
+      .property-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .search-container {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .map-container {
+        height: 500px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
+
+      .feature-icon {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: #dbeafe;
+        color: #1e40af;
+      }
+
+      .btn-primary {
+        background: linear-gradient(to right, #1e40af, #3b82f6);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(to right, #1d4ed8, #2563eb);
+        transform: translateY(-2px);
+      }
+
+      .testimonial-card {
+        transition: all 0.3s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: scale(1.02);
+      }
+
+      .property-image {
+        height: 250px;
+        object-fit: cover;
+      }
+
+      .badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+
+      .stats-card {
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2"
+            style="font-family: 'Times New Roman', Times, serif">
+            K
+          </div>
+          <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-8">
+          <a href="kama.html" class="text-blue-800 font-medium hover:text-blue-500 transition">Accueil</a>
+          <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+          <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+          <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+          <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+        </nav>
+
+        <a href="connexion.html">
+          <div class="flex items-center space-x-4">
+            <button class="hidden md:block text-gray-600 hover:text-blue-500 transition">
+              <i class="fas fa-bell text-xl"></i>
+            </button>
+
+            <button class="hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"><i class="fas fa-user mr-2"></i>Connexion</button>
+
+            <button class="md:hidden text-gray-600">
+              <i class="fas fa-bars text-2xl"></i>
+            </button>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-20">
+      <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Trouvez votre logement idéal en un clin d'œil</h1>
+        <p class="text-xl mb-10 max-w-2xl mx-auto">La plateforme immobilière qui met en relation acheteurs, locataires et propriétaires</p>
+
+        <div class="max-w-4xl mx-auto bg-white rounded-xl p-6 search-container">
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="md:col-span-3">
+              <label class="block text-gray-700 text-sm font-bold mb-2">Localisation</label>
+              <div class="relative">
+                <input
+                  type="text"
+                  placeholder="Ville, quartier..."
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  style="color: black" />
+                <i class="fas fa-search absolute right-3 top-3.5 text-gray-400"></i>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2">Type</label>
+              <select class="w-full text-gray-700 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option>-Type-</option>
+                <option>Acheter</option>
+                <option>Louer</option>
+                <option>Vacances</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-gray-700 text-sm font-bold mb-2">Budget</label>
+              <input type="text" placeholder="Minimum" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-center">
+            <button class="btn-primary text-white font-bold py-3 px-8 rounded-lg text-lg"><i class="fas fa-search mr-2"></i>Rechercher</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="stats-card bg-blue-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-blue-800">15,000+</div>
+            <div class="text-gray-600 mt-2">Biens disponibles</div>
+          </div>
+
+          <div class="stats-card bg-green-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-green-800">8,500+</div>
+            <div class="text-gray-600 mt-2">Transactions réussies</div>
+          </div>
+
+          <div class="stats-card bg-purple-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-purple-800">12,000+</div>
+            <div class="text-gray-600 mt-2">Utilisateurs actifs</div>
+          </div>
+
+          <div class="stats-card bg-yellow-50 p-6 rounded-xl text-center">
+            <div class="text-3xl font-bold text-yellow-800">98%</div>
+            <div class="text-gray-600 mt-2">Satisfaction clients</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Properties -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Biens à la une</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Découvrez nos dernières offres sélectionnées pour vous</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Property Card 1 -->
+          <div class="property-card bg-white rounded-xl overflow-hidden shadow-md">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Maison"
+                class="w-full property-image" />
+              <div class="badge bg-blue-500 text-white">À vendre</div>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-gray-800">Maison familiale avec jardin</h3>
+                <div class="text-xl font-bold text-blue-600">350 000€</div>
+              </div>
+              <p class="text-gray-600 mt-2 flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Paris, 75016</p>
+
+              <a href="connexion.html">
+                <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Voir les détails</button>
+              </a>
+            </div>
+          </div>
+
+          <!-- Property Card 2 -->
+          <div class="property-card bg-white rounded-xl overflow-hidden shadow-md">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Appartement"
+                class="w-full property-image" />
+              <div class="badge bg-green-500 text-white">À louer</div>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-gray-800">Appartement moderne centre-ville</h3>
+                <div class="text-xl font-bold text-blue-600">1 200€/mois</div>
+              </div>
+              <p class="text-gray-600 mt-2 flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Lyon, 69002</p>
+
+              <a href="connexion.html">
+                <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Voir les détails</button>
+              </a>
+            </div>
+          </div>
+
+          <!-- Property Card 3 -->
+          <div class="property-card bg-white rounded-xl overflow-hidden shadow-md">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Villa"
+                class="w-full property-image" />
+              <div class="badge bg-purple-500 text-white">Séjour court</div>
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-gray-800">Villa avec piscine et vue mer</h3>
+                <div class="text-xl font-bold text-blue-600">250€/nuit</div>
+              </div>
+              <p class="text-gray-600 mt-2 flex items-center"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Cannes, 06400</p>
+
+              <a href="connexion.html">
+                <button class="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Voir les détails</button>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-12">
+          <button class="btn-primary text-white font-bold py-3 px-8 rounded-lg">Voir toutes les offres</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Trouvez votre bien sur la carte</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Explorez les biens disponibles dans votre région</p>
+        </div>
+
+        <div class="map-container bg-gray-200 relative">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center">
+              <i class="fas fa-map-marked-alt text-5xl text-blue-500 mb-4"></i>
+              <p class="text-gray-600">Carte interactive Google Maps</p>
+              <p class="text-gray-500 text-sm mt-2">Intégration Google Maps API</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-blue-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Pourquoi choisir KAMA ?</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Une plateforme complète pour tous vos besoins immobiliers</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Feature 1 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fas fa-search text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Recherche avancée</h3>
+            <p class="text-gray-600">Filtrez par localisation, budget, type de bien et bien plus pour trouver exactement ce que vous cherchez.</p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fas fa-user-shield text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Sécurité garantie</h3>
+            <p class="text-gray-600">Validation des documents de propriété et vérification des identités pour des transactions sécurisées.</p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fas fa-bell text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Alertes personnalisées</h3>
+            <p class="text-gray-600">Recevez des notifications en temps réel dès qu'une offre correspond à vos critères de recherche.</p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+            <div class="feature-icon mx-auto mb-6">
+              <i class="fab fa-whatsapp text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Contact direct</h3>
+            <p class="text-gray-600">Communication sécurisée avec les propriétaires via WhatsApp après validation de votre compte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Ils nous font confiance</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">Découvrez les témoignages de nos utilisateurs satisfaits</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card bg-blue-50 p-8 rounded-xl">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center text-blue-800 font-bold mr-4">MC</div>
+              <div>
+                <h4 class="font-bold text-gray-800">Marie Curie</h4>
+                <p class="text-gray-600 text-sm">Acheteuse</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "Grâce à KAMA, j'ai trouvé mon appartement de rêve en moins de 2 semaines. La recherche avancée m'a permis de filtrer exactement selon mes critères."
+            </p>
+            <div class="flex mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card bg-green-50 p-8 rounded-xl">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center text-green-800 font-bold mr-4">JP</div>
+              <div>
+                <h4 class="font-bold text-gray-800">Jean Pierre</h4>
+                <p class="text-gray-600 text-sm">Propriétaire</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "En tant que vendeur, j'apprécie la validation des documents et la sécurité des transactions. Mes biens se vendent beaucoup plus rapidement grâce à la
+              plateforme."
+            </p>
+            <div class="flex mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card bg-purple-50 p-8 rounded-xl">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 rounded-full bg-purple-200 flex items-center justify-center text-purple-800 font-bold mr-4">SL</div>
+              <div>
+                <h4 class="font-bold text-gray-800">Sophie Lambert</h4>
+                <p class="text-gray-600 text-sm">Locataire</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "Les alertes personnalisées m'ont permis de trouver un appartement parfait pour mes études. La communication directe avec le propriétaire via WhatsApp a été
+              très pratique."
+            </p>
+            <div class="flex mt-4 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-700 to-blue-500 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Prêt à trouver votre logement idéal ?</h2>
+        <p class="text-xl mb-10 max-w-2xl mx-auto">Rejoignez des milliers d'utilisateurs qui ont déjà trouvé leur bien avec ImmoConnect</p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+          <a href="créeruncompte.html">
+            <button class="bg-white text-blue-700 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition">
+              <i class="fas fa-user-plus mr-2"></i>Créer un compte
+            </button>
+          </a>
+          <a href="vendre.html">
+            <button class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-blue-700 transition">
+              <i class="fas fa-home mr-2"></i>Déposer une annonce
+            </button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div>
+            <div class="flex items-center mb-6">
+              <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2">K</div>
+              <h2 class="text-2xl font-bold">Kama</h2>
+            </div>
+            <p class="text-gray-400 mb-6">La plateforme immobilière qui met en relation acheteurs, locataires et propriétaires de manière sécurisée et intuitive.</p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-6">Liens rapides</h3>
+            <ul class="space-y-3">
+              <li><a href="kama.html" class="text-gray-400 hover:text-white transition">Accueil</a></li>
+              <li><a href="acheter.html" class="text-gray-400 hover:text-white transition">Acheter</a></li>
+              <li><a href="louer.html " class="text-gray-400 hover:text-white transition">Louer</a></li>
+              <li><a href="vacances.html" class="text-gray-400 hover:text-white transition">Vacances</a></li>
+              <li><a href="connexion.html" class="text-gray-400 hover:text-white transition">Vendre</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-6">Services</h3>
+            <ul class="space-y-3">
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Estimation gratuite</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Visites virtuelles</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Conseil immobilier</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Financement</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition">Assurance habitation</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-6">Contact</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3"></i>
+                <span class="text-gray-400">123 Avenue des Champs-Élysées, 75008 Paris</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone text-blue-400 mr-3"></i>
+                <span class="text-gray-400">+33 1 23 45 67 89</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-envelope text-blue-400 mr-3"></i>
+                <span class="text-gray-400">contact@immoconnect.fr</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
+          <p>&copy; 2025 Kama. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="#" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition z-50">
+      <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+  </body>
+</html>
+
+git remote add origin https://github.com/Desire077/Project-kama.git git add . git commit -m "Premier commit : ajout du frontend" git push -u origin master
+>>>>>>> main/main

@@ -1,0 +1,1114 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déposer une Annonce Immobilière - Étape 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+          tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .form-section {
+            transition: opacity 0.3s ease;
+        }
+        .radio-card {
+            transition: all 0.2s ease;
+        }
+        .radio-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .radio-card.selected {
+            border-color: #0b8cf5;
+            background-color: #FFFBEB;
+        }
+        .btn-next {
+            background: linear-gradient(135deg, #0b70f5 0%, #0650d9 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(13, 220, 235, 0.4);
+        }
+        .form-input:focus {
+            border-color: #0b69f5;
+            box-shadow: 0 0 0 3px rgba(145, 255, 237, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-primary mb-2">Déposer une Annonce Immobilière</h1>
+            <p class="text-gray-600">Suivez les étapes pour publier votre bien immobilier</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="mb-10">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-primary">Étape 1 sur 3</span>
+                <span class="text-sm font-medium text-gray-500">Informations générales</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-secondary w-1/3 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <form id="propertyForm" class="p-6 md:p-8">
+                <!-- Section 1: Type d'annonce -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">1</span>
+                        Type d'annonce
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('sell-house')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-home text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Vendre une maison</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Proposer une maison à la vente</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('sell-land')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-tree text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Vendre un terrain</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Proposer un terrain à la vente</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('rent-habitation')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-key text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Louer une maison (habitation)</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Mettre en location pour résidence principale</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('rent-vacation')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-umbrella-beach text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Louer une maison (vacances)</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Mettre en location saisonnière</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="propertyType" name="propertyType" required>
+                </div>
+
+                <!-- Section 2: Détails du bien -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">2</span>
+                        Détails du bien immobilier
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Type de bien</label>
+                            <select id="propertySubType" name="propertySubType" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                                <option value="">Sélectionnez un type</option>
+                                
+                                <option id="villa" value="villa">Villa</option>
+                                <option id="appart" value="appartement">Appartement</option>
+                                <option id="mi" value="maison-individuelle">Maison individuelle</option>
+                                <option id="tc" value="terrain-constructible">Terrain constructible</option>
+                                <option id="ta" value="terrain-agricole">Terrain agricole</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Superficie (m²)</label>
+                            <div class="relative">
+                                <input type="number" id="area" name="area" min="1" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Ex: 120" required>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
+                                    <i class="fas fa-ruler-combined"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="roomsSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de chambres</label>
+                            <select id="bedrooms" name="bedrooms" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 chambre</option>
+                                <option value="2">2 chambres</option>
+                                <option value="3">3 chambres</option>
+                                <option value="4">4 chambres</option>
+                                <option value="5">5 chambres</option>
+                                <option value="6">6 chambres</option>
+                                <option value="7">7 chambres</option>
+                                <option value="8">8 chambres</option>
+                                <option value="9">9 chambres</option>
+                                <option value="10">10 chambres ou plus</option>
+                                
+                            </select>
+                        </div>
+                        
+                        <div id="bathroomsSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de salles de bain</label>
+                            <select id="bathrooms" name="bathrooms" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 salle de bain</option>
+                                <option value="2">2 salles de bain</option>
+                                <option value="3">3 salles de bain</option>
+                                <option value="4">4 salles de bain</option>
+                                <option value="5">5 salles de bain</option>
+                                <option value="6">6 salles de bain</option>
+                                <option value="7">7 salles de bain</option>
+                                <option value="8">8 salles de bain</option>
+                                <option value="9">9 salles de bain</option>
+                                <option value="10">10 salles de bain ou plus</option>
+                            </select>
+                        </div>
+                        
+                        <div id="toiletsSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de toilettes</label>
+                            <select id="toilets" name="toilets" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 toilette</option>
+                                <option value="2">2 toilettes</option>
+                                <option value="3">3 toilettes</option>
+                                <option value="4">4 toilettes</option>
+                                <option value="5">5 toilettes</option>
+                                <option value="6">6 toilettes</option>
+                                <option value="7">7 toilettes</option>
+                                <option value="8">8 toilettes</option>
+                                <option value="9">9 toilettes</option>
+                                <option value="10">10 toilettes ou plus</option>
+                            </select>
+                        </div>
+
+                         <div id="CuisineSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de Cuisine</label>
+                            <select id="cuisine" name="cuisine" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 Cuisine</option>
+                                <option value="2">2 Cuisines</option>
+                                <option value="3">3 Cuisines</option>
+                                <option value="4">4 Cuisines</option>
+                                <option value="5">5 Cuisines</option>
+                                <option value="6">6 Cuisines</option>
+                                <option value="7">7 Cuisines</option>
+                                <option value="8">8 Cuisines</option>
+                                <option value="9">9 Cuisines</option>
+                                <option value="10">10 Cuisines ou plus</option>
+                            </select>
+                        </div>
+                        
+                        <div id="salonandouche" class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Salon</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="livingRoom" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="livingRoom" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Cour / Jardin</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="garden" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="garden" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                             </div>
+
+                             <div id="salonandouche2" class="grid grid-cols-2 gap-4">
+
+                             <div>
+                                <label class="block text-gray-700 font-medium mb-2">Piscine</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="piscine" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="piscine" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                             <div>
+                                <label class="block text-gray-700 font-medium mb-2">Vue sur mer</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="view" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="view" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            </div>
+
+                            
+
+                             
+                       
+                    </div>
+                    
+                    <div class="mt-6">
+                        <label class="block text-gray-700 font-medium mb-2">Adresse complète</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <input type="text" id="country" name="country" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Pays" required>
+                            </div>
+                            <div>
+                                <input type="text" id="city" name="city" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Ville" required>
+                            </div>
+                            <div>
+                                <input type="text" id="district" name="district" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Quartier">
+                            </div>
+                            <div>
+                                <input type="text" id="street" name="street" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Rue" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <label class="block text-gray-700 font-medium mb-2">Date de disponibilité</label>
+                        <input type="date" id="availabilityDate" name="availabilityDate" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                    </div>
+                </div>
+
+                <!-- Section 3: Statut du déclarant -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">3</span>
+                        Statut du déclarant
+                    </h2>
+                    
+                    <div class="mb-4">
+                        <p class="text-gray-700 font-medium mb-4">Êtes-vous le propriétaire direct ou un intermédiaire ?</p>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="radio-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer flex-1 min-w-[200px]" onclick="selectOwnerType('direct')">
+                                <div class="flex items-center">
+                                    <input type="radio" name="ownerType" value="direct" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                    <span class="ml-2 font-medium">Je suis le propriétaire</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer flex-1 min-w-[200px]" onclick="selectOwnerType('intermediary')">
+                                <div class="flex items-center">
+                                    <input type="radio" name="ownerType" value="intermediary" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                    <span class="ml-2 font-medium">Je suis un intermédiaire</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Informations personnelles -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">4</span>
+                        Informations personnelles
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Nom</label>
+                            <input type="text" id="lastName" name="lastName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Votre nom" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Prénom</label>
+                            <input type="text" id="firstName" name="firstName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Votre prénom" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Date de naissance</label>
+                            <input type="date" id="birthDate" name="birthDate" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Adresse email</label>
+                            <input type="email" id="email" name="email" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="votre@email.com" required>
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">Numéro WhatsApp</label>
+                            <div class="flex">
+                                <select class="form-input w-1/4 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none">
+                                    <option>+221</option>
+                                    <option>+33</option>
+                                    <option>+1</option>
+                                </select>
+                                <input type="tel" id="whatsapp" name="whatsapp" class="form-input w-3/4 px-4 py-3 border border-gray-300 border-l-0 rounded-r-lg focus:outline-none" placeholder="Votre numéro WhatsApp" required>
+                            </div>
+                            <p class="text-gray-500 text-sm mt-2">Votre numéro WhatsApp ne sera visible qu'après validation de l'annonce</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Informations du propriétaire -->
+                <div class="form-section mb-10" id="ownerInfoSection" style="display: none;">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">5</span>
+                        Informations du propriétaire
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Nom du propriétaire</label>
+                            <input type="text" id="ownerLastName" name="ownerLastName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Nom du propriétaire">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Prénom du propriétaire</label>
+                            <input type="text" id="ownerFirstName" name="ownerFirstName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Prénom du propriétaire">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                 
+                <div class="text-center mt-10">
+                    
+                    <button type="submit" class="btn-next text-white font-bold py-4 px-8 rounded-lg text-lg shadow-md">
+                        Suivant : Ajouter les photos et justificatifs
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                  
+                </div>
+               
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Gestion de la sélection du type de propriété
+        function selectPropertyType(type) {
+            // Retirer la sélection précédente
+            document.querySelectorAll('.radio-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Ajouter la sélection à la carte cliquée
+            event.currentTarget.classList.add('selected');
+            
+            // Mettre à jour le champ caché
+            document.getElementById('propertyType').value = type;
+            
+            // Afficher/cacher les champs conditionnels
+            const roomsSection = document.getElementById('roomsSection');
+            const toiletsSection = document.getElementById('toiletsSection');
+            const bathroomsSection = document.getElementById('bathroomsSection');
+            const salonandouche = document.getElementById('salonandouche');
+            const salonandouche2 = document.getElementById('salonandouche2');
+            const villa = document.getElementById('villa');
+            const appart = document.getElementById('appart');
+            const mi = document.getElementById('mi');
+            const tc = document.getElementById('tc');
+            const ta = document.getElementById('ta');
+            const CuisineSection = document.getElementById('CuisineSection');
+            
+            if(type === 'sell-land') {
+                roomsSection.style.display = 'none';
+                toiletsSection.style.display = 'none';
+                bathroomsSection.style.display = 'none';
+                salonandouche.style.display = 'none';
+                villa.style.display = 'none';
+                appart.style.display = 'none';
+                mi.style.display = 'none';
+                CuisineSection.style.display = 'none';
+                salonandouche2.style.display = 'none';
+                tc.style.display = 'block';
+                ta.style.display = 'block';
+            } else {
+                roomsSection.style.display = 'block';
+                toiletsSection.style.display = 'block';
+                bathroomsSection.style.display = 'block';
+                salonandouche.style.display = 'block';
+                salonandouche2.style.display = 'block';
+                villa.style.display = 'block';
+                appart.style.display = 'block';
+                mi.style.display = 'block';
+                CuisineSection.style.display = 'block';
+                tc.style.display = 'none';
+                ta.style.display = 'none';
+            }
+        }
+        
+        // Gestion du type de propriétaire
+        function selectOwnerType(type) {
+            const ownerInfoSection = document.getElementById('ownerInfoSection');
+            if(type === 'intermediary') {
+                ownerInfoSection.style.display = 'block';
+            } else {
+                ownerInfoSection.style.display = 'none';
+            }
+        }
+        
+        // Validation du formulaire
+        document.getElementById('propertyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Vérification des champs obligatoires
+            const requiredFields = [
+                'propertyType', 'propertySubType', 'area', 'country', 'city', 
+                'street', 'availabilityDate', 'lastName', 'firstName', 
+                'birthDate', 'email', 'whatsapp'
+            ];
+            
+            let isValid = true;
+            let missingFields = [];
+            
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field) || document.querySelector(`input[name="${field}"]:checked`);
+                if (!input || !input.value) {
+                    isValid = false;
+                    missingFields.push(field);
+                   
+                }
+            });
+            
+            // Vérification spéciale pour le propriétaire si intermédiaire
+            const ownerType = document.querySelector('input[name="ownerType"]:checked');
+            if (ownerType && ownerType.value === 'intermediary') {
+                const ownerFirstName = document.getElementById('ownerFirstName');
+                const ownerLastName = document.getElementById('ownerLastName');
+                if (!ownerFirstName.value || !ownerLastName.value) {
+                    isValid = false;
+                    missingFields.push('Nom et prénom du propriétaire');
+                }
+            }
+            
+            if (isValid) {
+                // Ici, vous pouvez soumettre le formulaire à une base de données
+                alert('Formulaire valide ! Redirection vers la prochaine étape...');
+                window.location.href = 'vendre2.html';
+            } else {
+                alert(`Veuillez remplir les champs suivants : ${missingFields.join(', ')}`);
+            }
+        });
+        
+        // Initialisation de la date de disponibilité
+        const today = new Date();
+        const minDate = today.toISOString().split('T')[0];
+        document.getElementById('availabilityDate').min = minDate;
+        document.getElementById('availabilityDate').value = minDate;
+        
+        // Initialisation de la date de naissance
+        const maxBirthDate = new Date();
+        maxBirthDate.setFullYear(maxBirthDate.getFullYear() - 18);
+        document.getElementById('birthDate').max = maxBirthDate.toISOString().split('T')[0];
+    </script>
+</body>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déposer une Annonce Immobilière - Étape 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+          tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .form-section {
+            transition: opacity 0.3s ease;
+        }
+        .radio-card {
+            transition: all 0.2s ease;
+        }
+        .radio-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .radio-card.selected {
+            border-color: #0b8cf5;
+            background-color: #FFFBEB;
+        }
+        .btn-next {
+            background: linear-gradient(135deg, #0b70f5 0%, #0650d9 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(13, 220, 235, 0.4);
+        }
+        .form-input:focus {
+            border-color: #0b69f5;
+            box-shadow: 0 0 0 3px rgba(145, 255, 237, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-primary mb-2">Déposer une Annonce Immobilière</h1>
+            <p class="text-gray-600">Suivez les étapes pour publier votre bien immobilier</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="mb-10">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-primary">Étape 1 sur 3</span>
+                <span class="text-sm font-medium text-gray-500">Informations générales</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-secondary w-1/3 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <form id="propertyForm" class="p-6 md:p-8">
+                <!-- Section 1: Type d'annonce -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">1</span>
+                        Type d'annonce
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('sell-house')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-home text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Vendre une maison</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Proposer une maison à la vente</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('sell-land')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-tree text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Vendre un terrain</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Proposer un terrain à la vente</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('rent-habitation')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-key text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Louer une maison (habitation)</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Mettre en location pour résidence principale</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="radio-card border-2 border-gray-200 rounded-lg p-5 cursor-pointer" onclick="selectPropertyType('rent-vacation')">
+                            <div class="flex items-start">
+                                <div class="mr-4 mt-1">
+                                    <i class="fas fa-umbrella-beach text-2xl text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Louer une maison (vacances)</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Mettre en location saisonnière</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="propertyType" name="propertyType" required>
+                </div>
+
+                <!-- Section 2: Détails du bien -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">2</span>
+                        Détails du bien immobilier
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Type de bien</label>
+                            <select id="propertySubType" name="propertySubType" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                                <option value="">Sélectionnez un type</option>
+                                
+                                <option id="villa" value="villa">Villa</option>
+                                <option id="appart" value="appartement">Appartement</option>
+                                <option id="mi" value="maison-individuelle">Maison individuelle</option>
+                                <option id="tc" value="terrain-constructible">Terrain constructible</option>
+                                <option id="ta" value="terrain-agricole">Terrain agricole</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Superficie (m²)</label>
+                            <div class="relative">
+                                <input type="number" id="area" name="area" min="1" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Ex: 120" required>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
+                                    <i class="fas fa-ruler-combined"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="roomsSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de chambres</label>
+                            <select id="bedrooms" name="bedrooms" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 chambre</option>
+                                <option value="2">2 chambres</option>
+                                <option value="3">3 chambres</option>
+                                <option value="4">4 chambres</option>
+                                <option value="5">5 chambres</option>
+                                <option value="6">6 chambres</option>
+                                <option value="7">7 chambres</option>
+                                <option value="8">8 chambres</option>
+                                <option value="9">9 chambres</option>
+                                <option value="10">10 chambres ou plus</option>
+                                
+                            </select>
+                        </div>
+                        
+                        <div id="bathroomsSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de salles de bain</label>
+                            <select id="bathrooms" name="bathrooms" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 salle de bain</option>
+                                <option value="2">2 salles de bain</option>
+                                <option value="3">3 salles de bain</option>
+                                <option value="4">4 salles de bain</option>
+                                <option value="5">5 salles de bain</option>
+                                <option value="6">6 salles de bain</option>
+                                <option value="7">7 salles de bain</option>
+                                <option value="8">8 salles de bain</option>
+                                <option value="9">9 salles de bain</option>
+                                <option value="10">10 salles de bain ou plus</option>
+                            </select>
+                        </div>
+                        
+                        <div id="toiletsSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de toilettes</label>
+                            <select id="toilets" name="toilets" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 toilette</option>
+                                <option value="2">2 toilettes</option>
+                                <option value="3">3 toilettes</option>
+                                <option value="4">4 toilettes</option>
+                                <option value="5">5 toilettes</option>
+                                <option value="6">6 toilettes</option>
+                                <option value="7">7 toilettes</option>
+                                <option value="8">8 toilettes</option>
+                                <option value="9">9 toilettes</option>
+                                <option value="10">10 toilettes ou plus</option>
+                            </select>
+                        </div>
+
+                         <div id="CuisineSection">
+                            <label class="block text-gray-700 font-medium mb-2">Nombre de Cuisine</label>
+                            <select id="cuisine" name="cuisine" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                <option value="">Sélectionnez</option>
+                                <option value="1">1 Cuisine</option>
+                                <option value="2">2 Cuisines</option>
+                                <option value="3">3 Cuisines</option>
+                                <option value="4">4 Cuisines</option>
+                                <option value="5">5 Cuisines</option>
+                                <option value="6">6 Cuisines</option>
+                                <option value="7">7 Cuisines</option>
+                                <option value="8">8 Cuisines</option>
+                                <option value="9">9 Cuisines</option>
+                                <option value="10">10 Cuisines ou plus</option>
+                            </select>
+                        </div>
+                        
+                        <div id="salonandouche" class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Salon</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="livingRoom" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="livingRoom" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Cour / Jardin</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="garden" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="garden" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                             </div>
+
+                             <div id="salonandouche2" class="grid grid-cols-2 gap-4">
+
+                             <div>
+                                <label class="block text-gray-700 font-medium mb-2">Piscine</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="piscine" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="piscine" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                             <div>
+                                <label class="block text-gray-700 font-medium mb-2">Vue sur mer</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="view" value="yes" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Oui</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="view" value="no" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                        <span class="ml-2">Non</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            </div>
+
+                            
+
+                             
+                       
+                    </div>
+                    
+                    <div class="mt-6">
+                        <label class="block text-gray-700 font-medium mb-2">Adresse complète</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <input type="text" id="country" name="country" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Pays" required>
+                            </div>
+                            <div>
+                                <input type="text" id="city" name="city" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Ville" required>
+                            </div>
+                            <div>
+                                <input type="text" id="district" name="district" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Quartier">
+                            </div>
+                            <div>
+                                <input type="text" id="street" name="street" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Rue" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <label class="block text-gray-700 font-medium mb-2">Date de disponibilité</label>
+                        <input type="date" id="availabilityDate" name="availabilityDate" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                    </div>
+                </div>
+
+                <!-- Section 3: Statut du déclarant -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">3</span>
+                        Statut du déclarant
+                    </h2>
+                    
+                    <div class="mb-4">
+                        <p class="text-gray-700 font-medium mb-4">Êtes-vous le propriétaire direct ou un intermédiaire ?</p>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="radio-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer flex-1 min-w-[200px]" onclick="selectOwnerType('direct')">
+                                <div class="flex items-center">
+                                    <input type="radio" name="ownerType" value="direct" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                    <span class="ml-2 font-medium">Je suis le propriétaire</span>
+                                </div>
+                            </label>
+                            
+                            <label class="radio-card border-2 border-gray-200 rounded-lg p-4 cursor-pointer flex-1 min-w-[200px]" onclick="selectOwnerType('intermediary')">
+                                <div class="flex items-center">
+                                    <input type="radio" name="ownerType" value="intermediary" class="h-4 w-4 text-secondary focus:ring-secondary">
+                                    <span class="ml-2 font-medium">Je suis un intermédiaire</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Informations personnelles -->
+                <div class="form-section mb-10">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">4</span>
+                        Informations personnelles
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Nom</label>
+                            <input type="text" id="lastName" name="lastName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Votre nom" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Prénom</label>
+                            <input type="text" id="firstName" name="firstName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Votre prénom" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Date de naissance</label>
+                            <input type="date" id="birthDate" name="birthDate" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Adresse email</label>
+                            <input type="email" id="email" name="email" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="votre@email.com" required>
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">Numéro WhatsApp</label>
+                            <div class="flex">
+                                <select class="form-input w-1/4 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none">
+                                    <option>+221</option>
+                                    <option>+33</option>
+                                    <option>+1</option>
+                                </select>
+                                <input type="tel" id="whatsapp" name="whatsapp" class="form-input w-3/4 px-4 py-3 border border-gray-300 border-l-0 rounded-r-lg focus:outline-none" placeholder="Votre numéro WhatsApp" required>
+                            </div>
+                            <p class="text-gray-500 text-sm mt-2">Votre numéro WhatsApp ne sera visible qu'après validation de l'annonce</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Informations du propriétaire -->
+                <div class="form-section mb-10" id="ownerInfoSection" style="display: none;">
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center">
+                        <span class="bg-secondary text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">5</span>
+                        Informations du propriétaire
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Nom du propriétaire</label>
+                            <input type="text" id="ownerLastName" name="ownerLastName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Nom du propriétaire">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Prénom du propriétaire</label>
+                            <input type="text" id="ownerFirstName" name="ownerFirstName" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" placeholder="Prénom du propriétaire">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                 
+                <div class="text-center mt-10">
+                    
+                    <button type="submit" class="btn-next text-white font-bold py-4 px-8 rounded-lg text-lg shadow-md">
+                        Suivant : Ajouter les photos et justificatifs
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                  
+                </div>
+               
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Gestion de la sélection du type de propriété
+        function selectPropertyType(type) {
+            // Retirer la sélection précédente
+            document.querySelectorAll('.radio-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Ajouter la sélection à la carte cliquée
+            event.currentTarget.classList.add('selected');
+            
+            // Mettre à jour le champ caché
+            document.getElementById('propertyType').value = type;
+            
+            // Afficher/cacher les champs conditionnels
+            const roomsSection = document.getElementById('roomsSection');
+            const toiletsSection = document.getElementById('toiletsSection');
+            const bathroomsSection = document.getElementById('bathroomsSection');
+            const salonandouche = document.getElementById('salonandouche');
+            const salonandouche2 = document.getElementById('salonandouche2');
+            const villa = document.getElementById('villa');
+            const appart = document.getElementById('appart');
+            const mi = document.getElementById('mi');
+            const tc = document.getElementById('tc');
+            const ta = document.getElementById('ta');
+            const CuisineSection = document.getElementById('CuisineSection');
+            
+            if(type === 'sell-land') {
+                roomsSection.style.display = 'none';
+                toiletsSection.style.display = 'none';
+                bathroomsSection.style.display = 'none';
+                salonandouche.style.display = 'none';
+                villa.style.display = 'none';
+                appart.style.display = 'none';
+                mi.style.display = 'none';
+                CuisineSection.style.display = 'none';
+                salonandouche2.style.display = 'none';
+                tc.style.display = 'block';
+                ta.style.display = 'block';
+            } else {
+                roomsSection.style.display = 'block';
+                toiletsSection.style.display = 'block';
+                bathroomsSection.style.display = 'block';
+                salonandouche.style.display = 'block';
+                salonandouche2.style.display = 'block';
+                villa.style.display = 'block';
+                appart.style.display = 'block';
+                mi.style.display = 'block';
+                CuisineSection.style.display = 'block';
+                tc.style.display = 'none';
+                ta.style.display = 'none';
+            }
+        }
+        
+        // Gestion du type de propriétaire
+        function selectOwnerType(type) {
+            const ownerInfoSection = document.getElementById('ownerInfoSection');
+            if(type === 'intermediary') {
+                ownerInfoSection.style.display = 'block';
+            } else {
+                ownerInfoSection.style.display = 'none';
+            }
+        }
+        
+        // Validation du formulaire
+        document.getElementById('propertyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Vérification des champs obligatoires
+            const requiredFields = [
+                'propertyType', 'propertySubType', 'area', 'country', 'city', 
+                'street', 'availabilityDate', 'lastName', 'firstName', 
+                'birthDate', 'email', 'whatsapp'
+            ];
+            
+            let isValid = true;
+            let missingFields = [];
+            
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field) || document.querySelector(`input[name="${field}"]:checked`);
+                if (!input || !input.value) {
+                    isValid = false;
+                    missingFields.push(field);
+                   
+                }
+            });
+            
+            // Vérification spéciale pour le propriétaire si intermédiaire
+            const ownerType = document.querySelector('input[name="ownerType"]:checked');
+            if (ownerType && ownerType.value === 'intermediary') {
+                const ownerFirstName = document.getElementById('ownerFirstName');
+                const ownerLastName = document.getElementById('ownerLastName');
+                if (!ownerFirstName.value || !ownerLastName.value) {
+                    isValid = false;
+                    missingFields.push('Nom et prénom du propriétaire');
+                }
+            }
+            
+            if (isValid) {
+                // Ici, vous pouvez soumettre le formulaire à une base de données
+                alert('Formulaire valide ! Redirection vers la prochaine étape...');
+                window.location.href = 'vendre2.html';
+            } else {
+                alert(`Veuillez remplir les champs suivants : ${missingFields.join(', ')}`);
+            }
+        });
+        
+        // Initialisation de la date de disponibilité
+        const today = new Date();
+        const minDate = today.toISOString().split('T')[0];
+        document.getElementById('availabilityDate').min = minDate;
+        document.getElementById('availabilityDate').value = minDate;
+        
+        // Initialisation de la date de naissance
+        const maxBirthDate = new Date();
+        maxBirthDate.setFullYear(maxBirthDate.getFullYear() - 18);
+        document.getElementById('birthDate').max = maxBirthDate.toISOString().split('T')[0];
+    </script>
+</body>
+>>>>>>> main/main
+</html>

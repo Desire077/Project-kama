@@ -1,0 +1,976 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boostez votre annonce - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .boost-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .boost-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .boost-card.selected {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        
+        .premium-badge {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .pricing-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+        
+        .popular-card::before {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-6">
+                <i class="fas fa-rocket text-blue-600 text-3xl"></i>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Boostez votre annonce</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Augmentez la visibilité de votre bien immobilier et touchez plus de clients potentiels 
+                avec nos options de mise en avant.
+            </p>
+        </div>
+
+        <!-- Property Preview -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Votre annonce</h2>
+            <div class="flex items-center space-x-4">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                     alt="Property" class="w-20 h-20 object-cover rounded-lg">
+                <div class="flex-1">
+                    <h3 class="font-bold text-lg text-gray-800">Maison individuelle</h3>
+                    <p class="text-gray-600 text-sm">Lyon, Rhône • 4 chambres • 180 m²</p>
+                    <p class="text-blue-600 font-bold">425 000 €</p>
+                </div>
+                <div class="text-right">
+                    <span class="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
+                        En ligne
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boost Options -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Basic Boost -->
+            <div class="boost-card bg-white rounded-2xl shadow-lg p-6 pricing-card">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-star text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Boost Standard</h3>
+                    <p class="text-gray-600 text-sm">Mise en avant de base</p>
+                </div>
+                
+                <div class="text-center mb-6">
+                    <div class="text-3xl font-bold text-gray-800">9,99 €</div>
+                    <div class="text-gray-600 text-sm">pour 7 jours</div>
+                </div>
+                
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Mise en tête de liste</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Badge "Mise en avant"</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">+200% de vues</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-times text-gray-400 mr-3"></i>
+                        <span class="text-sm text-gray-400">Ciblage géographique</span>
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition">
+                    Choisir ce plan
+                </button>
+            </div>
+
+            <!-- Premium Boost -->
+            <div class="boost-card bg-white rounded-2xl shadow-lg p-6 pricing-card popular-card relative">
+                <div class="absolute top-0 right-0 bg-yellow-500 text-white px-4 py-1 rounded-bl-lg text-sm font-bold">
+                    POPULAIRE
+                </div>
+                
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-crown text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Boost Premium</h3>
+                    <p class="text-gray-600 text-sm">Mise en avant complète</p>
+                </div>
+                
+                <div class="text-center mb-6">
+                    <div class="text-3xl font-bold text-gray-800">19,99 €</div>
+                    <div class="text-gray-600 text-sm">pour 15 jours</div>
+                </div>
+                
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Mise en tête de liste</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Badge "Premium" doré</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">+400% de vues</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Ciblage géographique</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Statistiques détaillées</span>
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-yellow-500 text-white py-3 px-4 rounded-lg font-medium hover:bg-yellow-600 transition">
+                    Choisir ce plan
+                </button>
+            </div>
+
+            <!-- Ultimate Boost -->
+            <div class="boost-card bg-white rounded-2xl shadow-lg p-6 pricing-card">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-gem text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Boost Ultimate</h3>
+                    <p class="text-gray-600 text-sm">Mise en avant maximale</p>
+                </div>
+                
+                <div class="text-center mb-6">
+                    <div class="text-3xl font-bold text-gray-800">39,99 €</div>
+                    <div class="text-gray-600 text-sm">pour 30 jours</div>
+                </div>
+                
+                <ul class="space-y-3 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Mise en tête de liste</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Badge "Ultimate" premium</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">+600% de vues</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Ciblage géographique</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Statistiques détaillées</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-3"></i>
+                        <span class="text-sm">Support prioritaire</span>
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 transition">
+                    Choisir ce plan
+                </button>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Pourquoi booster votre annonce ?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="feature-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-eye text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Plus de visibilité</h3>
+                    <p class="text-gray-600 text-sm">Votre annonce apparaît en premier dans les résultats</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="feature-icon w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Plus de contacts</h3>
+                    <p class="text-gray-600 text-sm">Augmentez vos chances de recevoir des demandes</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="feature-icon w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Vente plus rapide</h3>
+                    <p class="text-gray-600 text-sm">Réduisez le temps de mise en vente</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="feature-icon w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Statistiques</h3>
+                    <p class="text-gray-600 text-sm">Suivez les performances de votre annonce</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Paiement sécurisé</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Méthodes de paiement</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition cursor-pointer">
+                            <i class="fab fa-cc-visa text-2xl text-blue-600 mr-4"></i>
+                            <span class="font-medium">Carte bancaire</span>
+                        </div>
+                        <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition cursor-pointer">
+                            <i class="fab fa-paypal text-2xl text-blue-600 mr-4"></i>
+                            <span class="font-medium">PayPal</span>
+                        </div>
+                        <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition cursor-pointer">
+                            <i class="fas fa-university text-2xl text-blue-600 mr-4"></i>
+                            <span class="font-medium">Virement bancaire</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Sécurité</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-shield-alt text-green-500 mr-3"></i>
+                            <span class="text-sm text-gray-600">Paiement 100% sécurisé</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-lock text-green-500 mr-3"></i>
+                            <span class="text-sm text-gray-600">Données cryptées SSL</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-undo text-green-500 mr-3"></i>
+                            <span class="text-sm text-gray-600">Remboursement sous 24h</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2025 KAMA. Tous droits réservés. | 
+                <a href="#" class="text-blue-600 hover:underline">Conditions générales</a> | 
+                <a href="#" class="text-blue-600 hover:underline">Politique de confidentialité</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Boost card selection
+        document.querySelectorAll('.boost-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected class from all cards
+                document.querySelectorAll('.boost-card').forEach(c => c.classList.remove('selected'));
+                
+                // Add selected class to clicked card
+                this.classList.add('selected');
+            });
+        });
+
+        // Boost card buttons
+        document.querySelectorAll('.boost-card button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const card = this.closest('.boost-card');
+                const planName = card.querySelector('h3').textContent;
+                
+                // Show confirmation
+                if (confirm(`Voulez-vous vraiment choisir le plan "${planName}" ?`)) {
+                    // In a real application, this would redirect to payment
+                    alert(`Redirection vers le paiement pour le plan "${planName}"`);
+                }
+            });
+        });
+
+        // Add hover effects
+        document.querySelectorAll('.feature-icon').forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+            });
+            
+            icon.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boostez votre annonce immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Playfair Display", serif;
+      }
+
+      .blue-gradient {
+        background: linear-gradient(90deg, #3769d4, #006eff, #377bd4);
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(55, 136, 212, 0.2);
+      }
+
+      .selected-card {
+        border: 2px solid #3776d4;
+        transform: scale(1.03);
+        box-shadow: 0 0 20px rgba(55, 149, 212, 0.4);
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(55, 149, 212, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(55, 141, 212, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(55, 149, 212, 0);
+        }
+      }
+
+      .step-indicator {
+        transition: all 0.3s ease;
+      }
+
+      .step-indicator.active {
+        background-color: #376ed4;
+        color: #f1f1f1;
+      }
+
+      .step-indicator.completed {
+        background-color: #e6e6e6;
+        border: 2px solid #3780d4;
+      }
+
+      .form-input {
+        background-color: #ebebeb;
+        border: 1px solid #c7c7c7;
+        color: #222222;
+      }
+
+      .form-input:focus {
+        border-color: #378dd4;
+        outline: none;
+      }
+
+      .btn-blue {
+        background: linear-gradient(90deg, #376ed4, #0077ff);
+        color: #f5f5f5;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-blue:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(55, 162, 212, 0.4);
+      }
+
+      .bg-pattern {
+        background-image: radial-gradient(circle at 10% 20%, rgba(55, 149, 212, 0.05) 0%, transparent 20%),
+          radial-gradient(circle at 90% 80%, rgba(55, 141, 212, 0.05) 0%, transparent 20%);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2"
+            style="font-family: 'Times New Roman', Times, serif">
+            K
+          </div>
+          <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+        </div>
+
+        <nav class="hidden md:flex space-x-8">
+          <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+          <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+          <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+          <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+          <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+        </nav>
+
+        <div class="flex items-center space-x-4">
+          <div class="hidden md:block">
+            <p class="text-secondary font-medium">Bonjour, <span class="text-primary">Jean Dupont</span></p>
+          </div>
+          <a href="tableaudebord.html">
+            <div class="relative">
+              <img
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80"
+                alt="Profile"
+                class="w-10 h-10 rounded-full object-cover border-2 border-primary" />
+              <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"></span>
+            </div>
+          </a>
+
+          <div class="hidden md:flex space-x-2">
+            <button class="text-sm text-gray-600 hover:text-primary"><i class="fas fa-user-edit mr-1"></i>Modifier le profil</button>
+            <button class="text-sm text-gray-600 hover:text-red-500"><i class="fas fa-sign-out-alt mr-1"></i>Déconnexion</button>
+          </div>
+
+          <button class="md:hidden text-gray-600">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+      <!-- Page Title -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Boostez votre annonce immobilière</h1>
+        <p class="text-gray-400 max-w-2xl mx-auto">Augmentez la visibilité de votre propriété et trouvez le bon acheteur plus rapidement</p>
+      </div>
+
+      <!-- Annonce à booster -->
+      <section class="mb-16 bg-dark-800 rounded-2xl p-6 md:p-8 border border-gray-800 shadow-xl">
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="md:w-1/3">
+            <div class="relative rounded-xl overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Maison à vendre"
+                class="w-full h-64 object-cover" />
+              <div class="absolute top-4 right-4 bg-blue-500 text-dark-900 px-3 py-1 rounded-full text-sm font-bold">À vendre</div>
+            </div>
+          </div>
+
+          <div class="md:w-2/3">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h2 class="text-2xl font-bold mb-2">Villa contemporaine avec piscine</h2>
+                <div class="flex items-center text-gray-400 mb-4">
+                  <i class="fas fa-map-marker-alt mr-2"></i>
+                  <span>12 Rue des Lilas, 75016 Paris</span>
+                </div>
+              </div>
+              <span class="bg-green-900 text-green-300 px-3 py-1 rounded-full text-sm">Actif</span>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div class="bg-gray-900 p-4 rounded-lg text-center">
+                <div class="text-blue-500 text-2xl mb-1">250 m²</div>
+                <div class="text-gray-400 text-sm">Surface</div>
+              </div>
+              <div class="bg-gray-900 p-4 rounded-lg text-center">
+                <div class="text-blue-500 text-2xl mb-1">5</div>
+                <div class="text-gray-400 text-sm">Pièces</div>
+              </div>
+              <div class="bg-gray-900 p-4 rounded-lg text-center">
+                <div class="text-blue-500 text-2xl mb-1">4</div>
+                <div class="text-gray-400 text-sm">Chambres</div>
+              </div>
+              <div class="bg-gray-900 p-4 rounded-lg text-center">
+                <div class="text-blue-500 text-2xl mb-1">2</div>
+                <div class="text-gray-400 text-sm">Salles de bain</div>
+              </div>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-lg">
+              <div class="flex justify-between items-center">
+                <div>
+                  <div class="text-gray-400 text-sm">Prix</div>
+                  <div class="text-2xl font-bold text-blue-500">1 250 000 €</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-gray-400 text-sm">Référence</div>
+                  <div class="text-2xl font-bold text-blue-500">#IM125478</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 text-center">
+          <button onclick="window.location.href='modificationfiche.html'" class="text-blue-500 hover:text-blue-400 transition">
+            <i class="fas fa-edit mr-2"></i>Modifier l'annonce
+          </button>
+        </div>
+      </section>
+
+      <!-- Pourquoi booster -->
+      <section class="mb-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold mb-4">Pourquoi booster votre annonce ?</h2>
+          <p class="text-gray-400 max-w-2xl mx-auto">Donnez une nouvelle impulsion à votre vente avec notre système de mise en avant premium</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800 hover:border-blue-500 transition-all duration-300 card-hover">
+            <div class="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+              <i class="fas fa-arrow-up text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Position premium</h3>
+            <p class="text-gray-400">Votre annonce apparaît en tête des résultats de recherche et sur la page d'accueil</p>
+          </div>
+
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800 hover:border-blue-500 transition-all duration-300 card-hover">
+            <div class="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+              <i class="fas fa-medal text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Badge exclusif</h3>
+            <p class="text-gray-400">Un badge "À ne pas rater" attire immédiatement l'attention des acheteurs</p>
+          </div>
+
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800 hover:border-blue-500 transition-all duration-300 card-hover">
+            <div class="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+              <i class="fas fa-eye text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Visibilité accrue</h3>
+            <p class="text-gray-400">Jusqu'à 3x plus de vues par rapport aux annonces standards</p>
+          </div>
+
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800 hover:border-blue-500 transition-all duration-300 card-hover">
+            <div class="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+              <i class="fas fa-clock text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Durée personnalisable</h3>
+            <p class="text-gray-400">Choisissez la durée qui convient à votre stratégie de vente</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Packs de sponsoring -->
+      <section class="mb-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold mb-4">Choisissez votre pack de sponsoring</h2>
+          <p class="text-gray-400 max-w-2xl mx-auto">Sélectionnez la durée qui vous convient pour maximiser vos chances de vente</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Pack 3 jours -->
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800 cursor-pointer transition-all duration-300 card-hover" id="pack3">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-xl font-bold mb-2">Pack Découverte</h3>
+                <div class="text-3xl font-bold text-blue-500">3€</div>
+              </div>
+              <span class="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full text-sm">Populaire</span>
+            </div>
+
+            <ul class="space-y-3 mb-6">
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>3 jours de mise en avant</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>En tête des résultats de recherche</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>Badge "À ne pas rater"</span>
+              </li>
+            </ul>
+
+            <button class="w-full py-3 rounded-lg bg-gray-900 hover:bg-blue-500/10 border border-gray-700 hover:border-blue-500 transition">Sélectionner</button>
+          </div>
+
+          <!-- Pack 7 jours -->
+          <div class="bg-dark-800 rounded-2xl p-6 border-2 border-blue-500 pulse" id="pack7">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-xl font-bold mb-2">Pack Performance</h3>
+                <div class="text-3xl font-bold text-blue-500">6€</div>
+              </div>
+              <span class="bg-blue-500 text-dark-900 px-3 py-1 rounded-full text-sm">Recommandé</span>
+            </div>
+
+            <ul class="space-y-3 mb-6">
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>7 jours de mise en avant</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>En tête des résultats et page d'accueil</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>Badge "À ne pas rater" renforcé</span>
+              </li>
+            </ul>
+
+            <button class="w-full py-3 rounded-lg bg-blue-500 text-dark-900 font-bold">Sélectionné</button>
+          </div>
+
+          <!-- Pack 14 jours -->
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800 cursor-pointer transition-all duration-300 card-hover" id="pack14">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-xl font-bold mb-2">Pack Premium</h3>
+                <div class="text-3xl font-bold text-blue-500">10€</div>
+              </div>
+              <span class="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-full text-sm">Maxi visibilité</span>
+            </div>
+
+            <ul class="space-y-3 mb-6">
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>14 jours de mise en avant</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>En tête de tous les espaces premium</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                <span>Badge "À ne pas rater" exclusif</span>
+              </li>
+            </ul>
+
+            <button class="w-full py-3 rounded-lg bg-gray-900 hover:bg-blue-500/10 border border-gray-700 hover:border-blue-500 transition">Sélectionner</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Récapitulatif et Paiement -->
+      <section class="mb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Récapitulatif -->
+          <div class="bg-white-800 rounded-2xl p-6 border border-gray-800">
+            <h2 class="text-2xl font-bold mb-6">Récapitulatif de votre commande</h2>
+
+            <div class="flex items-center mb-6 p-4 bg-blue-900 rounded-lg">
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=150&q=80"
+                alt="Maison"
+                class="w-16 h-16 rounded-lg object-cover" />
+              <div class="ml-4">
+                <h3 class="font-bold">Villa contemporaine avec piscine</h3>
+                <p class="text-gray-400 text-sm">12 Rue des Lilas, 75016 Paris</p>
+              </div>
+            </div>
+
+            <div class="space-y-4 mb-6">
+              <div class="flex justify-between">
+                <span>Pack sélectionné</span>
+                <span class="font-bold">Pack Performance (7 jours)</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Durée de mise en avant</span>
+                <span>7 jours</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Badge "À ne pas rater"</span>
+                <span>Inclus</span>
+              </div>
+              <div class="flex justify-between pt-4 border-t border-gray-800">
+                <span class="text-lg font-bold">Total</span>
+                <span class="text-lg font-bold text-blue-500">6€</span>
+              </div>
+            </div>
+
+            <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+              <div class="flex">
+                <i class="fas fa-lightbulb text-blue-500 mt-1 mr-3"></i>
+                <p class="text-sm"><strong>Important :</strong> Vous ne serez débité qu'une fois votre annonce validée par notre équipe.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paiement sécurisé -->
+          <div class="bg-dark-800 rounded-2xl p-6 border border-gray-800">
+            <h2 class="text-2xl font-bold mb-6">Paiement sécurisé</h2>
+
+            <div class="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-6">
+              <div class="flex">
+                <i class="fas fa-lock text-blue-500 mt-1 mr-3"></i>
+                <p>Toutes les transactions sont sécurisées par notre système de paiement certifié.</p>
+              </div>
+            </div>
+
+            <form class="space-y-4">
+              <div>
+                <label class="block text-gray-400 mb-2">Nom complet</label>
+                <input type="text" class="w-full form-input rounded-lg p-3" placeholder="Jean Dupont" />
+              </div>
+
+              <div>
+                <label class="block text-gray-400 mb-2">Adresse email</label>
+                <input type="email" class="w-full form-input rounded-lg p-3" placeholder="jean.dupont@email.com" />
+              </div>
+
+              <div>
+                <label class="block text-gray-400 mb-2">Numéro de carte</label>
+                <div class="relative">
+                  <input type="text" class="w-full form-input rounded-lg p-3 pl-12" placeholder="1234 5678 9012 3456" />
+                  <i class="fas fa-credit-card absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-gray-400 mb-2">Date d'expiration</label>
+                  <input type="text" class="w-full form-input rounded-lg p-3" placeholder="MM/AA" />
+                </div>
+                <div>
+                  <label class="block text-gray-400 mb-2">Code de sécurité</label>
+                  <input type="text" class="w-full form-input rounded-lg p-3" placeholder="CVV" />
+                </div>
+              </div>
+
+              <div class="flex items-center pt-2">
+                <input type="checkbox" id="terms" class="mr-2 h-5 w-5 text-blue-500 rounded" />
+                <label for="terms" class="text-gray-400">J'accepte les <a href="#" class="text-blue-500 hover:underline">conditions de sponsoring</a></label>
+              </div>
+
+              <button type="button" class="w-full btn-blue py-4 rounded-lg font-bold mt-4">Payer 6€ & Attendre validation</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-12">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div
+                class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2"
+                style="font-family: 'Times New Roman', Times, serif">
+                K
+              </div>
+              <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            <p class="text-gray-400">La solution premium pour booster vos annonces immobilières.</p>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-bold mb-4">Navigation</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-blue-500 transition">Accueil</a></li>
+              <li><a href="#" class="hover:text-blue-500 transition">Mes annonces</a></li>
+              <li><a href="#" class="hover:text-blue-500 transition">Boostez une annonce</a></li>
+              <li><a href="#" class="hover:text-blue-500 transition">Contact</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-bold mb-4">Légal</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-blue-500 transition">Conditions générales</a></li>
+              <li><a href="#" class="hover:text-blue-500 transition">Politique de confidentialité</a></li>
+              <li><a href="#" class="hover:text-blue-500 transition">Mentions légales</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-bold mb-4">Contact</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li class="flex items-center">
+                <i class="fas fa-envelope mr-2"></i>
+                <span>contact@immoboost.fr</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone mr-2"></i>
+                <span>01 23 45 67 89</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                <span>Paris, France</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
+          <p>© 2023 ImmoBoost. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Gestion de la sélection des packs
+      document.querySelectorAll('[id^="pack"]').forEach((pack) => {
+        pack.addEventListener("click", function () {
+          // Réinitialiser tous les packs
+          document.querySelectorAll('[id^="pack"]').forEach((p) => {
+            p.classList.remove("selected-card");
+            const button = p.querySelector("button");
+            if (button) {
+              button.classList.remove("bg-blue-500", "text-dark-900", "font-bold");
+              button.classList.add("bg-gray-900", "hover:bg-blue-500/10", "border", "border-gray-700", "hover:border-blue-500");
+              button.textContent = "Sélectionner";
+            }
+          });
+
+          // Sélectionner le pack cliqué
+          this.classList.add("selected-card");
+          const button = this.querySelector("button");
+          if (button) {
+            button.classList.remove("bg-gray-900", "hover:bg-blue-500/10", "border", "border-gray-700", "hover:border-blue-500");
+            button.classList.add("bg-blue-500", "text-dark-900", "font-bold");
+            button.textContent = "Sélectionné";
+          }
+
+          // Mettre à jour le récapitulatif
+          const packName = this.querySelector("h3").textContent;
+          const packPrice = this.querySelector(".text-3xl").textContent;
+          document.querySelector('.font-bold:contains("Pack Performance")').textContent = packName;
+          document.querySelector(".text-blue-500.text-lg").textContent = packPrice;
+        });
+      });
+
+      // Animation du bouton de paiement
+      const payButton = document.querySelector(".btn-blue");
+      if (payButton) {
+        payButton.addEventListener("click", function () {
+          this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Traitement...';
+          this.disabled = true;
+
+          // Simulation de traitement
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-check mr-2"></i> Paiement accepté';
+
+            // Afficher la confirmation
+            alert(
+              "🎉 Merci ! Votre demande de sponsoring a été reçue.\nElle sera activée dès que l'annonce sera validée par notre équipe.\nUn email vous sera envoyé avec le reçu de paiement."
+            );
+
+            // Réinitialiser le bouton
+            setTimeout(() => {
+              this.innerHTML = "Payer & Attendre validation";
+              this.disabled = false;
+            }, 3000);
+          }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>
+>>>>>>> main/main

@@ -1,0 +1,564 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion | Agence Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .login-card {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .login-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .input-field:focus {
+        border-color: #d69e2e;
+        box-shadow: 0 0 0 3px rgba(214, 158, 46, 0.2);
+      }
+
+      .btn-primary {
+        background: linear-gradient(to right, #2e90d6, #1f7ab7);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(to right, #1f8fb7, #166c97);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .error-message {
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .house-icon {
+        position: relative;
+      }
+
+      .house-icon::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border: 2px solid #d69e2e;
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1);
+          opacity: 0.1;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 0.3;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card w-full max-w-md bg-white">
+      <div class="bg-primary py-6 px-8 text-center">
+        <div class="house-icon inline-block mb-4">
+          <i class="fas fa-home text-4xl text-secondary"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-white">Espace Client</h1>
+        <p class="text-gray-300 mt-2">Connectez-vous à votre compte</p>
+      </div>
+
+      <div class="p-8">
+        <form id="loginForm">
+          <div class="mb-5">
+            <label for="email" class="block text-gray-700 font-medium mb-2">Adresse email</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-envelope text-gray-400"></i>
+              </div>
+              <input
+                type="email"
+                id="email"
+                class="input-field w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="votre@email.com"
+                required />
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <label for="password" class="block text-gray-700 font-medium mb-2">Mot de passe</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-lock text-gray-400"></i>
+              </div>
+              <input
+                type="password"
+                id="password"
+                class="input-field w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="••••••••"
+                required />
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <button type="button" id="togglePassword" class="text-gray-400 hover:text-gray-600">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">
+              <input id="remember" type="checkbox" class="h-4 w-4 text-accent focus:ring-accent border-gray-300 rounded" />
+              <label for="remember" class="ml-2 block text-sm text-gray-700"> Se souvenir de moi </label>
+            </div>
+
+            <div class="text-sm">
+              <a href="mdp.html" class="font-medium text-accent hover:text-amber-700"> Mot de passe oublié ? </a>
+            </div>
+          </div>
+
+          <div id="errorMessage" class="hidden error-message mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span id="errorText"></span>
+          </div>
+
+          <div class="g-recaptcha mb-5" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+
+          <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition duration-300">
+            <i class="fas fa-sign-in-alt mr-2"></i> Se connecter
+          </button>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Nouveau sur notre plateforme ?
+            <a href="créeruncompte.html" class="font-medium text-accent hover:text-amber-700"> Créer un compte </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 px-8 py-5 text-center border-t border-gray-200">
+        <p class="text-xs text-gray-500"><i class="fas fa-shield-alt text-green-500 mr-1"></i> Connexion sécurisée • HTTPS • Protection anti-brute-force</p>
+      </div>
+    </div>
+
+    <script>
+      // Toggle password visibility
+      document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordInput = document.getElementById("password");
+        const icon = this.querySelector("i");
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          passwordInput.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      });
+
+      // Form submission handling
+      document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const errorMessage = document.getElementById("errorMessage");
+        const errorText = document.getElementById("errorText");
+
+        // Reset error message
+        errorMessage.classList.add("hidden");
+
+        // Validation
+        if (!email || !password) {
+          errorText.textContent = "Veuillez remplir tous les champs.";
+          errorMessage.classList.remove("hidden");
+          return;
+        }
+
+        // Real login: call backend API
+        loginRequest(email, password);
+      });
+      async function loginRequest(email, password) {
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+            credentials: 'include'
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            errorText.textContent = data.message || 'Échec de la connexion';
+            errorMessage.classList.remove('hidden');
+            return;
+          }
+
+          // On succès, redirection selon rôle si présent dans la réponse, sinon vers interface par défaut
+          if (data.user && data.user.role === 'vendeur') {
+            window.location.href = 'tableaudebord.html';
+          } else {
+            window.location.href = 'interfaceProf.html';
+          }
+        } catch (err) {
+          errorText.textContent = err.message || 'Erreur réseau';
+          errorMessage.classList.remove('hidden');
+        }
+      }
+    </script>
+  </body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion | Agence Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .login-card {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .login-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .input-field:focus {
+        border-color: #d69e2e;
+        box-shadow: 0 0 0 3px rgba(214, 158, 46, 0.2);
+      }
+
+      .btn-primary {
+        background: linear-gradient(to right, #2e90d6, #1f7ab7);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(to right, #1f8fb7, #166c97);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .error-message {
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .house-icon {
+        position: relative;
+      }
+
+      .house-icon::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        border: 2px solid #d69e2e;
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1);
+          opacity: 0.1;
+        }
+        100% {
+          transform: scale(0.95);
+          opacity: 0.3;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-card w-full max-w-md bg-white">
+      <div class="bg-primary py-6 px-8 text-center">
+        <div class="house-icon inline-block mb-4">
+          <i class="fas fa-home text-4xl text-secondary"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-white">Espace Client</h1>
+        <p class="text-gray-300 mt-2">Connectez-vous à votre compte</p>
+      </div>
+
+      <div class="p-8">
+        <form id="loginForm">
+          <div class="mb-5">
+            <label for="email" class="block text-gray-700 font-medium mb-2">Adresse email</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-envelope text-gray-400"></i>
+              </div>
+              <input
+                type="email"
+                id="email"
+                class="input-field w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="votre@email.com"
+                required />
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <label for="password" class="block text-gray-700 font-medium mb-2">Mot de passe</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <i class="fas fa-lock text-gray-400"></i>
+              </div>
+              <input
+                type="password"
+                id="password"
+                class="input-field w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="••••••••"
+                required />
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <button type="button" id="togglePassword" class="text-gray-400 hover:text-gray-600">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center">
+              <input id="remember" type="checkbox" class="h-4 w-4 text-accent focus:ring-accent border-gray-300 rounded" />
+              <label for="remember" class="ml-2 block text-sm text-gray-700"> Se souvenir de moi </label>
+            </div>
+
+            <div class="text-sm">
+              <a href="mdp.html" class="font-medium text-accent hover:text-amber-700"> Mot de passe oublié ? </a>
+            </div>
+          </div>
+
+          <div id="errorMessage" class="hidden error-message mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span id="errorText"></span>
+          </div>
+
+          <div class="g-recaptcha mb-5" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+
+          <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition duration-300">
+            <i class="fas fa-sign-in-alt mr-2"></i> Se connecter
+          </button>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Nouveau sur notre plateforme ?
+            <a href="créeruncompte.html" class="font-medium text-accent hover:text-amber-700"> Créer un compte </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 px-8 py-5 text-center border-t border-gray-200">
+        <p class="text-xs text-gray-500"><i class="fas fa-shield-alt text-green-500 mr-1"></i> Connexion sécurisée • HTTPS • Protection anti-brute-force</p>
+      </div>
+    </div>
+
+    <script>
+      // Toggle password visibility
+      document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordInput = document.getElementById("password");
+        const icon = this.querySelector("i");
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          passwordInput.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      });
+
+      // Form submission handling
+      document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const errorMessage = document.getElementById("errorMessage");
+        const errorText = document.getElementById("errorText");
+
+        // Reset error message
+        errorMessage.classList.add("hidden");
+
+        // Validation
+        if (!email || !password) {
+          errorText.textContent = "Veuillez remplir tous les champs.";
+          errorMessage.classList.remove("hidden");
+          return;
+        }
+
+        // Simulate login process
+        // In a real application, this would be an AJAX call to your server
+        simulateLogin(email, password);
+      });
+
+      function simulateLogin(email, password) {
+        const errorMessage = document.getElementById("errorMessage");
+        const errorText = document.getElementById("errorText");
+
+        // Simulate network delay
+        setTimeout(() => {
+          // Simulate authentication
+          if (email === "client@example.com" && password === "password123") {
+            // Redirect client to personalized profile
+            window.location.href = "interfaceProf.html";
+          } else if (email === "vendeur@example.com" && password === "password123") {
+            // Redirect seller to dashboard
+            window.location.href = "tableaudebord.html";
+          } else {
+            // Show error message
+            errorText.textContent = "Adresse email ou mot de passe incorrect.";
+            errorMessage.classList.remove("hidden");
+          }
+        }, 1500);
+      }
+    </script>
+  </body>
+</html>
+>>>>>>> main/main

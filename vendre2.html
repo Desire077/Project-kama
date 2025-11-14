@@ -1,0 +1,964 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendre - Étape 2/3 | Immobilier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .file-upload {
+            border: 2px dashed #25a7fd;
+            transition: all 0.3s ease;
+        }
+        .file-upload:hover {
+            background-color: #FFF8E1;
+            border-color: #0b73b8;
+        }
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #1586bb;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .thumbnail-container {
+            position: relative;
+            display: inline-block;
+            margin: 5px;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .thumbnail-container:hover .delete-btn {
+            opacity: 1;
+        }
+        .document-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        .document-card:hover {
+            box-shadow: 0 4px 8px rgba(30, 137, 187, 0.842);
+        }
+        .error-message {
+            color: #f44336;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+        .success-message {
+            color: #4CAF50;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header avec barre de progression -->
+      <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-primary mb-2">Déposer une Annonce Immobilière</h1>
+            <p class="text-gray-600">Suivez les étapes pour publier votre bien immobilier</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="mb-10">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-primary">Étape 2 sur 3</span>
+                <span class="text-sm font-medium text-gray-500">Informations générales</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-secondary w-2/3 rounded-full"></div>
+            </div>
+        </div>
+
+
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold text-darkGray mb-2">Téléversement des documents</h1>
+                <p class="text-gray-600">Ajoutez les photos et documents nécessaires pour valider votre annonce</p>
+            </div>
+
+            <!-- Section Téléversement des photos -->
+            <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h2 class="text-xl font-bold text-darkGray mb-4 flex items-center">
+                    <i class="fas fa-camera text-blue mr-2"></i>
+                    Ajoutez des photos de votre bien immobilier
+                </h2>
+                <p class="text-gray-600 mb-6">Les photos de qualité augmentent vos chances de recevoir des contacts rapidement.</p>
+                
+                <div id="photoUpload" class="file-upload rounded-lg p-8 text-center cursor-pointer mb-6">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-blue mb-4"></i>
+                    <p class="font-medium mb-2">Glissez-déposez vos photos ici</p>
+                    <p class="text-gray-500 text-sm mb-4">ou</p>
+                    <button class="bg-black hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
+                        Sélectionner des fichiers
+                    </button>
+                    <input type="file" id="photoInput" accept="image/jpeg, image/png" multiple class="hidden">
+                    <p class="text-gray-500 text-xs mt-4">Formats acceptés: JPEG, PNG | Taille max: 5 Mo par photo</p>
+                </div>
+                
+                <div id="photoPreview" class="mb-4">
+                    <h3 class="font-medium mb-2">Photos téléchargées (<span id="photoCount">0</span>/3 minimum)</h3>
+                    <div id="photoThumbnails" class="flex flex-wrap min-h-32 border border-gray-200 rounded-lg p-2">
+                        <p class="text-gray-500 w-full text-center py-8">Aucune photo sélectionnée</p>
+                    </div>
+                </div>
+                
+                <div id="photoError" class="error-message hidden"></div>
+            </section>
+
+            <!-- Section Téléversement des documents -->
+            <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h2 class="text-xl font-bold text-darkGray mb-4 flex items-center">
+                    <i class="fas fa-file-contract text-blue mr-2"></i>
+                    Ajoutez les documents prouvant que le bien vous appartient
+                </h2>
+                <p class="text-gray-600 mb-6">Votre annonce ne sera visible qu’après vérification manuelle par notre équipe. Ces documents ne seront jamais partagés publiquement.</p>
+                
+                <!-- Document 1: Titre de propriété -->
+                <div class="document-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-medium flex items-center">
+                            <i class="fas fa-file-alt text-gray-500 mr-2"></i>
+                            Titre de propriété ou acte notarié
+                        </h3>
+                        <span class="text-red-500 text-sm">Requis</span>
+                    </div>
+                    <div id="propertyDocUpload" class="file-upload rounded-lg p-6 text-center cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-blue mb-3"></i>
+                        <p class="font-medium mb-2">Glissez-déposez votre document ici</p>
+                        <p class="text-gray-500 text-sm mb-3">ou</p>
+                        <button class="bg-black hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded-lg transition duration-300 text-sm">
+                            Sélectionner un fichier
+                        </button>
+                        <input type="file" id="propertyDocInput" accept=".pdf, .jpg, .jpeg, .png" class="hidden">
+                        <p class="text-gray-500 text-xs mt-3">Formats acceptés: PDF, JPG, PNG | Taille max: 10 Mo</p>
+                    </div>
+                    <div id="propertyDocPreview" class="mt-3 hidden">
+                        <div class="flex items-center bg-lightGreen p-3 rounded-lg">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span id="propertyDocName" class="font-medium"></span>
+                            <button id="removePropertyDoc" class="ml-auto text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="propertyDocError" class="error-message hidden mt-2"></div>
+                </div>
+                
+                <!-- Document 2: Document complémentaire -->
+                <div class="document-card mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-medium flex items-center">
+                            <i class="fas fa-file-invoice text-gray-500 mr-2"></i>
+                            Document complémentaire (facultatif)
+                        </h3>
+                        <span class="text-gray-500 text-sm">Facultatif</span>
+                    </div>
+                    <div id="complementDocUpload" class="file-upload rounded-lg p-6 text-center cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-blue mb-3"></i>
+                        <p class="font-medium mb-2">Glissez-déposez votre document ici</p>
+                        <p class="text-gray-500 text-sm mb-3">ou</p>
+                        <button class="bg-black hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded-lg transition duration-300 text-sm">
+                            Sélectionner un fichier
+                        </button>
+                        <input type="file" id="complementDocInput" accept=".pdf, .jpg, .jpeg, .png" class="hidden">
+                        <p class="text-gray-500 text-xs mt-3">Formats acceptés: PDF, JPG, PNG | Taille max: 10 Mo</p>
+                    </div>
+                    <div id="complementDocPreview" class="mt-3 hidden">
+                        <div class="flex items-center bg-lightGreen p-3 rounded-lg">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span id="complementDocName" class="font-medium"></span>
+                            <button id="removeComplementDoc" class="ml-auto text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="complementDocError" class="error-message hidden mt-2"></div>
+                </div>
+            </section>
+
+            <!-- Clause de vérification -->
+            <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <div class="flex items-start">
+                    <input type="checkbox" id="verificationCheckbox" class="mt-1 mr-3 h-5 w-5 text-blue border-gray-300 rounded">
+                    <label for="verificationCheckbox" class="text-gray-700">
+                        Je certifie sur l’honneur que les documents fournis sont authentiques, et que le bien appartient bien au propriétaire déclaré à l’étape précédente.
+                    </label>
+                </div>
+                <div id="checkboxError" class="error-message hidden mt-2">Veuillez cocher cette case pour continuer</div>
+            </section>
+
+            <!-- Bouton de validation -->
+            <div class="text-center">
+                <button id="submitBtn" class="bg-black hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105">
+                    Soumettre les fichiers et continuer vers le paiement (Étape 3/3)
+                </button>
+                <p id="submitError" class="error-message mt-4 hidden"></p>
+            </div>
+        </div>
+    </main>
+
+ </div>
+
+    <script>
+        // États des fichiers
+        let photos = [];
+        let propertyDoc = null;
+        let complementDoc = null;
+        let verificationChecked = false;
+
+        // Éléments DOM
+        const photoInput = document.getElementById('photoInput');
+        const photoUpload = document.getElementById('photoUpload');
+        const photoThumbnails = document.getElementById('photoThumbnails');
+        const photoCount = document.getElementById('photoCount');
+        const photoError = document.getElementById('photoError');
+        
+        const propertyDocInput = document.getElementById('propertyDocInput');
+        const propertyDocUpload = document.getElementById('propertyDocUpload');
+        const propertyDocPreview = document.getElementById('propertyDocPreview');
+        const propertyDocName = document.getElementById('propertyDocName');
+        const propertyDocError = document.getElementById('propertyDocError');
+        const removePropertyDoc = document.getElementById('removePropertyDoc');
+        
+        const complementDocInput = document.getElementById('complementDocInput');
+        const complementDocUpload = document.getElementById('complementDocUpload');
+        const complementDocPreview = document.getElementById('complementDocPreview');
+        const complementDocName = document.getElementById('complementDocName');
+        const complementDocError = document.getElementById('complementDocError');
+        const removeComplementDoc = document.getElementById('removeComplementDoc');
+        
+        const verificationCheckbox = document.getElementById('verificationCheckbox');
+        const checkboxError = document.getElementById('checkboxError');
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const submitError = document.getElementById('submitError');
+
+        // Gestion des événements pour les photos
+        photoUpload.addEventListener('click', () => photoInput.click());
+        photoInput.addEventListener('change', handlePhotoUpload);
+
+        function handlePhotoUpload(e) {
+            const files = Array.from(e.target.files);
+            let validFiles = [];
+            
+            // Réinitialiser les erreurs
+            photoError.classList.add('hidden');
+            
+            // Vérifier chaque fichier
+            for (let file of files) {
+                if (photos.length >= 10) {
+                    photoError.textContent = "Vous ne pouvez pas ajouter plus de 10 photos.";
+                    photoError.classList.remove('hidden');
+                    break;
+                }
+                
+                if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    photoError.textContent = "Format non supporté. Veuillez utiliser JPEG ou PNG.";
+                    photoError.classList.remove('hidden');
+                    continue;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    photoError.textContent = "Fichier trop volumineux. Taille maximale: 5 Mo.";
+                    photoError.classList.remove('hidden');
+                    continue;
+                }
+                
+                validFiles.push(file);
+            }
+            
+            // Ajouter les fichiers valides
+            for (let file of validFiles) {
+                if (photos.length < 10) {
+                    photos.push(file);
+                }
+            }
+            
+            updatePhotoPreview();
+        }
+
+        function updatePhotoPreview() {
+            photoThumbnails.innerHTML = '';
+            
+            if (photos.length === 0) {
+                photoThumbnails.innerHTML = '<p class="text-gray-500 w-full text-center py-8">Aucune photo sélectionnée</p>';
+                photoCount.textContent = '0';
+                return;
+            }
+            
+            photoCount.textContent = photos.length;
+            
+            photos.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const thumbnailContainer = document.createElement('div');
+                    thumbnailContainer.className = 'thumbnail-container relative';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-24 h-24 object-cover rounded-md border border-gray-200';
+                    
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    deleteBtn.onclick = () => removePhoto(index);
+                    
+                    thumbnailContainer.appendChild(img);
+                    thumbnailContainer.appendChild(deleteBtn);
+                    photoThumbnails.appendChild(thumbnailContainer);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removePhoto(index) {
+            photos.splice(index, 1);
+            updatePhotoPreview();
+        }
+
+        // Gestion des documents
+        propertyDocUpload.addEventListener('click', () => propertyDocInput.click());
+        propertyDocInput.addEventListener('change', (e) => handleDocumentUpload(e, 'property'));
+        
+        complementDocUpload.addEventListener('click', () => complementDocInput.click());
+        complementDocInput.addEventListener('change', (e) => handleDocumentUpload(e, 'complement'));
+
+        function handleDocumentUpload(e, type) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Réinitialiser les erreurs
+            if (type === 'property') {
+                propertyDocError.classList.add('hidden');
+            } else {
+                complementDocError.classList.add('hidden');
+            }
+            
+            // Vérifier le format
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                if (type === 'property') {
+                    propertyDocError.textContent = "Format non supporté. Veuillez utiliser PDF, JPEG ou PNG.";
+                    propertyDocError.classList.remove('hidden');
+                } else {
+                    complementDocError.textContent = "Format non supporté. Veuillez utiliser PDF, JPEG ou PNG.";
+                    complementDocError.classList.remove('hidden');
+                }
+                return;
+            }
+            
+            // Vérifier la taille
+            if (file.size > 10 * 1024 * 1024) {
+                if (type === 'property') {
+                    propertyDocError.textContent = "Fichier trop volumineux. Taille maximale: 10 Mo.";
+                    propertyDocError.classList.remove('hidden');
+                } else {
+                    complementDocError.textContent = "Fichier trop volumineux. Taille maximale: 10 Mo.";
+                    complementDocError.classList.remove('hidden');
+                }
+                return;
+            }
+            
+            // Mettre à jour l'état
+            if (type === 'property') {
+                propertyDoc = file;
+                propertyDocName.textContent = file.name;
+                propertyDocPreview.classList.remove('hidden');
+            } else {
+                complementDoc = file;
+                complementDocName.textContent = file.name;
+                complementDocPreview.classList.remove('hidden');
+            }
+        }
+
+        // Suppression des documents
+        removePropertyDoc.addEventListener('click', () => {
+            propertyDoc = null;
+            propertyDocPreview.classList.add('hidden');
+            propertyDocInput.value = '';
+        });
+        
+        removeComplementDoc.addEventListener('click', () => {
+            complementDoc = null;
+            complementDocPreview.classList.add('hidden');
+            complementDocInput.value = '';
+        });
+
+        // Gestion de la case à cocher
+        verificationCheckbox.addEventListener('change', () => {
+            verificationChecked = verificationCheckbox.checked;
+            if (verificationChecked) {
+                checkboxError.classList.add('hidden');
+            }
+        });
+
+        // Validation et soumission
+        submitBtn.addEventListener('click', validateAndSubmit);
+
+        function validateAndSubmit() {
+            let isValid = true;
+            submitError.classList.add('hidden');
+            
+            // Vérifier les photos
+            if (photos.length < 3) {
+                photoError.textContent = "Veuillez ajouter au moins 3 photos.";
+                photoError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Vérifier le document de propriété
+            if (!propertyDoc) {
+                propertyDocError.textContent = "Veuillez ajouter le titre de propriété ou l'acte notarié.";
+                propertyDocError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Vérifier la case à cocher
+            if (!verificationChecked) {
+                checkboxError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Si tout est valide
+            if (isValid) {
+                // Simulation de soumission
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Envoi en cours...";
+                
+                // Simuler un délai de traitement
+                setTimeout(() => {
+                    alert("Fichiers envoyés avec succès ! Vous allez être redirigé vers l'étape suivante.");
+                    // Redirection vers l'étape suivante
+                    window.location.href = "attente.html";
+                }, 1500);
+            } else {
+                submitError.textContent = "Veuillez corriger les erreurs avant de continuer.";
+                submitError.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendre - Étape 2/3 | Immobilier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .file-upload {
+            border: 2px dashed #25a7fd;
+            transition: all 0.3s ease;
+        }
+        .file-upload:hover {
+            background-color: #FFF8E1;
+            border-color: #0b73b8;
+        }
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #1586bb;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .thumbnail-container {
+            position: relative;
+            display: inline-block;
+            margin: 5px;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .thumbnail-container:hover .delete-btn {
+            opacity: 1;
+        }
+        .document-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        .document-card:hover {
+            box-shadow: 0 4px 8px rgba(30, 137, 187, 0.842);
+        }
+        .error-message {
+            color: #f44336;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+        .success-message {
+            color: #4CAF50;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header avec barre de progression -->
+      <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-primary mb-2">Déposer une Annonce Immobilière</h1>
+            <p class="text-gray-600">Suivez les étapes pour publier votre bien immobilier</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="mb-10">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-primary">Étape 2 sur 3</span>
+                <span class="text-sm font-medium text-gray-500">Informations générales</span>
+            </div>
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-secondary w-2/3 rounded-full"></div>
+            </div>
+        </div>
+
+
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-bold text-darkGray mb-2">Téléversement des documents</h1>
+                <p class="text-gray-600">Ajoutez les photos et documents nécessaires pour valider votre annonce</p>
+            </div>
+
+            <!-- Section Téléversement des photos -->
+            <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h2 class="text-xl font-bold text-darkGray mb-4 flex items-center">
+                    <i class="fas fa-camera text-blue mr-2"></i>
+                    Ajoutez des photos de votre bien immobilier
+                </h2>
+                <p class="text-gray-600 mb-6">Les photos de qualité augmentent vos chances de recevoir des contacts rapidement.</p>
+                
+                <div id="photoUpload" class="file-upload rounded-lg p-8 text-center cursor-pointer mb-6">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-blue mb-4"></i>
+                    <p class="font-medium mb-2">Glissez-déposez vos photos ici</p>
+                    <p class="text-gray-500 text-sm mb-4">ou</p>
+                    <button class="bg-black hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
+                        Sélectionner des fichiers
+                    </button>
+                    <input type="file" id="photoInput" accept="image/jpeg, image/png" multiple class="hidden">
+                    <p class="text-gray-500 text-xs mt-4">Formats acceptés: JPEG, PNG | Taille max: 5 Mo par photo</p>
+                </div>
+                
+                <div id="photoPreview" class="mb-4">
+                    <h3 class="font-medium mb-2">Photos téléchargées (<span id="photoCount">0</span>/3 minimum)</h3>
+                    <div id="photoThumbnails" class="flex flex-wrap min-h-32 border border-gray-200 rounded-lg p-2">
+                        <p class="text-gray-500 w-full text-center py-8">Aucune photo sélectionnée</p>
+                    </div>
+                </div>
+                
+                <div id="photoError" class="error-message hidden"></div>
+            </section>
+
+            <!-- Section Téléversement des documents -->
+            <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <h2 class="text-xl font-bold text-darkGray mb-4 flex items-center">
+                    <i class="fas fa-file-contract text-blue mr-2"></i>
+                    Ajoutez les documents prouvant que le bien vous appartient
+                </h2>
+                <p class="text-gray-600 mb-6">Votre annonce ne sera visible qu’après vérification manuelle par notre équipe. Ces documents ne seront jamais partagés publiquement.</p>
+                
+                <!-- Document 1: Titre de propriété -->
+                <div class="document-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-medium flex items-center">
+                            <i class="fas fa-file-alt text-gray-500 mr-2"></i>
+                            Titre de propriété ou acte notarié
+                        </h3>
+                        <span class="text-red-500 text-sm">Requis</span>
+                    </div>
+                    <div id="propertyDocUpload" class="file-upload rounded-lg p-6 text-center cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-blue mb-3"></i>
+                        <p class="font-medium mb-2">Glissez-déposez votre document ici</p>
+                        <p class="text-gray-500 text-sm mb-3">ou</p>
+                        <button class="bg-black hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded-lg transition duration-300 text-sm">
+                            Sélectionner un fichier
+                        </button>
+                        <input type="file" id="propertyDocInput" accept=".pdf, .jpg, .jpeg, .png" class="hidden">
+                        <p class="text-gray-500 text-xs mt-3">Formats acceptés: PDF, JPG, PNG | Taille max: 10 Mo</p>
+                    </div>
+                    <div id="propertyDocPreview" class="mt-3 hidden">
+                        <div class="flex items-center bg-lightGreen p-3 rounded-lg">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span id="propertyDocName" class="font-medium"></span>
+                            <button id="removePropertyDoc" class="ml-auto text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="propertyDocError" class="error-message hidden mt-2"></div>
+                </div>
+                
+                <!-- Document 2: Document complémentaire -->
+                <div class="document-card mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-medium flex items-center">
+                            <i class="fas fa-file-invoice text-gray-500 mr-2"></i>
+                            Document complémentaire (facultatif)
+                        </h3>
+                        <span class="text-gray-500 text-sm">Facultatif</span>
+                    </div>
+                    <div id="complementDocUpload" class="file-upload rounded-lg p-6 text-center cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-blue mb-3"></i>
+                        <p class="font-medium mb-2">Glissez-déposez votre document ici</p>
+                        <p class="text-gray-500 text-sm mb-3">ou</p>
+                        <button class="bg-black hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded-lg transition duration-300 text-sm">
+                            Sélectionner un fichier
+                        </button>
+                        <input type="file" id="complementDocInput" accept=".pdf, .jpg, .jpeg, .png" class="hidden">
+                        <p class="text-gray-500 text-xs mt-3">Formats acceptés: PDF, JPG, PNG | Taille max: 10 Mo</p>
+                    </div>
+                    <div id="complementDocPreview" class="mt-3 hidden">
+                        <div class="flex items-center bg-lightGreen p-3 rounded-lg">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span id="complementDocName" class="font-medium"></span>
+                            <button id="removeComplementDoc" class="ml-auto text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="complementDocError" class="error-message hidden mt-2"></div>
+                </div>
+            </section>
+
+            <!-- Clause de vérification -->
+            <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+                <div class="flex items-start">
+                    <input type="checkbox" id="verificationCheckbox" class="mt-1 mr-3 h-5 w-5 text-blue border-gray-300 rounded">
+                    <label for="verificationCheckbox" class="text-gray-700">
+                        Je certifie sur l’honneur que les documents fournis sont authentiques, et que le bien appartient bien au propriétaire déclaré à l’étape précédente.
+                    </label>
+                </div>
+                <div id="checkboxError" class="error-message hidden mt-2">Veuillez cocher cette case pour continuer</div>
+            </section>
+
+            <!-- Bouton de validation -->
+            <div class="text-center">
+                <button id="submitBtn" class="bg-black hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105">
+                    Soumettre les fichiers et continuer vers le paiement (Étape 3/3)
+                </button>
+                <p id="submitError" class="error-message mt-4 hidden"></p>
+            </div>
+        </div>
+    </main>
+
+ </div>
+
+    <script>
+        // États des fichiers
+        let photos = [];
+        let propertyDoc = null;
+        let complementDoc = null;
+        let verificationChecked = false;
+
+        // Éléments DOM
+        const photoInput = document.getElementById('photoInput');
+        const photoUpload = document.getElementById('photoUpload');
+        const photoThumbnails = document.getElementById('photoThumbnails');
+        const photoCount = document.getElementById('photoCount');
+        const photoError = document.getElementById('photoError');
+        
+        const propertyDocInput = document.getElementById('propertyDocInput');
+        const propertyDocUpload = document.getElementById('propertyDocUpload');
+        const propertyDocPreview = document.getElementById('propertyDocPreview');
+        const propertyDocName = document.getElementById('propertyDocName');
+        const propertyDocError = document.getElementById('propertyDocError');
+        const removePropertyDoc = document.getElementById('removePropertyDoc');
+        
+        const complementDocInput = document.getElementById('complementDocInput');
+        const complementDocUpload = document.getElementById('complementDocUpload');
+        const complementDocPreview = document.getElementById('complementDocPreview');
+        const complementDocName = document.getElementById('complementDocName');
+        const complementDocError = document.getElementById('complementDocError');
+        const removeComplementDoc = document.getElementById('removeComplementDoc');
+        
+        const verificationCheckbox = document.getElementById('verificationCheckbox');
+        const checkboxError = document.getElementById('checkboxError');
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const submitError = document.getElementById('submitError');
+
+        // Gestion des événements pour les photos
+        photoUpload.addEventListener('click', () => photoInput.click());
+        photoInput.addEventListener('change', handlePhotoUpload);
+
+        function handlePhotoUpload(e) {
+            const files = Array.from(e.target.files);
+            let validFiles = [];
+            
+            // Réinitialiser les erreurs
+            photoError.classList.add('hidden');
+            
+            // Vérifier chaque fichier
+            for (let file of files) {
+                if (photos.length >= 10) {
+                    photoError.textContent = "Vous ne pouvez pas ajouter plus de 10 photos.";
+                    photoError.classList.remove('hidden');
+                    break;
+                }
+                
+                if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    photoError.textContent = "Format non supporté. Veuillez utiliser JPEG ou PNG.";
+                    photoError.classList.remove('hidden');
+                    continue;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    photoError.textContent = "Fichier trop volumineux. Taille maximale: 5 Mo.";
+                    photoError.classList.remove('hidden');
+                    continue;
+                }
+                
+                validFiles.push(file);
+            }
+            
+            // Ajouter les fichiers valides
+            for (let file of validFiles) {
+                if (photos.length < 10) {
+                    photos.push(file);
+                }
+            }
+            
+            updatePhotoPreview();
+        }
+
+        function updatePhotoPreview() {
+            photoThumbnails.innerHTML = '';
+            
+            if (photos.length === 0) {
+                photoThumbnails.innerHTML = '<p class="text-gray-500 w-full text-center py-8">Aucune photo sélectionnée</p>';
+                photoCount.textContent = '0';
+                return;
+            }
+            
+            photoCount.textContent = photos.length;
+            
+            photos.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const thumbnailContainer = document.createElement('div');
+                    thumbnailContainer.className = 'thumbnail-container relative';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-24 h-24 object-cover rounded-md border border-gray-200';
+                    
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    deleteBtn.onclick = () => removePhoto(index);
+                    
+                    thumbnailContainer.appendChild(img);
+                    thumbnailContainer.appendChild(deleteBtn);
+                    photoThumbnails.appendChild(thumbnailContainer);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removePhoto(index) {
+            photos.splice(index, 1);
+            updatePhotoPreview();
+        }
+
+        // Gestion des documents
+        propertyDocUpload.addEventListener('click', () => propertyDocInput.click());
+        propertyDocInput.addEventListener('change', (e) => handleDocumentUpload(e, 'property'));
+        
+        complementDocUpload.addEventListener('click', () => complementDocInput.click());
+        complementDocInput.addEventListener('change', (e) => handleDocumentUpload(e, 'complement'));
+
+        function handleDocumentUpload(e, type) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Réinitialiser les erreurs
+            if (type === 'property') {
+                propertyDocError.classList.add('hidden');
+            } else {
+                complementDocError.classList.add('hidden');
+            }
+            
+            // Vérifier le format
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                if (type === 'property') {
+                    propertyDocError.textContent = "Format non supporté. Veuillez utiliser PDF, JPEG ou PNG.";
+                    propertyDocError.classList.remove('hidden');
+                } else {
+                    complementDocError.textContent = "Format non supporté. Veuillez utiliser PDF, JPEG ou PNG.";
+                    complementDocError.classList.remove('hidden');
+                }
+                return;
+            }
+            
+            // Vérifier la taille
+            if (file.size > 10 * 1024 * 1024) {
+                if (type === 'property') {
+                    propertyDocError.textContent = "Fichier trop volumineux. Taille maximale: 10 Mo.";
+                    propertyDocError.classList.remove('hidden');
+                } else {
+                    complementDocError.textContent = "Fichier trop volumineux. Taille maximale: 10 Mo.";
+                    complementDocError.classList.remove('hidden');
+                }
+                return;
+            }
+            
+            // Mettre à jour l'état
+            if (type === 'property') {
+                propertyDoc = file;
+                propertyDocName.textContent = file.name;
+                propertyDocPreview.classList.remove('hidden');
+            } else {
+                complementDoc = file;
+                complementDocName.textContent = file.name;
+                complementDocPreview.classList.remove('hidden');
+            }
+        }
+
+        // Suppression des documents
+        removePropertyDoc.addEventListener('click', () => {
+            propertyDoc = null;
+            propertyDocPreview.classList.add('hidden');
+            propertyDocInput.value = '';
+        });
+        
+        removeComplementDoc.addEventListener('click', () => {
+            complementDoc = null;
+            complementDocPreview.classList.add('hidden');
+            complementDocInput.value = '';
+        });
+
+        // Gestion de la case à cocher
+        verificationCheckbox.addEventListener('change', () => {
+            verificationChecked = verificationCheckbox.checked;
+            if (verificationChecked) {
+                checkboxError.classList.add('hidden');
+            }
+        });
+
+        // Validation et soumission
+        submitBtn.addEventListener('click', validateAndSubmit);
+
+        function validateAndSubmit() {
+            let isValid = true;
+            submitError.classList.add('hidden');
+            
+            // Vérifier les photos
+            if (photos.length < 3) {
+                photoError.textContent = "Veuillez ajouter au moins 3 photos.";
+                photoError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Vérifier le document de propriété
+            if (!propertyDoc) {
+                propertyDocError.textContent = "Veuillez ajouter le titre de propriété ou l'acte notarié.";
+                propertyDocError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Vérifier la case à cocher
+            if (!verificationChecked) {
+                checkboxError.classList.remove('hidden');
+                isValid = false;
+            }
+            
+            // Si tout est valide
+            if (isValid) {
+                // Simulation de soumission
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Envoi en cours...";
+                
+                // Simuler un délai de traitement
+                setTimeout(() => {
+                    alert("Fichiers envoyés avec succès ! Vous allez être redirigé vers l'étape suivante.");
+                    // Redirection vers l'étape suivante
+                    window.location.href = "attente.html";
+                }, 1500);
+            } else {
+                submitError.textContent = "Veuillez corriger les erreurs avant de continuer.";
+                submitError.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+>>>>>>> main/main
+</html>

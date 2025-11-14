@@ -1,0 +1,666 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mot de passe oublié - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .reset-card {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .reset-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .input-field:focus {
+            border-color: #d69e2e;
+            box-shadow: 0 0 0 3px rgba(214, 158, 46, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #2e90d6, #1f7ab7);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #1f8fb7, #166c97);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .success-message {
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .lock-icon {
+            position: relative;
+        }
+        
+        .lock-icon::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid #d69e2e;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.3; }
+            50% { transform: scale(1); opacity: 0.1; }
+            100% { transform: scale(0.95); opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="reset-card w-full max-w-md bg-white">
+        <div class="bg-primary py-6 px-8 text-center">
+            <div class="lock-icon inline-block mb-4">
+                <i class="fas fa-lock text-4xl text-secondary"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-white">Mot de passe oublié</h1>
+            <p class="text-gray-300 mt-2">Récupérez l'accès à votre compte</p>
+        </div>
+
+        <div class="p-8">
+            <!-- Step 1: Email Input -->
+            <div id="step1">
+                <form id="resetForm">
+                    <div class="mb-5">
+                        <label for="email" class="block text-gray-700 font-medium mb-2">Adresse email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input
+                                type="email"
+                                id="email"
+                                class="input-field w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                                placeholder="votre@email.com"
+                                required />
+                        </div>
+                        <p class="text-gray-500 text-sm mt-2">Nous vous enverrons un lien de réinitialisation</p>
+                    </div>
+
+                    <div id="errorMessage" class="hidden error-message mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <span id="errorText"></span>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold shadow-md hover:shadow-lg transition duration-300">
+                        <i class="fas fa-paper-plane mr-2"></i> Envoyer le lien
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: Success Message -->
+            <div id="step2" class="hidden">
+                <div class="text-center success-message">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Email envoyé !</h3>
+                    <p class="text-gray-600 mb-6">
+                        Nous avons envoyé un lien de réinitialisation à votre adresse email. 
+                        Vérifiez votre boîte de réception et suivez les instructions.
+                    </p>
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <p class="text-sm text-blue-800">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Si vous ne recevez pas l'email dans les 5 minutes, vérifiez votre dossier spam.
+                        </p>
+                    </div>
+                    <button onclick="resetForm()" class="text-accent font-medium hover:underline">
+                        <i class="fas fa-arrow-left mr-2"></i> Essayer avec une autre adresse
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">
+                    Vous vous souvenez de votre mot de passe ?
+                    <a href="connexion.html" class="font-medium text-accent hover:text-amber-700"> Se connecter </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 px-8 py-5 text-center border-t border-gray-200">
+            <p class="text-xs text-gray-500">
+                <i class="fas fa-shield-alt text-green-500 mr-1"></i> 
+                Réinitialisation sécurisée • Protection des données
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handling
+        document.getElementById('resetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            // Reset error message
+            errorMessage.classList.add('hidden');
+
+            // Validation
+            if (!email) {
+                errorText.textContent = "Veuillez saisir votre adresse email.";
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorText.textContent = "Veuillez saisir une adresse email valide.";
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Simulate sending reset email
+            simulateResetEmail(email);
+        });
+
+        function simulateResetEmail(email) {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Envoi en cours...';
+            submitBtn.disabled = true;
+
+            // Simulate network delay
+            setTimeout(() => {
+                // Hide step 1 and show step 2
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        function resetForm() {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const emailInput = document.getElementById('email');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Reset form
+            emailInput.value = '';
+            errorMessage.classList.add('hidden');
+            
+            // Show step 1 and hide step 2
+            step1.classList.remove('hidden');
+            step2.classList.add('hidden');
+        }
+
+        // Add floating animation to lock icon
+        document.addEventListener('DOMContentLoaded', function() {
+            const lockIcon = document.querySelector('.lock-icon');
+            if (lockIcon) {
+                lockIcon.classList.add('floating');
+            }
+        });
+    </script>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Réinitialisation du mot de passe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3b82f6",
+              secondary: "#1e40af",
+              accent: "#f97316",
+              dark: "#0f172a",
+              light: "#f8fafc",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+
+      .card {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+      }
+
+      .input-field:focus {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+      }
+
+      .password-strength {
+        height: 5px;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+      }
+
+      .step-indicator {
+        transition: all 0.3s ease;
+      }
+
+      .step-indicator.active {
+        background-color: #3b82f6;
+        color: white;
+      }
+
+      .step-indicator.completed {
+        background-color: #10b981;
+        color: white;
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <div class="w-full max-w-md">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="mx-auto bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+          <i class="fas fa-lock text-blue-600 text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-800">Réinitialisation du mot de passe</h1>
+        <p class="text-gray-600 mt-2">Suivez les étapes pour récupérer votre compte</p>
+      </div>
+
+      <!-- Step Indicator -->
+      <div class="flex justify-between mb-8 relative">
+        <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -z-10"></div>
+        <div class="step-indicator active w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+        <div class="step-indicator w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+        <div class="step-indicator w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+      </div>
+
+      <!-- Main Card -->
+      <div class="bg-white rounded-2xl card p-6 md:p-8">
+        <!-- Step 1: Request Reset -->
+        <div id="step1" class="fade-in">
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Identifiez votre compte</h2>
+          <p class="text-gray-600 mb-6">Entrez votre adresse email pour recevoir un lien de réinitialisation</p>
+
+          <form id="resetForm">
+            <div class="mb-4">
+              <label for="email" class="block text-gray-700 font-medium mb-2">Adresse email</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fas fa-envelope text-gray-400"></i>
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  class="input-field w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="votre@email.com"
+                  required />
+              </div>
+            </div>
+
+            <div class="flex items-center mb-6">
+              <input type="checkbox" id="recaptcha" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" required />
+              <label for="recaptcha" class="ml-2 text-gray-700 text-sm"> Je ne suis pas un robot <i class="fas fa-robot text-gray-500 ml-1"></i> </label>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300">
+              Envoyer le lien de réinitialisation
+            </button>
+          </form>
+
+          <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-blue-800">
+              <i class="fas fa-info-circle mr-2"></i>
+              Vous recevrez un lien de réinitialisation si cet email correspond à un compte existant. Vérifiez votre dossier spam.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2: Verification -->
+        <div id="step2" class="hidden fade-in">
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Vérification</h2>
+          <p class="text-gray-600 mb-6">Entrez le code de vérification envoyé à votre email</p>
+
+          <div class="mb-6">
+            <label class="block text-gray-700 font-medium mb-2">Code de vérification</label>
+            <div class="flex space-x-3 justify-center">
+              <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" />
+              <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" />
+              <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" />
+              <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" />
+              <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" />
+              <input type="text" maxlength="1" class="w-12 h-12 text-center text-2xl border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" />
+            </div>
+          </div>
+
+          <button id="verifyBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300">
+            Vérifier le code
+          </button>
+
+          <div class="mt-4 text-center">
+            <p class="text-gray-600 text-sm">
+              Vous n'avez pas reçu de code ?
+              <a href="#" class="text-blue-600 hover:underline">Renvoyer le code</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3: New Password -->
+        <div id="step3" class="hidden fade-in">
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Nouveau mot de passe</h2>
+          <p class="text-gray-600 mb-6">Créez un mot de passe fort et sécurisé</p>
+
+          <form id="newPasswordForm">
+            <div class="mb-4">
+              <label for="newPassword" class="block text-gray-700 font-medium mb-2">Nouveau mot de passe</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fas fa-lock text-gray-400"></i>
+                </div>
+                <input
+                  type="password"
+                  id="newPassword"
+                  class="input-field w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="••••••••"
+                  required />
+                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" id="togglePassword">
+                  <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                </button>
+              </div>
+              <div class="mt-2">
+                <div class="password-strength bg-gray-200 w-full rounded"></div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Faible</span>
+                  <span>Fort</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label for="confirmPassword" class="block text-gray-700 font-medium mb-2">Confirmer le mot de passe</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <i class="fas fa-lock text-gray-400"></i>
+                </div>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  class="input-field w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="••••••••"
+                  required />
+                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" id="toggleConfirmPassword">
+                  <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                </button>
+              </div>
+              <div id="passwordMatch" class="text-sm mt-1"></div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-300">
+              Réinitialiser le mot de passe
+            </button>
+          </form>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden fade-in text-center py-6">
+          <div class="mx-auto bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-check text-green-600 text-2xl"></i>
+          </div>
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Mot de passe réinitialisé !</h2>
+          <p class="text-gray-600 mb-6">Votre mot de passe a été changé avec succès.</p>
+          <a href="connexion.html" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300">
+            Se connecter
+          </a>
+        </div>
+      </div>
+
+      <!-- Security Notice -->
+      <div class="mt-6 text-center text-xs text-gray-500">
+        <p>
+          <i class="fas fa-shield-alt mr-1"></i>
+          Pour votre sécurité, nous ne vous dirons jamais si un email existe ou non dans notre base de données. Si vous avez un compte, vous recevrez un lien de
+          réinitialisation. Sinon, créez un nouveau compte.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // DOM Elements
+      const step1 = document.getElementById("step1");
+      const step2 = document.getElementById("step2");
+      const step3 = document.getElementById("step3");
+      const successMessage = document.getElementById("successMessage");
+      const resetForm = document.getElementById("resetForm");
+      const newPasswordForm = document.getElementById("newPasswordForm");
+      const verifyBtn = document.getElementById("verifyBtn");
+      const newPasswordInput = document.getElementById("newPassword");
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+      const passwordMatch = document.getElementById("passwordMatch");
+      const togglePassword = document.getElementById("togglePassword");
+      const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+      const stepIndicators = document.querySelectorAll(".step-indicator");
+      const passwordStrength = document.querySelector(".password-strength");
+
+      // Navigation functions
+      function goToStep(stepNumber) {
+        // Hide all steps
+        step1.classList.add("hidden");
+        step2.classList.add("hidden");
+        step3.classList.add("hidden");
+
+        // Show the requested step
+        if (stepNumber === 1) step1.classList.remove("hidden");
+        if (stepNumber === 2) step2.classList.remove("hidden");
+        if (stepNumber === 3) step3.classList.remove("hidden");
+        if (stepNumber === 4) successMessage.classList.remove("hidden");
+
+        // Update step indicators
+        stepIndicators.forEach((indicator, index) => {
+          if (index < stepNumber - 1) {
+            indicator.classList.remove("active");
+            indicator.classList.add("completed");
+          } else if (index === stepNumber - 1) {
+            indicator.classList.add("active");
+            indicator.classList.remove("completed");
+          } else {
+            indicator.classList.remove("active", "completed");
+          }
+        });
+      }
+
+      // Password visibility toggle
+      function setupPasswordToggle(input, toggleButton) {
+        toggleButton.addEventListener("click", () => {
+          const type = input.getAttribute("type") === "password" ? "text" : "password";
+          input.setAttribute("type", type);
+          toggleButton.innerHTML =
+            type === "password" ? '<i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>' : '<i class="fas fa-eye-slash text-gray-400 hover:text-gray-600"></i>';
+        });
+      }
+
+      // Password strength indicator
+      function updatePasswordStrength() {
+        const password = newPasswordInput.value;
+        let strength = 0;
+
+        // Check length
+        if (password.length >= 8) strength += 25;
+        if (password.length >= 12) strength += 15;
+
+        // Check for lowercase
+        if (/[a-z]/.test(password)) strength += 15;
+
+        // Check for uppercase
+        if (/[A-Z]/.test(password)) strength += 15;
+
+        // Check for numbers
+        if (/\d/.test(password)) strength += 15;
+
+        // Check for special characters
+        if (/[^A-Za-z0-9]/.test(password)) strength += 15;
+
+        // Update visual indicator
+        passwordStrength.style.width = `${strength}%`;
+
+        if (strength < 40) {
+          passwordStrength.className = "password-strength bg-red-500 rounded";
+        } else if (strength < 70) {
+          passwordStrength.className = "password-strength bg-yellow-500 rounded";
+        } else {
+          passwordStrength.className = "password-strength bg-green-500 rounded";
+        }
+      }
+
+      // Password match validation
+      function checkPasswordMatch() {
+        if (confirmPasswordInput.value === "") {
+          passwordMatch.textContent = "";
+          return;
+        }
+
+        if (newPasswordInput.value === confirmPasswordInput.value) {
+          passwordMatch.innerHTML = '<span class="text-green-600"><i class="fas fa-check-circle"></i> Les mots de passe correspondent</span>';
+        } else {
+          passwordMatch.innerHTML = '<span class="text-red-600"><i class="fas fa-times-circle"></i> Les mots de passe ne correspondent pas</span>';
+        }
+      }
+
+      // Event Listeners
+      resetForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // Simulate API call
+        setTimeout(() => {
+          goToStep(2);
+        }, 800);
+      });
+
+      verifyBtn.addEventListener("click", () => {
+        // Simulate verification
+        setTimeout(() => {
+          goToStep(3);
+        }, 800);
+      });
+
+      newPasswordForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (newPasswordInput.value !== confirmPasswordInput.value) {
+          passwordMatch.innerHTML = '<span class="text-red-600"><i class="fas fa-times-circle"></i> Les mots de passe ne correspondent pas</span>';
+          return;
+        }
+
+        // Simulate password reset
+        setTimeout(() => {
+          goToStep(4);
+        }, 800);
+      });
+
+      newPasswordInput.addEventListener("input", () => {
+        updatePasswordStrength();
+        checkPasswordMatch();
+      });
+
+      confirmPasswordInput.addEventListener("input", checkPasswordMatch);
+
+      setupPasswordToggle(newPasswordInput, togglePassword);
+      setupPasswordToggle(confirmPasswordInput, toggleConfirmPassword);
+
+      // Initialize
+      goToStep(1);
+    </script>
+  </body>
+</html>
+>>>>>>> main/main

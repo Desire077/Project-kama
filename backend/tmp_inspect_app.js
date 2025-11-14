@@ -1,0 +1,7 @@
+const app = require('./index')
+console.log('app type:', typeof app)
+console.log('app keys:', Object.keys(app).slice(0,50))
+console.log('app.listen?', typeof app.listen)
+console.log('app.handle?', typeof app.handle)
+console.log('app.stack?', app.stack ? app.stack.length : 'no stack')
+process.exit(0)

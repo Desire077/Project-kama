@@ -1,0 +1,1060 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Vendeur - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+       tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+             font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3780d4, #0b64b8);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0b73b8, #3761d4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            border: 1px solid #3788d4;
+            color: #376ed4;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background-color: #3788d4;
+            color: white;
+        }
+        
+        .notification {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(55, 118, 212, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2" style="font-family: 'Times New Roman', Times, serif;">K</div>
+                <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+                <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+                <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+                <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+                <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+            </nav>
+
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:block">
+                    <p class="text-secondary font-medium">Bonjour, <span class="text-primary">Jean Dupont</span></p>
+                </div>
+                
+                 <a href="tableaudebord.html">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" 
+                         alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-primary">
+                    <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"></span>
+                </div>
+                </a>
+                
+                <div class="hidden md:flex space-x-2">
+                    <button class="text-sm text-gray-600 hover:text-primary">
+                        <i class="fas fa-user-edit mr-1"></i>Modifier le profil
+                    </button>
+                    <button class="text-sm text-gray-600 hover:text-red-500">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Déconnexion
+                    </button>
+                </div>
+                
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notifications -->
+    <div class="container mx-auto px-4 mt-4">
+        <div class="notification bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-blue-400 text-lg"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        <span class="font-medium">Attention !</span> Votre annonce "Maison à Douala" est encore en attente de validation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-secondary">Mes Annonces</h2>
+                <p class="text-gray-600">Gérez toutes vos offres immobilières en un seul endroit</p>
+            </div>
+            <button onclick="window.location.href='vendre.html'" class="mt-4 md:mt-0 btn-primary text-white font-semibold py-3 px-6 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i> Créer une nouvelle annonce
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+                <div class="flex flex-wrap gap-2">
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Tous les types</option>
+                        <option>Vente</option>
+                        <option>Location</option>
+                        <option>Vacances</option>
+                    </select>
+                    
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Tous les statuts</option>
+                        <option>En ligne</option>
+                        <option>En attente</option>
+                        <option>Expirée</option>
+                    </select>
+                    
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Trier par date</option>
+                        <option>Plus récent</option>
+                        <option>Plus ancien</option>
+                        <option>Prix croissant</option>
+                        <option>Prix décroissant</option>
+                    </select>
+                </div>
+                
+                <div class="relative">
+                    <input type="text" placeholder="Rechercher une annonce..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-64">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offers Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Offer Card 1 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Maison à vendre" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-green-100 text-green-800">En ligne</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 1,248 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Maison individuelle</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Lyon, Rhône</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">425 000 €</p>
+                            <p class="text-gray-500 text-sm">Publiée le 12 mai</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Vente</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">4 chambres</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">180 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button type="button" id="SupBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Card 2 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Appartement à louer" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-blue-100 text-blue-800">En attente</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 342 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Appartement F3</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Marseille, Bouches-du-Rhône</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">950 € / mois</p>
+                            <p class="text-gray-500 text-sm">Publiée le 18 juin</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Location</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">3 pièces</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">75 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Card 3 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1615529162924-f8605388463e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Villa de vacances" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-blue-100 text-blue-800">En négociation</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 876 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Villa avec piscine</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Nice, Alpes-Maritimes</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">250 € / nuit</p>
+                            <p class="text-gray-500 text-sm">Publiée le 5 avril</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Vacances</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">5 chambres</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">200 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Card 4 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Terrain à vendre" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-red-100 text-red-800">Expirée</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 156 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Terrain constructible</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Bordeaux, Gironde</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">180 000 €</p>
+                            <p class="text-gray-500 text-sm">Publiée le 3 mars</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Vente</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Zone urbaine</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">1 200 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boost Section -->
+        <div class="mt-12 bg-gradient-to-r from-blue-50 to-amber-50 rounded-2xl shadow-sm p-6 border border-blue-100">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="flex-1 mb-6 md:mb-0 md:pr-6">
+                    <h3 class="text-xl font-bold text-secondary mb-2">Boostez vos annonces pour plus de visibilité</h3>
+                    <p class="text-gray-600 mb-4">
+                        Mettez vos biens en avant pour toucher plus de clients potentiels. 
+                        Vos annonces seront mieux positionnées dans les résultats de recherche.
+                    </p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Mise en tête de liste pendant 7, 15 ou 30 jours</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Ciblage géographique précis</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Highlight visuel avec cadre doré</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm w-full md:w-1/3">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-lock text-primary text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">
+                            Vous ne serez débité qu'après validation de votre annonce par notre équipe. 
+                            Le paiement est sécurisé.
+                        </p>
+                    </div>
+                    <button onclick="window.location.href='modificationfiche.html'" class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-lg">
+                        <i class="fas fa-rocket mr-2"></i> Découvrir les options de boost
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <h2 class="text-xl font-bold">KA<span class="text-primary">MA</span></h2>
+                    </div>
+                    <p class="text-primary-400 text-sm mt-2">Votre partenaire immobilier de confiance</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-primary-800 mt-6 pt-6 text-center text-primary-500 text-sm">
+                <p>© 2025 Kama. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="absolute right-0 top-0 h-full w-64 bg-white p-6">
+            <div class="flex justify-end">
+                <button id="close-menu" class="text-gray-500">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="mt-8 space-y-6">
+                <div>
+                    <p class="text-lg font-semibold text-secondary">Bonjour, Jean Dupont</p>
+                    <p class="text-gray-600">jean.dupont@email.com</p>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#" class="block py-2 text-gray-700 hover:text-primary">
+                        <i class="fas fa-user-edit mr-2"></i> Modifier le profil
+                    </a>
+                    <a href="#" class="block py-2 text-gray-700 hover:text-primary">
+                        <i class="fas fa-cog mr-2"></i> Paramètres
+                    </a>
+                    <a href="#" class="block py-2 text-gray-700 hover:text-red-500">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('open-menu')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('hidden');
+        });
+        
+        document.getElementById('close-menu')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            if (menu && !menu.classList.contains('hidden') && !event.target.closest('#mobile-menu')) {
+                menu.classList.add('hidden');
+            }
+        });
+        
+        // Simulate boosting action
+        document.querySelectorAll('.pulse').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.bg-white');
+                const title = card.querySelector('h3').textContent;
+                
+                alert(`Vous allez être redirigé vers la page de boost pour "${title}".\n\nOptions disponibles:\n- Mise en tête de liste\n- Ciblage géographique\n- Highlight visuel`);
+            });
+        });
+        
+        // Simulate delete action
+        document.querySelectorAll('[data-action="delete"]').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.bg-white');
+                const title = card.querySelector('h3').textContent;
+                
+                if (confirm(`Êtes-vous sûr de vouloir supprimer l'annonce "${title}" ?`)) {
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                }
+            });
+        });
+
+
+
+       
+    </script>
+</body>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Vendeur - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+       tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+             font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3780d4, #0b64b8);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0b73b8, #3761d4);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            border: 1px solid #3788d4;
+            color: #376ed4;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background-color: #3788d4;
+            color: white;
+        }
+        
+        .notification {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(55, 118, 212, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2" style="font-family: 'Times New Roman', Times, serif;">K</div>
+                <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+                <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+                <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+                <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+                <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+            </nav>
+
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:block">
+                    <p class="text-secondary font-medium">Bonjour, <span class="text-primary">Jean Dupont</span></p>
+                </div>
+                
+                 <a href="tableaudebord.html">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" 
+                         alt="Profile" class="w-10 h-10 rounded-full object-cover border-2 border-primary">
+                    <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"></span>
+                </div>
+                </a>
+                
+                <div class="hidden md:flex space-x-2">
+                    <button class="text-sm text-gray-600 hover:text-primary">
+                        <i class="fas fa-user-edit mr-1"></i>Modifier le profil
+                    </button>
+                    <button class="text-sm text-gray-600 hover:text-red-500">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Déconnexion
+                    </button>
+                </div>
+                
+                <button class="md:hidden text-gray-600">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notifications -->
+    <div class="container mx-auto px-4 mt-4">
+        <div class="notification bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-blue-400 text-lg"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        <span class="font-medium">Attention !</span> Votre annonce "Maison à Douala" est encore en attente de validation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-secondary">Mes Annonces</h2>
+                <p class="text-gray-600">Gérez toutes vos offres immobilières en un seul endroit</p>
+            </div>
+            <button onclick="window.location.href='vendre.html'" class="mt-4 md:mt-0 btn-primary text-white font-semibold py-3 px-6 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i> Créer une nouvelle annonce
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+                <div class="flex flex-wrap gap-2">
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Tous les types</option>
+                        <option>Vente</option>
+                        <option>Location</option>
+                        <option>Vacances</option>
+                    </select>
+                    
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Tous les statuts</option>
+                        <option>En ligne</option>
+                        <option>En attente</option>
+                        <option>Expirée</option>
+                    </select>
+                    
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Trier par date</option>
+                        <option>Plus récent</option>
+                        <option>Plus ancien</option>
+                        <option>Prix croissant</option>
+                        <option>Prix décroissant</option>
+                    </select>
+                </div>
+                
+                <div class="relative">
+                    <input type="text" placeholder="Rechercher une annonce..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-64">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offers Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Offer Card 1 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Maison à vendre" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-green-100 text-green-800">En ligne</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 1,248 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Maison individuelle</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Lyon, Rhône</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">425 000 €</p>
+                            <p class="text-gray-500 text-sm">Publiée le 12 mai</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Vente</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">4 chambres</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">180 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button type="button" id="SupBtn" data-bs-toggle="modal" data-bs-target="#exampleModal" class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Card 2 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Appartement à louer" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-blue-100 text-blue-800">En attente</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 342 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Appartement F3</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Marseille, Bouches-du-Rhône</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">950 € / mois</p>
+                            <p class="text-gray-500 text-sm">Publiée le 18 juin</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Location</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">3 pièces</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">75 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Card 3 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1615529162924-f8605388463e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Villa de vacances" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-blue-100 text-blue-800">En négociation</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 876 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Villa avec piscine</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Nice, Alpes-Maritimes</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">250 € / nuit</p>
+                            <p class="text-gray-500 text-sm">Publiée le 5 avril</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Vacances</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">5 chambres</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">200 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Offer Card 4 -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover transition-all duration-300">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
+                         alt="Terrain à vendre" class="w-full h-48 object-cover">
+                    <div class="absolute top-3 right-3">
+                        <span class="status-badge bg-red-100 text-red-800">Expirée</span>
+                    </div>
+                    <div class="absolute bottom-3 left-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        <i class="fas fa-eye mr-1"></i> 156 vues
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-bold text-lg text-secondary">Terrain constructible</h3>
+                            <p class="text-gray-600 text-sm"><i class="fas fa-map-marker-alt mr-1 text-primary"></i> Bordeaux, Gironde</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xl font-bold text-primary">180 000 €</p>
+                            <p class="text-gray-500 text-sm">Publiée le 3 mars</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Vente</span>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Zone urbaine</span>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">1 200 m²</span>
+                    </div>
+                    
+                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+                        <button onclick="window.location.href='modificationfiche.html'" class="btn-outline text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Modifier
+                        </button>
+                        <button class="text-gray-600 hover:text-red-500 text-xs py-1.5 px-3 rounded-lg flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Supprimer
+                        </button>
+                        <button onclick="window.location.href='sponso.html'" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs py-1.5 px-3 rounded-lg flex items-center pulse">
+                            <i class="fas fa-rocket mr-1"></i> Booster
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boost Section -->
+        <div class="mt-12 bg-gradient-to-r from-blue-50 to-amber-50 rounded-2xl shadow-sm p-6 border border-blue-100">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="flex-1 mb-6 md:mb-0 md:pr-6">
+                    <h3 class="text-xl font-bold text-secondary mb-2">Boostez vos annonces pour plus de visibilité</h3>
+                    <p class="text-gray-600 mb-4">
+                        Mettez vos biens en avant pour toucher plus de clients potentiels. 
+                        Vos annonces seront mieux positionnées dans les résultats de recherche.
+                    </p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Mise en tête de liste pendant 7, 15 ou 30 jours</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Ciblage géographique précis</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>Highlight visuel avec cadre doré</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-sm w-full md:w-1/3">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-lock text-primary text-2xl mb-2"></i>
+                        <p class="text-sm text-gray-600">
+                            Vous ne serez débité qu'après validation de votre annonce par notre équipe. 
+                            Le paiement est sécurisé.
+                        </p>
+                    </div>
+                    <button onclick="window.location.href='modificationfiche.html'" class="w-full btn-primary text-white font-semibold py-3 px-4 rounded-lg">
+                        <i class="fas fa-rocket mr-2"></i> Découvrir les options de boost
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-home text-primary text-2xl"></i>
+                        <h2 class="text-xl font-bold">KA<span class="text-primary">MA</span></h2>
+                    </div>
+                    <p class="text-primary-400 text-sm mt-2">Votre partenaire immobilier de confiance</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-primary-400 hover:text-primary transition">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-primary-800 mt-6 pt-6 text-center text-primary-500 text-sm">
+                <p>© 2025 Kama. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="absolute right-0 top-0 h-full w-64 bg-white p-6">
+            <div class="flex justify-end">
+                <button id="close-menu" class="text-gray-500">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="mt-8 space-y-6">
+                <div>
+                    <p class="text-lg font-semibold text-secondary">Bonjour, Jean Dupont</p>
+                    <p class="text-gray-600">jean.dupont@email.com</p>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#" class="block py-2 text-gray-700 hover:text-primary">
+                        <i class="fas fa-user-edit mr-2"></i> Modifier le profil
+                    </a>
+                    <a href="#" class="block py-2 text-gray-700 hover:text-primary">
+                        <i class="fas fa-cog mr-2"></i> Paramètres
+                    </a>
+                    <a href="#" class="block py-2 text-gray-700 hover:text-red-500">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('open-menu')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('hidden');
+        });
+        
+        document.getElementById('close-menu')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            if (menu && !menu.classList.contains('hidden') && !event.target.closest('#mobile-menu')) {
+                menu.classList.add('hidden');
+            }
+        });
+        
+        // Simulate boosting action
+        document.querySelectorAll('.pulse').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.bg-white');
+                const title = card.querySelector('h3').textContent;
+                
+                alert(`Vous allez être redirigé vers la page de boost pour "${title}".\n\nOptions disponibles:\n- Mise en tête de liste\n- Ciblage géographique\n- Highlight visuel`);
+            });
+        });
+        
+        // Simulate delete action
+        document.querySelectorAll('[data-action="delete"]').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.bg-white');
+                const title = card.querySelector('h3').textContent;
+                
+                if (confirm(`Êtes-vous sûr de vouloir supprimer l'annonce "${title}" ?`)) {
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                }
+            });
+        });
+
+
+
+       
+    </script>
+</body>
+>>>>>>> main/main
+</html>

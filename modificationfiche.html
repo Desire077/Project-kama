@@ -1,0 +1,1098 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier une annonce - Plateforme Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#60a5fa',
+                        light: '#f0f9ff',
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .form-section {
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(to right, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+        }
+        
+        .image-upload {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        
+        .image-upload:hover {
+            border-color: #3b82f6;
+            background-color: #f0f9ff;
+        }
+        
+        .image-preview {
+            transition: all 0.3s ease;
+        }
+        
+        .image-preview:hover {
+            transform: scale(1.05);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2" style="font-family: 'Times New Roman', Times, serif;">K</div>
+                <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+                <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+                <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+                <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+                <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="tableaudebord.html" class="text-gray-600 hover:text-blue-500 transition">
+                    <i class="fas fa-arrow-left mr-2"></i>Retour au tableau de bord
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Modifier votre annonce</h1>
+                <p class="text-gray-600">Apportez des modifications à votre bien immobilier</p>
+            </div>
+
+            <!-- Property Info -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex items-center space-x-4">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                         alt="Property" class="w-20 h-20 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Maison individuelle</h3>
+                        <p class="text-gray-600 text-sm">Lyon, Rhône • 4 chambres • 180 m²</p>
+                        <p class="text-blue-600 font-bold">425 000 €</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                            En ligne
+                        </span>
+                        <p class="text-gray-500 text-sm mt-1">Publiée le 12 mai 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="border-b border-gray-200">
+                    <nav class="flex space-x-8 px-6">
+                        <button class="tab-button py-4 px-2 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 active" data-tab="general">
+                            <i class="fas fa-info-circle mr-2"></i>Informations générales
+                        </button>
+                        <button class="tab-button py-4 px-2 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="details">
+                            <i class="fas fa-home mr-2"></i>Détails du bien
+                        </button>
+                        <button class="tab-button py-4 px-2 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="images">
+                            <i class="fas fa-images mr-2"></i>Photos
+                        </button>
+                        <button class="tab-button py-4 px-2 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300" data-tab="pricing">
+                            <i class="fas fa-euro-sign mr-2"></i>Prix et disponibilité
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- General Information Tab -->
+                    <div id="general" class="tab-content active">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Informations générales</h2>
+                        
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Titre de l'annonce</label>
+                                    <input type="text" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                           value="Maison individuelle" placeholder="Titre de votre annonce">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Type de bien</label>
+                                    <select class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                        <option value="maison">Maison</option>
+                                        <option value="appartement">Appartement</option>
+                                        <option value="terrain">Terrain</option>
+                                        <option value="villa">Villa</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Description</label>
+                                <textarea class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                          rows="4" placeholder="Décrivez votre bien...">Cette magnifique maison familiale offre un cadre de vie exceptionnel dans un quartier résidentiel calme. Elle dispose de 4 chambres, 2 salles de bain et un grand jardin. Idéale pour une famille.</textarea>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Pays</label>
+                                    <input type="text" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                           value="France" placeholder="Pays">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Ville</label>
+                                    <input type="text" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                           value="Lyon" placeholder="Ville">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Code postal</label>
+                                    <input type="text" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                           value="69000" placeholder="Code postal">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Adresse complète</label>
+                                <input type="text" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                       value="123 Rue de la Paix" placeholder="Adresse complète">
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Details Tab -->
+                    <div id="details" class="tab-content">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Détails du bien</h2>
+                        
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Surface (m²)</label>
+                                    <input type="number" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                           value="180" placeholder="Surface">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Nombre de chambres</label>
+                                    <select class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                        <option value="1">1 chambre</option>
+                                        <option value="2">2 chambres</option>
+                                        <option value="3">3 chambres</option>
+                                        <option value="4" selected>4 chambres</option>
+                                        <option value="5">5 chambres</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Salles de bain</label>
+                                    <select class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                        <option value="1">1 salle de bain</option>
+                                        <option value="2" selected>2 salles de bain</option>
+                                        <option value="3">3 salles de bain</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Équipements</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3" checked>
+                                            <span>Jardin</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3" checked>
+                                            <span>Garage</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3">
+                                            <span>Piscine</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3" checked>
+                                            <span>Balcon</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Énergie</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3" checked>
+                                            <span>Électricité</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3" checked>
+                                            <span>Eau courante</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3" checked>
+                                            <span>Chauffage</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-3">
+                                            <span>Climatisation</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Images Tab -->
+                    <div id="images" class="tab-content">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Photos du bien</h2>
+                        
+                        <div class="space-y-6">
+                            <!-- Current Images -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Photos actuelles</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="relative image-preview">
+                                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                                             alt="Property" class="w-full h-32 object-cover rounded-lg">
+                                        <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="relative image-preview">
+                                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                                             alt="Property" class="w-full h-32 object-cover rounded-lg">
+                                        <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="relative image-preview">
+                                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                                             alt="Property" class="w-full h-32 object-cover rounded-lg">
+                                        <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="relative image-preview">
+                                        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" 
+                                             alt="Property" class="w-full h-32 object-cover rounded-lg">
+                                        <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Upload New Images -->
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Ajouter de nouvelles photos</h3>
+                                <div class="image-upload rounded-lg p-8 text-center cursor-pointer">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                                    <p class="font-medium mb-2">Glissez-déposez vos photos ici</p>
+                                    <p class="text-gray-500 text-sm mb-4">ou</p>
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                                        Sélectionner des fichiers
+                                    </button>
+                                    <input type="file" multiple accept="image/*" class="hidden">
+                                    <p class="text-gray-500 text-xs mt-4">Formats acceptés: JPEG, PNG | Taille max: 5 Mo par photo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Tab -->
+                    <div id="pricing" class="tab-content">
+                        <h2 class="text-xl font-bold text-gray-800 mb-6">Prix et disponibilité</h2>
+                        
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Prix</label>
+                                    <div class="relative">
+                                        <input type="number" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                               value="425000" placeholder="Prix">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <span class="text-gray-500">€</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Type de transaction</label>
+                                    <select class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                        <option value="vente" selected>Vente</option>
+                                        <option value="location">Location</option>
+                                        <option value="vacances">Vacances</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Date de disponibilité</label>
+                                    <input type="date" class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none" 
+                                           value="2024-06-01">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Statut</label>
+                                    <select class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none">
+                                        <option value="online" selected>En ligne</option>
+                                        <option value="pending">En attente</option>
+                                        <option value="draft">Brouillon</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-between items-center mt-8">
+                <a href="tableaudebord.html" class="text-gray-600 hover:text-gray-800 transition">
+                    <i class="fas fa-arrow-left mr-2"></i>Annuler
+                </a>
+                
+                <div class="flex space-x-4">
+                    <button class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition">
+                        Sauvegarder comme brouillon
+                    </button>
+                    <button class="btn-primary text-white px-6 py-3 rounded-lg">
+                        <i class="fas fa-save mr-2"></i>Enregistrer les modifications
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Image upload functionality
+        document.querySelector('.image-upload').addEventListener('click', function() {
+            this.querySelector('input[type="file"]').click();
+        });
+
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            const uploadArea = document.querySelector('.image-upload');
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'relative image-preview';
+                        imageContainer.innerHTML = `
+                            <img src="${e.target.result}" alt="Property" class="w-full h-32 object-cover rounded-lg">
+                            <button class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        
+                        // Insert before the upload area
+                        uploadArea.parentNode.insertBefore(imageContainer, uploadArea);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // Delete image functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.image-preview button')) {
+                e.target.closest('.image-preview').remove();
+            }
+        });
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real application, this would validate and save the form
+            alert('Modifications sauvegardées avec succès !');
+        });
+    </script>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modifier Annonce Immobilière</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1e40af",
+              secondary: "#3b82f6",
+              accent: "#60a5fa",
+              light: "#f0f9ff",
+              dark: "#0f172a",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      .gold-border {
+        border: 1px solid #376ed4;
+      }
+
+      .gold-text {
+        color: #3776d4;
+      }
+
+      .gold-bg {
+        background-color: #377bd4;
+      }
+
+      .gold-hover:hover {
+        background-color: #2a74c9;
+      }
+
+      .dark-card {
+        background-color: #f7f7f7;
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5);
+      }
+
+      .photo-placeholder {
+        background: linear-gradient(45deg, #ebebeb, #e2e2e2);
+        border: 2px dashed #dfdfdf;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #eeeeee;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: rgb(0, 0, 0);
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #376ed4;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      .photo-container {
+        transition: all 0.3s ease;
+      }
+
+      .photo-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(55, 162, 212, 0.2);
+      }
+
+      .section-title {
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: #378dd4;
+      }
+
+      .drop-area {
+        border: 2px dashed #c0c0c0;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .drop-area.active {
+        border-color: #3776d4;
+        background-color: rgba(55, 162, 212, 0.1);
+      }
+
+      .animate-pulse-slow {
+        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+      <!-- Header -->
+      <header class="mb-10 text-center">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-2"
+              style="font-family: 'Times New Roman', Times, serif">
+              K
+            </div>
+            <h1 class="text-2xl font-bold text-blue-800">Kama</h1>
+          </div>
+
+          <nav class="hidden md:flex space-x-8">
+            <a href="kama.html" class="text-gray-600 hover:text-blue-500 transition">Accueil</a>
+            <a href="acheter.html" class="text-gray-600 hover:text-blue-500 transition">Acheter</a>
+            <a href="louer.html" class="text-gray-600 hover:text-blue-500 transition">Louer</a>
+            <a href="vacances.html" class="text-gray-600 hover:text-blue-500 transition">Vacances</a>
+            <a href="vendre.html" class="text-gray-600 hover:text-blue-500 transition">Vendre</a>
+          </nav>
+
+          <div class="flex items-center space-x-4">
+            <div class="hidden md:block">
+              <p class="text-secondary font-medium">Bonjour, <span class="text-primary">Jean Dupont</span></p>
+            </div>
+            <a href="tableaudebord.html">
+              <div class="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80"
+                  alt="Profile"
+                  class="w-10 h-10 rounded-full object-cover border-2 border-primary" />
+                <span class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"></span>
+              </div>
+            </a>
+
+            <div class="hidden md:flex space-x-2">
+              <button class="text-sm text-gray-600 hover:text-primary"><i class="fas fa-user-edit mr-1"></i>Modifier le profil</button>
+              <button class="text-sm text-gray-600 hover:text-red-500"><i class="fas fa-sign-out-alt mr-1"></i>Déconnexion</button>
+            </div>
+
+            <button class="md:hidden text-gray-600">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold gold-text mb-2">Modifier Votre Annonce Immobilière</h1>
+        <p class="text-gray-400">Mettez à jour les détails de votre bien pour maximiser sa visibilité</p>
+      </header>
+
+      <!-- Main Content -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Photos Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier les photos du bien</h2>
+
+            <div class="mb-6">
+              <div class="flex flex-wrap gap-4 mb-4">
+                <!-- Existing Photos -->
+                <div class="photo-container relative group">
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Propriété"
+                    class="w-32 h-32 object-cover rounded-lg" />
+                  <button
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-times text-xs"></i>
+                  </button>
+                </div>
+
+                <div class="photo-container relative group">
+                  <img
+                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Salon"
+                    class="w-32 h-32 object-cover rounded-lg" />
+                  <button
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-times text-xs"></i>
+                  </button>
+                </div>
+
+                <div class="photo-container relative group">
+                  <img
+                    src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Cuisine"
+                    class="w-32 h-32 object-cover rounded-lg" />
+                  <button
+                    class="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fas fa-times text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <p class="text-sm text-gray-400 mb-4">Minimum 1 photo requise – 10 maximum</p>
+              <p class="text-xs text-gray-500">Format conseillé : JPEG / PNG – Taille max : 5Mo</p>
+            </div>
+
+            <!-- Add Photo Area -->
+            <div class="drop-area p-8 text-center cursor-pointer" id="dropArea">
+              <i class="fas fa-cloud-upload-alt text-3xl gold-text mb-3"></i>
+              <p class="mb-2">Glissez-déposez vos photos ici</p>
+              <p class="text-sm text-gray-400 mb-4">ou</p>
+              <button class="gold-bg text-black px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition">
+                <i class="fas fa-plus mr-2"></i> Ajouter une photo
+              </button>
+              <input type="file" id="fileInput" class="hidden" accept="image/*" />
+            </div>
+          </section>
+
+          <!-- Characteristics Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier les caractéristiques du bien</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium mb-2">Titre de l'annonce</label>
+                <input
+                  type="text"
+                  value="Villa moderne à Bonapriso"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Lieu / Quartier</label>
+                <input
+                  type="text"
+                  value="Bonapriso"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Type de bien</label>
+                <select class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                  <option>Maison</option>
+                  <option>Appartement</option>
+                  <option>Terrain</option>
+                  <option>Villa</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Superficie (m²)</label>
+                <input
+                  type="number"
+                  value="250"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de chambres</label>
+                <input
+                  type="number"
+                  value="4"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de salons</label>
+                <input
+                  type="number"
+                  value="2"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de douches</label>
+                <input
+                  type="number"
+                  value="3"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium mb-2">Nombre de cuisines</label>
+                <input
+                  type="number"
+                  value="1"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+
+              <!-- Toggle Features -->
+              <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
+                  <span>Terrasse</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
+                  <span>Piscine</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-dark-700 rounded-lg">
+                  <span>Parking</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium mb-2">État du bien</label>
+                <select class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gold-500">
+                  <option>Neuf</option>
+                  <option>Bon état</option>
+                  <option>À rénover</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <!-- Description Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier la description</h2>
+
+            <div class="mb-4">
+              <p class="text-sm text-gray-400 mb-3">Soyez clair, précis et honnête. Une bonne description augmente vos chances !</p>
+              <textarea
+                class="w-full h-40 bg-dark-700 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gold-500"
+                placeholder="Décrivez votre bien en détail...">
+Magnifique villa moderne située dans le quartier résidentiel de Bonapriso. Cette propriété offre un espace de vie spacieux avec 4 chambres, 2 salons, 3 salles de bains et une cuisine entièrement équipée. La villa dispose également d'une terrasse spacieuse, d'un jardin bien entretenu et d'un parking privé. Proche des commodités et des écoles, cette villa est idéale pour une famille recherchant un cadre de vie confortable et sécurisé.</textarea
+              >
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-bold mr-1"></i> Gras</button>
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-italic mr-1"></i> Italic</button>
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-list-ul mr-1"></i> Liste</button>
+              <button class="text-xs bg-dark-700 px-3 py-1 rounded-lg hover:bg-opacity-80"><i class="fas fa-link mr-1"></i> Lien</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-8">
+          <!-- Price Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">Modifier le prix</h2>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">Prix</label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">FCFA</span>
+                <input
+                  type="number"
+                  value="45000000"
+                  class="w-full bg-dark-700 border border-gray-700 rounded-lg px-4 py-2 pl-12 focus:outline-none focus:ring-2 focus:ring-gold-500" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-3">Type de prix</label>
+              <div class="space-y-3">
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" checked />
+                  <span class="ml-2">Vente</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                  <span class="ml-2">Location mensuelle</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                  <span class="ml-2">Prix à discuter</span>
+                </label>
+                <label class="flex items-center cursor-pointer">
+                  <input type="radio" name="price-type" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                  <span class="ml-2">Gratuit</span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- Status Section -->
+          <section class="dark-card rounded-xl p-6 gold-border">
+            <h2 class="section-title text-xl font-bold mb-6">État de l'annonce</h2>
+
+            <div class="space-y-4">
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" checked />
+                <span class="ml-2">Annonce active</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                <span class="ml-2">Annonce en cours de négociation</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                <span class="ml-2">Annonce temporairement indisponible</span>
+              </label>
+              <label class="flex items-center cursor-pointer">
+                <input type="radio" name="status" class="h-4 w-4 text-gold-500 focus:ring-gold-500" />
+                <span class="ml-2">Annonce déjà vendue / louée</span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Boost Section -->
+          <section class="dark-card rounded-xl p-6 gold-border border-2 border-gold-500">
+            <div class="text-center">
+              <div class="w-16 h-16 rounded-full bg-gold-500 bg-opacity-20 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-fire text-2xl gold-text"></i>
+              </div>
+              <h3 class="text-xl font-bold mb-2">Booster cette annonce</h3>
+              <p class="text-gray-300 mb-4">Pour qu'elle apparaisse en tête des résultats</p>
+
+              <ul class="text-left space-y-2 mb-6">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-gold-500 mt-1 mr-2"></i>
+                  <span>Plus de visibilité</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-gold-500 mt-1 mr-2"></i>
+                  <span>Apparaît en premier pendant 7 jours</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-gold-500 mt-1 mr-2"></i>
+                  <span>Badge "À ne pas rater" ajouté</span>
+                </li>
+              </ul>
+
+              <button
+                onclick="window.location.href='sponso.html'"
+                class="w-full gold-bg text-black py-3 rounded-lg font-bold hover:bg-opacity-90 transition flex items-center justify-center">
+                <i class="fas fa-rocket mr-2"></i> Booster l'annonce
+              </button>
+            </div>
+          </section>
+
+          <!-- Save Button -->
+          <div class="sticky bottom-6">
+            <button id="saveButton" class="w-full gold-bg text-black py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition animate-pulse-slow">
+              <i class="fas fa-save mr-2"></i> Enregistrer les modifications
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+      <div class="dark-card rounded-xl p-8 max-w-md w-full mx-4 text-center">
+        <div class="w-20 h-20 rounded-full bg-green-500 bg-opacity-20 flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-check text-4xl text-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">Annonce mise à jour !</h3>
+        <p class="text-gray-300 mb-6">Vos modifications ont été enregistrées avec succès.</p>
+        <button id="closeModal" class="gold-bg text-black px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition">Continuer</button>
+      </div>
+    </div>
+
+    <script>
+      // Drag and drop functionality
+      const dropArea = document.getElementById("dropArea");
+      const fileInput = document.getElementById("fileInput");
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight() {
+        dropArea.classList.add("active");
+      }
+
+      function unhighlight() {
+        dropArea.classList.remove("active");
+      }
+
+      dropArea.addEventListener("drop", handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      }
+
+      dropArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", () => {
+        handleFiles(fileInput.files);
+      });
+
+      function handleFiles(files) {
+        [...files].forEach(uploadFile);
+      }
+
+      function uploadFile(file) {
+        if (!file.type.match("image.*")) {
+          alert("Veuillez sélectionner uniquement des images.");
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert("La taille de l'image ne doit pas dépasser 5Mo.");
+          return;
+        }
+
+        // In a real app, you would upload the file to a server here
+        // For demo purposes, we'll just show a success message
+        console.log("Fichier prêt à être uploadé:", file.name);
+      }
+
+      // Save button functionality
+      const saveButton = document.getElementById("saveButton");
+      const successModal = document.getElementById("successModal");
+      const closeModal = document.getElementById("closeModal");
+
+      saveButton.addEventListener("click", function () {
+        // Simulate saving process
+        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enregistrement...';
+        this.disabled = true;
+
+        setTimeout(() => {
+          successModal.classList.remove("hidden");
+          this.innerHTML = '<i class="fas fa-save mr-2"></i> Enregistrer les modifications';
+          this.disabled = false;
+        }, 1500);
+      });
+
+      closeModal.addEventListener("click", function () {
+        successModal.classList.add("hidden");
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener("click", function (event) {
+        if (event.target === successModal) {
+          successModal.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>
+>>>>>>> main/main

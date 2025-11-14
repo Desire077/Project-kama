@@ -1,0 +1,66 @@
+(node:81036) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:81036) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+  console.log
+    MongoDB connected
+
+      at log (config/db.js:10:13)
+
+PASS tests/refresh.test.js
+  Auth refresh and logout
+    √ register sets refresh cookie and refresh endpoint returns new token (615 ms)
+    √ logout clears cookie and subsequent refresh fails (50 ms)
+
+(node:81036) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(node:81036) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+  console.log
+    MongoDB connected
+
+      at log (config/db.js:10:13)
+
+PASS tests/email.test.js
+  Email endpoints
+    √ POST /api/email/welcome should send welcome email (protected) (36 ms)
+    √ POST /api/email/inquiry should send inquiry email (protected) (32 ms)
+    √ POST /api/email/reset-password should send reset email (public) (8 ms)
+
+(node:81036) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(node:81036) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+  console.log
+    MongoDB connected
+
+      at log (config/db.js:10:13)
+
+PASS tests/upload.test.js
+  Upload images integration
+    √ POST /api/properties/:id/images uploads images (mocked Cloudinary) (562 ms)
+
+(node:81036) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(node:81036) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+  console.log
+    MongoDB connected
+
+      at log (config/db.js:10:13)
+
+PASS tests/properties.test.js
+  Properties integration
+    √ GET /api/properties returns list (56 ms)
+    √ GET /api/properties/:id returns property (31 ms)
+
+(node:81036) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(node:81036) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+  console.log
+    MongoDB connected
+
+      at log (config/db.js:10:13)
+
+PASS tests/auth.test.js
+  Auth integration
+    √ register, login and get me (505 ms)
+
+Test Suites: 5 passed, 5 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        9.696 s
+Ran all test suites.
+^C

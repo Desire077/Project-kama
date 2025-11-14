@@ -1,0 +1,5 @@
+# pack-refs with: peeled fully-peeled sorted 
+3fba0e522a3960af5d95391cbd559c5f7641eb13 refs/heads/cursor/implement-project-kama-functionality-changes-ef12
+a0f91dd1c348dfbd68e85e87431378830ee8b318 refs/heads/main
+28f99595ee60b31c0215aa3f91d024ff0553da7a refs/heads/master
+3fba0e522a3960af5d95391cbd559c5f7641eb13 refs/pull/1/head

@@ -90,9 +90,6 @@ exports.createProperty = async (req, res) => {
 
     // Populate owner info
     await property.populate('owner', 'firstName lastName email whatsapp');
-    
-    console.log('Property created with ID:', property._id);
-    console.log('Property images after creation:', property.images);
 
     res.status(201).json({
       message: 'Propriété créée avec succès',
@@ -149,9 +146,25 @@ exports.getProperties = async (req, res) => {
     }
 
     // Construction du filtre
-    const filter = { status };
+    // For public display, accept both 'approved' and 'online' status
+    // This ensures backward compatibility with existing properties
+    const filter = {};
+    if (status === 'approved') {
+      filter.status = { $in: ['approved', 'online'] };
+    } else {
+      filter.status = status;
+    }
     
-    if (type) filter.type = type;
+    // Handle type filter - can be a string or an array
+    if (type) {
+      if (Array.isArray(type)) {
+        // If type is an array, use $in operator to match any of the types
+        filter.type = { $in: type };
+      } else {
+        // If type is a string, use exact match
+        filter.type = type;
+      }
+    }
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = parseInt(minPrice);
@@ -170,13 +183,6 @@ exports.getProperties = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
-      
-    console.log('Found properties:', properties.length);
-    if (properties.length > 0) {
-      console.log('First property images:', properties[0].images);
-      console.log('First property ID:', properties[0]._id);
-      console.log('First property all data:', JSON.stringify(properties[0], null, 2));
-    }
 
     const total = await Property.countDocuments(filter);
 
@@ -221,17 +227,16 @@ exports.getPropertyById = async (req, res) => {
       return res.status(404).json({ message: 'Propriété non trouvée.' });
     }
       
-    // Increment view count only if it's a unique view
-    // If user is logged in, check if they've already viewed this property
-    let shouldIncrementView = true;
-      
+    // Increment view count only for utilisateurs authentifiés
+    // et uniquement lors de la première visite de ce compte
+    let shouldIncrementView = false;
+
     if (req.user) {
       // Check if user has already viewed this property
-      if (property.viewedBy.includes(req.user.id)) {
-        shouldIncrementView = false;
-      } else {
-        // Add user to viewedBy array
+      if (!property.viewedBy.includes(req.user.id)) {
+        // Add user to viewedBy array and increment views
         property.viewedBy.push(req.user.id);
+        shouldIncrementView = true;
       }
     }
       
@@ -264,11 +269,6 @@ exports.getPropertyById = async (req, res) => {
     }
       
     await property.save();
-      
-    console.log('Property found:', property._id);
-    console.log('Property images:', property.images);
-    console.log('Property owner:', property.owner);
-    console.log('Property full data:', JSON.stringify(property, null, 2));
 
     res.json(property);
   } catch (err) {
@@ -360,11 +360,8 @@ exports.uploadImages = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Aucune image fournie.' });
     }
-
-    console.log('Files received:', req.files.length);
     
     const uploadPromises = req.files.map(file => {
-      console.log('Uploading file:', file.originalname);
       return new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream(
           { resource_type: 'image', folder: 'kama/properties' },
@@ -373,7 +370,6 @@ exports.uploadImages = async (req, res) => {
               console.error('Cloudinary upload error:', error);
               reject(error);
             } else {
-              console.log('Upload successful:', result.secure_url);
               resolve(result);
             }
           }
@@ -382,29 +378,16 @@ exports.uploadImages = async (req, res) => {
     });
 
     const uploadResults = await Promise.all(uploadPromises);
-    console.log('Upload results:', uploadResults.length);
 
     // Ajouter les images à la propriété
     const newImages = uploadResults.map(result => ({
       url: result.secure_url,
       public_id: result.public_id
     }));
-
-    console.log('New images to add:', newImages);
     
     // Mettre à jour la propriété avec les nouvelles images
     property.images = [...property.images, ...newImages];
-    const updatedProperty = await property.save();
-    
-    console.log('Property images after save:', updatedProperty.images);
-    console.log('Property ID after save:', updatedProperty._id);
-    console.log('Full property after save:', JSON.stringify(updatedProperty, null, 2));
-
-    // Recharger la propriété pour s'assurer que les images sont correctement sauvegardées
-    const savedProperty = await Property.findById(updatedProperty._id)
-      .populate('owner', 'firstName lastName email whatsapp createdAt _id');
-    
-    console.log('Reloaded property with images:', savedProperty.images);
+    const savedProperty = await property.save();
 
     res.json({
       message: 'Images uploadées avec succès',
@@ -423,16 +406,10 @@ exports.uploadImages = async (req, res) => {
  */
 exports.getMyProperties = async (req, res) => {
   try {
-    // Log the user information for debugging
-    console.log('User info in getMyProperties:', req.user);
-    
     // Check if user is authenticated (since this route is now public, we need to check auth here)
     if (!req.user || !req.user.id) {
-      console.log('User not authenticated or missing ID');
       return res.status(401).json({ message: 'Utilisateur non authentifié.' });
     }
-    
-    console.log('Searching properties for user ID:', req.user.id);
     const properties = await Property.find({ owner: req.user.id })
       .populate('owner', 'firstName lastName email whatsapp createdAt _id')
       .sort({ createdAt: -1 });
@@ -440,16 +417,11 @@ exports.getMyProperties = async (req, res) => {
     // Add review count to each property
     const propertiesWithReviewCount = properties.map(property => {
       const propertyObj = property.toObject();
-      propertyObj.reviewCount = property.reviews.length;
+      propertyObj.reviewCount = (property.reviews || []).length;
       return propertyObj;
     });
-      
-    console.log('My properties found:', propertiesWithReviewCount.length);
-    if (propertiesWithReviewCount.length > 0) {
-      console.log('First property images:', propertiesWithReviewCount[0].images);
-    }
 
-    res.json(propertiesWithReviewCount);
+    res.json({ properties: propertiesWithReviewCount });
   } catch (err) {
     console.error('Get my properties error:', err);
     // Send more detailed error information for debugging
@@ -468,9 +440,6 @@ exports.getPropertiesByUser = async (req, res) => {
   try {
     const { userId } = req.params;
     
-    // Log request details for debugging
-    console.log('getPropertiesByUser called with:', { userId, requestingUser: req.user });
-    
     // Validate user ID
     if (!userId) {
       console.log('User ID is missing');
@@ -481,33 +450,24 @@ exports.getPropertiesByUser = async (req, res) => {
     // If so, show all properties (including non-approved ones)
     // If not, show only approved properties
     const filter = { owner: userId };
-    console.log('Initial filter:', filter);
     
     // Si l'utilisateur n'est pas connecté ou s'il ne consulte pas son propre profil,
     // ne montrer que les propriétés approuvées
     if (!req.user || req.user.id !== userId) {
-      filter.status = 'approved';
-      console.log('User is not owner, showing only approved properties');
-    } else {
-      console.log('User is owner, showing all properties');
+      filter.status = { $in: ['approved', 'online'] };
     }
-    // Sinon (si l'utilisateur consulte son propre profil), montrer toutes les propriétés
-    
-    console.log('Final filter:', filter);
     const properties = await Property.find(filter)
       .populate('owner', 'firstName lastName email whatsapp')
       .sort({ createdAt: -1 });
-      
-    console.log(`Properties found for user ${userId}:`, properties.length);
-    console.log('Properties data:', properties.map(p => ({
-      id: p._id,
-      title: p.title,
-      status: p.status,
-      owner: p.owner._id
-    })));
 
     // Return the same format as getMyProperties for consistency
-    res.json(properties);
+    const propertiesWithReviewCount = properties.map(property => {
+      const propertyObj = property.toObject();
+      propertyObj.reviewCount = (property.reviews || []).length;
+      return propertyObj;
+    });
+
+    res.json({ properties: propertiesWithReviewCount });
   } catch (err) {
     console.error('Get properties by user error:', err);
     res.status(500).json({ message: 'Erreur serveur lors de la récupération des propriétés.' });
@@ -575,7 +535,6 @@ exports.removeImage = async (req, res) => {
     if (imageToDelete.public_id) {
       try {
         await cloudinary.uploader.destroy(imageToDelete.public_id);
-        console.log('Image removed from Cloudinary:', imageToDelete.public_id);
       } catch (cloudinaryErr) {
         console.error('Error removing image from Cloudinary:', cloudinaryErr);
         // Continue with the operation even if Cloudinary deletion fails
@@ -625,12 +584,15 @@ exports.addReview = async (req, res) => {
     }
     
     // Check if user already reviewed this property
-    const existingReview = property.reviews.find(review => review.user.toString() === req.user.id);
+    const existingReview = (property.reviews || []).find(review => review.user.toString() === req.user.id);
     if (existingReview) {
       return res.status(400).json({ message: 'Vous avez déjà laissé un avis sur cette annonce.' });
     }
     
     // Add review
+    if (!property.reviews) {
+      property.reviews = [];
+    }
     property.reviews.push({
       user: req.user.id,
       rating,
@@ -646,7 +608,9 @@ exports.addReview = async (req, res) => {
       select: 'firstName lastName'
     });
     
-    const newReview = property.reviews[property.reviews.length - 1];
+    const newReview = property.reviews && property.reviews.length > 0 
+      ? property.reviews[property.reviews.length - 1]
+      : null;
     
     res.status(201).json({
       message: 'Avis ajouté avec succès',
@@ -684,6 +648,9 @@ exports.respondToReview = async (req, res) => {
     }
     
     // Find the review
+    if (!property.reviews || property.reviews.length === 0) {
+      return res.status(404).json({ message: 'Avis non trouvé.' });
+    }
     const review = property.reviews.id(reviewId);
     if (!review) {
       return res.status(404).json({ message: 'Avis non trouvé.' });
@@ -743,7 +710,7 @@ exports.getPropertyReviews = async (req, res) => {
     }
     
     res.json({
-      reviews: property.reviews
+      reviews: property.reviews || []
     });
   } catch (err) {
     console.error('Get property reviews error:', err);
@@ -771,11 +738,8 @@ exports.uploadDocuments = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Aucun document fourni.' });
     }
-
-    console.log('Document files received:', req.files.length);
     
     const uploadPromises = req.files.map(file => {
-      console.log('Uploading document file:', file.originalname);
       return new Promise((resolve, reject) => {
         cloudinary.uploader.upload_stream(
           { resource_type: 'raw', folder: 'kama/documents' },
@@ -784,7 +748,6 @@ exports.uploadDocuments = async (req, res) => {
               console.error('Cloudinary document upload error:', error);
               reject(error);
             } else {
-              console.log('Document upload successful:', result.secure_url);
               resolve(result);
             }
           }
@@ -793,27 +756,16 @@ exports.uploadDocuments = async (req, res) => {
     });
 
     const uploadResults = await Promise.all(uploadPromises);
-    console.log('Document upload results:', uploadResults.length);
 
     // Ajouter les documents à la propriété
     const newDocuments = uploadResults.map(result => ({
       url: result.secure_url,
       public_id: result.public_id
     }));
-
-    console.log('New documents to add:', newDocuments);
     
     // Mettre à jour la propriété avec les nouveaux documents
     property.documents = [...property.documents, ...newDocuments];
-    const updatedProperty = await property.save();
-    
-    console.log('Property documents after save:', updatedProperty.documents);
-
-    // Recharger la propriété pour s'assurer que les documents sont correctement sauvegardées
-    const savedProperty = await Property.findById(updatedProperty._id)
-      .populate('owner', 'firstName lastName email whatsapp createdAt _id');
-    
-    console.log('Reloaded property with documents:', savedProperty.documents);
+    const savedProperty = await property.save();
 
     res.json({
       message: 'Documents uploadés avec succès',
@@ -914,6 +866,9 @@ exports.reportComment = async (req, res) => {
       return res.status(404).json({ message: 'Propriété non trouvée.' });
     }
 
+    if (!property.reviews || property.reviews.length === 0) {
+      return res.status(404).json({ message: 'Commentaire non trouvé.' });
+    }
     const comment = property.reviews.id(req.params.commentId);
     
     if (!comment) {
@@ -957,6 +912,9 @@ exports.deleteComment = async (req, res) => {
       return res.status(404).json({ message: 'Propriété non trouvée.' });
     }
 
+    if (!property.reviews || property.reviews.length === 0) {
+      return res.status(404).json({ message: 'Commentaire non trouvé.' });
+    }
     const comment = property.reviews.id(req.params.commentId);
     
     if (!comment) {

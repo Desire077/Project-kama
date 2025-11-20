@@ -12,7 +12,7 @@ const Property = require('../models/Property');
 router.get('/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    res.json({ user });
   } catch (err) {
     console.error('Get profile error:', err);
     res.status(500).json({ message: 'Erreur serveur lors de la récupération du profil.' });
@@ -347,6 +347,74 @@ router.delete('/alerts/:alertId', protect, async (req, res) => {
 });
 
 /**
+ * Récupérer l'abonnement de l'utilisateur
+ * GET /api/users/subscription
+ */
+router.get('/subscription', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('subscription');
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+    res.json({ subscription: user.subscription });
+  } catch (err) {
+    console.error('Get subscription error:', err);
+    res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'abonnement.' });
+  }
+});
+
+/**
+ * Rafraîchir le statut d'abonnement de l'utilisateur
+ * POST /api/users/subscription/refresh
+ */
+router.post('/subscription/refresh', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+    
+    // Check if subscription has expired
+    if (user.subscription.expiresAt && new Date(user.subscription.expiresAt) < new Date()) {
+      user.subscription.active = false;
+      await user.save();
+    }
+    
+    res.json({ subscription: user.subscription });
+  } catch (err) {
+    console.error('Refresh subscription error:', err);
+    res.status(500).json({ message: 'Erreur serveur lors de la mise à jour de l\'abonnement.' });
+  }
+});
+
+/**
+ * Vérifier le statut premium de l'utilisateur
+ * GET /api/users/premium-status
+ */
+router.get('/premium-status', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+    
+    const isPremium = user.subscription && 
+                     user.subscription.active && 
+                     user.subscription.expiresAt && 
+                     new Date(user.subscription.expiresAt) > new Date();
+    
+    res.json({ 
+      isPremium,
+      subscription: user.subscription,
+      expiresAt: user.subscription?.expiresAt
+    });
+  } catch (err) {
+    console.error('Get premium status error:', err);
+    res.status(500).json({ message: 'Erreur serveur lors de la vérification du statut premium.' });
+  }
+});
+
+/**
  * Récupérer un utilisateur par ID
  * GET /api/users/:id
  */
@@ -596,74 +664,6 @@ router.delete('/:id/avatar', protect, async (req, res) => {
   } catch (err) {
     console.error('Delete profile picture error:', err);
     res.status(500).json({ message: 'Erreur serveur lors de la suppression de la photo de profil.' });
-  }
-});
-
-/**
- * Récupérer l'abonnement de l'utilisateur
- * GET /api/users/subscription
- */
-router.get('/subscription', protect, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('subscription');
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-    }
-    res.json({ subscription: user.subscription });
-  } catch (err) {
-    console.error('Get subscription error:', err);
-    res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'abonnement.' });
-  }
-});
-
-/**
- * Rafraîchir le statut d'abonnement de l'utilisateur
- * POST /api/users/subscription/refresh
- */
-router.post('/subscription/refresh', protect, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-    }
-    
-    // Check if subscription has expired
-    if (user.subscription.expiresAt && new Date(user.subscription.expiresAt) < new Date()) {
-      user.subscription.active = false;
-      await user.save();
-    }
-    
-    res.json({ subscription: user.subscription });
-  } catch (err) {
-    console.error('Refresh subscription error:', err);
-    res.status(500).json({ message: 'Erreur serveur lors de la mise à jour de l\'abonnement.' });
-  }
-});
-
-/**
- * Vérifier le statut premium de l'utilisateur
- * GET /api/users/premium-status
- */
-router.get('/premium-status', protect, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-    }
-    
-    const isPremium = user.subscription && 
-                     user.subscription.active && 
-                     user.subscription.expiresAt && 
-                     new Date(user.subscription.expiresAt) > new Date();
-    
-    res.json({ 
-      isPremium,
-      subscription: user.subscription,
-      expiresAt: user.subscription?.expiresAt
-    });
-  } catch (err) {
-    console.error('Get premium status error:', err);
-    res.status(500).json({ message: 'Erreur serveur lors de la vérification du statut premium.' });
   }
 });
 

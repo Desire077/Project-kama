@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import propertyClient from '../api/propertyClient';
 import userClient from '../api/userClient';
+import ProtectedOfferLink from '../components/ProtectedOfferLink';
 
 export default function Vacances() {
   const user = useSelector(state => state.auth.user);
@@ -121,7 +122,7 @@ export default function Vacances() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {offers.map(offer => (
                   <div key={offer._id} className="premium-card overflow-hidden hover-lift transition-all duration-300 shadow-md hover:shadow-xl fade-in">
-                    <Link to={`/offers/${offer._id}`} className="block">
+                    <ProtectedOfferLink to={`/offers/${offer._id}`} className="block">
                       {offer.images && offer.images.length > 0 ? (
                         <div className="relative">
                           <img
@@ -232,7 +233,7 @@ export default function Vacances() {
                           </button>
                         </div>
                       </div>
-                    </Link>
+                    </ProtectedOfferLink>
                   </div>
                 ))}
               </div>

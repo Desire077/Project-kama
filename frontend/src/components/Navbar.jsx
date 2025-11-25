@@ -243,7 +243,7 @@ export default function Navbar() {
                 <Button
                   as={Link}
                   to="/register"
-                  variant="secondary"
+                  variant="gold"
                   size="sm"
                   className="font-semibold"
                 >
@@ -341,7 +341,7 @@ export default function Navbar() {
                 <Button
                   as={Link}
                   to="/register"
-                  variant="secondary"
+                  variant="gold"
                   size="sm"
                   fullWidth
                   onClick={() => setMobileOpen(false)}

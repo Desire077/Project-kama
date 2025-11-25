@@ -6,7 +6,7 @@ import api from '../api/api'
 import authClient from '../api/authClient'
 import { useDispatch } from 'react-redux'
 import { setUser, setToken } from '../store/slices/authSlice'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 const schema = z.object({
   email: z.string().email('Email invalide'),
@@ -16,15 +16,27 @@ const schema = z.object({
 export default function Login(){
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({ resolver: zodResolver(schema) })
   const [showPassword, setShowPassword] = useState(false);
+
+  // Get redirect URL from query params
+  const searchParams = new URLSearchParams(location.search)
+  const redirectUrl = searchParams.get('redirect')
 
   async function onSubmit(data){
     try {
       const res = await authClient.login(data)
       dispatch(setUser(res.user))
       dispatch(setToken(res.token))
-      // redirect to dashboard based on user role
+      
+      // Si une URL de redirection est fournie, y rediriger l'utilisateur
+      if (redirectUrl) {
+        navigate(redirectUrl)
+        return
+      }
+      
+      // Sinon, rediriger vers le dashboard basé sur le rôle
       if (res.user.role === 'vendeur') {
         navigate('/dashboard/seller')
       } else if (res.user.role === 'admin') {

@@ -18,7 +18,7 @@ export const userClient = {
 
   // Get user profile
   getProfile: () => {
-    return api.get('/api/users/profile');
+    return api.get('/api/auth/me');
   },
 
   // Update user profile
@@ -109,6 +109,11 @@ export const userClient = {
   // Refresh user subscription status
   refreshSubscription: () => {
     return api.post('/api/users/subscription/refresh');
+  },
+  
+  // Delete account (requires password confirmation)
+  deleteAccount: (password) => {
+    return api.delete('/api/users/account', { data: { password } });
   }
 };
 

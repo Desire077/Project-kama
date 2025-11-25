@@ -1,7 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Footer() {
+  const navigate = useNavigate();
+  const { user, token } = useSelector(state => state.auth);
+  const [showBuyerModal, setShowBuyerModal] = useState(false);
+
+  const handleSellClick = (e) => {
+    e.preventDefault();
+    // Not logged in -> go to login
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    // Logged in: check role
+    if (user?.role === 'vendeur') {
+      navigate('/vendre');
+    } else {
+      setShowBuyerModal(true);
+    }
+  };
+
   return (
     <footer className="bg-kama-vert text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -16,18 +36,18 @@ export default function Footer() {
               Votre partenaire de confiance pour l'achat, la vente et la location de biens immobiliers au Gabon.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110">
+              <button type="button" onClick={(e) => e.preventDefault()} className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110" aria-label="Facebook">
                 <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110">
+              </button>
+              <button type="button" onClick={(e) => e.preventDefault()} className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110" aria-label="X">
                 <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110">
+              </button>
+              <button type="button" onClick={(e) => e.preventDefault()} className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110" aria-label="Instagram">
                 <i className="fab fa-instagram"></i>
-              </a>
-              <a href="#" className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110">
+              </button>
+              <button type="button" onClick={(e) => e.preventDefault()} className="text-kama-dore hover:text-white transition-all duration-300 transform hover:scale-110" aria-label="LinkedIn">
                 <i className="fab fa-linkedin-in"></i>
-              </a>
+              </button>
             </div>
           </div>
 
@@ -38,7 +58,9 @@ export default function Footer() {
               <li><Link to="/acheter" className="text-kama-muted hover:text-kama-dore transition-all duration-300">Acheter</Link></li>
               <li><Link to="/louer" className="text-kama-muted hover:text-kama-dore transition-all duration-300">Louer</Link></li>
               <li><Link to="/vacances" className="text-kama-muted hover:text-kama-dore transition-all duration-300">Vacances</Link></li>
-              <li><Link to="/vendre" className="text-kama-muted hover:text-kama-dore transition-all duration-300">Vendre</Link></li>
+              <li>
+                <a href="#" onClick={handleSellClick} className="text-kama-muted hover:text-kama-dore transition-all duration-300">Vendre</a>
+              </li>
               <li><Link to="/offers" className="text-kama-muted hover:text-kama-dore transition-all duration-300">Toutes les offres</Link></li>
             </ul>
           </div>
@@ -75,10 +97,47 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-kama-muted text-sm">
-          <p>&copy; {new Date().getFullYear()} Kama Immobilier. Tous droits réservés.</p>
-        </div>
+          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-kama-muted text-sm space-y-2">
+            <p>&copy; {new Date().getFullYear()} Kama Immobilier. Tous droits réservés.</p>
+            <div className="flex flex-wrap justify-center gap-4 text-xs">
+              <Link to="/cgu" className="hover:text-kama-dore transition-colors">Conditions générales</Link>
+              <button
+                type="button"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="hover:text-kama-dore transition-colors"
+              >
+                Retour en haut de page
+              </button>
+            </div>
+          </div>
       </div>
+
+      {/* Buyer account modal */}
+      {showBuyerModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-text-primary mb-2">Compte acheteur détecté</h3>
+            <p className="text-text-secondary mb-4">
+              Vous possédez actuellement un compte acheteur. Pour publier une annonce, vous devez être connecté avec un compte vendeur.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button 
+                className="px-4 py-2 rounded-lg bg-gray-200 text-text-primary"
+                onClick={() => setShowBuyerModal(false)}
+              >
+                Fermer
+              </button>
+              <Link 
+                to="/dashboard/seller"
+                className="px-4 py-2 rounded-lg bg-primary-dark text-white"
+                onClick={() => setShowBuyerModal(false)}
+              >
+                Aller au tableau vendeur
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 }

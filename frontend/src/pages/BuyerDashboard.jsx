@@ -8,6 +8,7 @@ import CommentsTab from '../components/buyer/CommentsTab';
 import ProfileTab from '../components/buyer/ProfileTab';
 import SettingsTab from '../components/buyer/SettingsTab';
 
+
 export default function BuyerDashboard() {
   const user = useSelector(state => state.auth.user);
   const [activeTab, setActiveTab] = useState('home');
@@ -25,9 +26,9 @@ export default function BuyerDashboard() {
           {activeTab === 'home' && <HomeTab />}
           {activeTab === 'favorites' && <FavoritesTab />}
           {activeTab === 'alerts' && <AlertsTab />}
-          {activeTab === 'comments' && <CommentsTab />}
           {activeTab === 'profile' && <ProfileTab />}
           {activeTab === 'settings' && <SettingsTab />}
+
         </div>
       </main>
     </div>

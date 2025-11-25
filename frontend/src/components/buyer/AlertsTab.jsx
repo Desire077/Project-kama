@@ -24,10 +24,29 @@ export default function AlertsTab() {
     try {
       const response = await userClient.getAlerts();
       const alertsData = response.data || response;
-      setAlerts(alertsData);
+
+      // Merge with persisted active states in localStorage
+      const savedActive = JSON.parse(localStorage.getItem('kama_alert_active') || '{}');
+      const merged = (alertsData || []).map(a => ({
+        ...a,
+        active: savedActive[a._id] ?? (a.active ?? false)
+      }));
+
+      setAlerts(merged);
     } catch (err) {
       console.error('Error loading alerts:', err);
       setError('Erreur lors du chargement des alertes');
+
+      // Fallback: try to load from localStorage when API fails
+      const savedActive = JSON.parse(localStorage.getItem('kama_alert_active') || '{}');
+      const savedAlerts = JSON.parse(localStorage.getItem('kama_alerts_cache') || '[]');
+      if (savedAlerts.length > 0) {
+        const merged = savedAlerts.map(a => ({
+          ...a,
+          active: savedActive[a._id] ?? (a.active ?? false)
+        }));
+        setAlerts(merged);
+      }
     }
   };
 
@@ -40,29 +59,23 @@ export default function AlertsTab() {
     setLoading(true);
     setError('');
     setSuccess('');
-    
     try {
-      const response = await userClient.createAlert(formData);
-      const newAlert = response.data?.alert || response.alert;
-      
-      setAlerts([...alerts, newAlert]);
-      setFormData({
-        title: '',
-        type: 'maison',
-        minPrice: '',
-        maxPrice: '',
-        city: '',
-        rooms: ''
-      });
+      const res = await userClient.createAlert(formData);
+      const created = res.alert || res.data?.alert || formData;
+      const newAlert = { ...created, _id: created._id || `${Date.now()}` };
+
+      // Update cache
+      const cache = JSON.parse(localStorage.getItem('kama_alerts_cache') || '[]');
+      localStorage.setItem('kama_alerts_cache', JSON.stringify([ ...cache, newAlert ]));
+
+      setAlerts(prev => [ ...prev, { ...newAlert, active: false } ]);
       setShowForm(false);
       setSuccess('Alerte créée avec succès');
-      
+
       // Refresh matching properties
       window.dispatchEvent(new Event('refreshMatchingProperties'));
-      
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      console.error('Error creating alert:', err);
       setError('Erreur lors de la création de l\'alerte');
     } finally {
       setLoading(false);
@@ -73,6 +86,13 @@ export default function AlertsTab() {
     try {
       await userClient.deleteAlert(id);
       setAlerts(alerts.filter(alert => alert._id !== id));
+
+      // Update cache
+      const cache = JSON.parse(localStorage.getItem('kama_alerts_cache') || '[]').filter(a => a._id !== id);
+      localStorage.setItem('kama_alerts_cache', JSON.stringify(cache));
+      const savedActive = JSON.parse(localStorage.getItem('kama_alert_active') || '{}');
+      delete savedActive[id];
+      localStorage.setItem('kama_alert_active', JSON.stringify(savedActive));
       
       // Refresh matching properties
       window.dispatchEvent(new Event('refreshMatchingProperties'));
@@ -83,10 +103,22 @@ export default function AlertsTab() {
   };
 
   const toggleAlertStatus = (id) => {
-    // In a real implementation, this would call an API to update the alert status
-    setAlerts(alerts.map(alert => 
-      alert._id === id ? { ...alert, active: !alert.active } : alert
-    ));
+    const next = alerts.map(alert => {
+      if (alert._id === id) {
+        return { ...alert, active: !alert.active };
+      }
+      return alert;
+    });
+    setAlerts(next);
+
+    // Persist active flags locally (fallback when backend not available)
+    const savedActive = JSON.parse(localStorage.getItem('kama_alert_active') || '{}');
+    const changed = next.find(a => a._id === id);
+    savedActive[id] = !!changed?.active;
+    localStorage.setItem('kama_alert_active', JSON.stringify(savedActive));
+
+    // Optional: dispatch refresh matching properties
+    window.dispatchEvent(new Event('refreshMatchingProperties'));
   };
 
   return (
@@ -98,7 +130,7 @@ export default function AlertsTab() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white px-5 py-3 rounded-lg font-poppins font-bold mt-4 md:mt-0 hover-lift transition-all duration-300 shadow hover:shadow-lg"
+          className="bg-gradient-to-r from-kama-vert to-kama-turquoise text-white px-5 py-3 rounded-lg font-poppins font-bold mt-4 md:mt-0 hover-lift transition-all duration-300 shadow hover:shadow-lg"
         >
           <i className="fas fa-plus mr-2"></i> Créer une alerte
         </button>
@@ -128,7 +160,7 @@ export default function AlertsTab() {
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D6EFD] font-medium font-inter"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-kama-vert font-medium font-inter"
                 placeholder="Ex: Maison à Libreville"
               />
             </div>
@@ -140,7 +172,7 @@ export default function AlertsTab() {
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D6EFD] font-medium font-inter"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-kama-vert font-medium font-inter"
                 >
                   <option value="maison">Maison</option>
                   <option value="appartement">Appartement</option>
@@ -156,7 +188,7 @@ export default function AlertsTab() {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D6EFD] font-medium font-inter"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-kama-vert font-medium font-inter"
                   placeholder="Ex: Libreville"
                 />
               </div>
@@ -168,7 +200,7 @@ export default function AlertsTab() {
                   name="minPrice"
                   value={formData.minPrice}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D6EFD] font-medium font-inter"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-kama-vert font-medium font-inter"
                   placeholder="Ex: 5000000"
                 />
               </div>
@@ -180,7 +212,7 @@ export default function AlertsTab() {
                   name="maxPrice"
                   value={formData.maxPrice}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D6EFD] font-medium font-inter"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-kama-vert font-medium font-inter"
                   placeholder="Ex: 20000000"
                 />
               </div>
@@ -191,7 +223,7 @@ export default function AlertsTab() {
                   name="rooms"
                   value={formData.rooms}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0D6EFD] font-medium font-inter"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-kama-vert font-medium font-inter"
                 >
                   <option value="">Peu importe</option>
                   <option value="1">1 chambre</option>
@@ -213,7 +245,7 @@ export default function AlertsTab() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white px-5 py-3 rounded-lg font-medium font-inter hover-lift transition-all duration-300 shadow hover:shadow-lg"
+                className="bg-gradient-to-r from-kama-vert to-kama-turquoise text-white px-5 py-3 rounded-lg font-medium font-inter hover-lift transition-all duration-300 shadow hover:shadow-lg"
               >
                 {loading ? (
                   <>
@@ -237,7 +269,7 @@ export default function AlertsTab() {
           <p className="text-text-secondary mb-6 font-inter">Créez des alertes pour être informé des nouvelles offres</p>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white px-6 py-3 rounded-lg font-poppins font-bold hover-lift transition-all duration-300 shadow hover:shadow-lg"
+            className="bg-gradient-to-r from-kama-vert to-kama-turquoise text-white px-6 py-3 rounded-lg font-poppins font-bold hover-lift transition-all duration-300 shadow hover:shadow-lg"
           >
             <i className="fas fa-plus mr-2"></i> Créer une alerte
           </button>
@@ -261,7 +293,7 @@ export default function AlertsTab() {
                     onClick={() => toggleAlertStatus(alert._id)}
                     className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       alert.active 
-                        ? 'bg-green-100 text-green-600 hover:bg-green-200' 
+                        ? 'bg-kama-vert/10 text-kama-vert hover:bg-kama-vert/20' 
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >

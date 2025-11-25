@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import propertyClient from '../api/propertyClient';
 import userClient from '../api/userClient';
+import { SEO } from '../components/SEO';
 
 export default function OfferDetail() {
   const { id } = useParams();
@@ -35,6 +36,10 @@ export default function OfferDetail() {
   // Add state for success modal
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  // Fallback suggestions states when offer is missing
+  const [fallbackOffers, setFallbackOffers] = useState([]);
+  const [fallbackLoading, setFallbackLoading] = useState(false);
+  const [fallbackError, setFallbackError] = useState('');
 
   // Add report functions inside the component
   const handleReportSubmit = async () => {
@@ -89,52 +94,101 @@ export default function OfferDetail() {
     }
   };
 
-  const loadOffer = async () => {
+  const loadOffer = async (abortSignal) => {
+    // Validate ID before making API call
+    if (!id || id === 'undefined' || id === 'null') {
+      setError('ID d\'offre invalide');
+      setLoading(false);
+      return;
+    }
+    
     setLoading(true);
     setError('');
     
+    let timeoutId;
+    
     // Add a timeout to ensure loading is reset even if the API call hangs
-    const timeoutId = setTimeout(() => {
-      if (loading) {
+    timeoutId = setTimeout(() => {
+      if (!abortSignal?.aborted) {
         setLoading(false);
         setError('Le chargement de l\'offre prend trop de temps. Veuillez réessayer.');
       }
-    }, 10000); // 10 second timeout
+    }, 30000); // 30 second timeout (increased from 10)
     
     try {
       const response = await propertyClient.getById(id);
+      
+      if (abortSignal?.aborted) {
+        clearTimeout(timeoutId);
+        return; // Request was cancelled
+      }
+      
       // Handle both possible response formats
       const property = response.property || response.data || response;
-      console.log('Offer loaded:', property);
-      setOffer(property);
       
-      // Check if property is in favorites
-      if (user) {
-        try {
-          const favoritesResponse = await userClient.getFavorites();
-          const favorites = favoritesResponse.data || favoritesResponse;
-          const isFav = favorites.some(fav => fav._id === property._id);
-          setIsFavorite(isFav);
-        } catch (err) {
-          console.error('Error checking favorites:', err);
+      if (!property || !property._id) {
+        if (!abortSignal?.aborted) {
+          setError('Offre non trouvée');
+          setLoading(false);
         }
+        clearTimeout(timeoutId);
+        return;
       }
+      
+      if (!abortSignal?.aborted) {
+        setOffer(property);
+        
+        // Check if property is in favorites
+        if (user) {
+          try {
+            const favoritesResponse = await userClient.getFavorites();
+            const favorites = favoritesResponse.data || favoritesResponse;
+            const isFav = favorites.some(fav => fav._id === property._id);
+            setIsFavorite(isFav);
+          } catch (err) {
+            console.error('Error checking favorites:', err);
+          }
+        }
+        
+        setLoading(false);
+      }
+      clearTimeout(timeoutId);
     } catch (err) {
+      if (abortSignal?.aborted) {
+        clearTimeout(timeoutId);
+        return; // Request was cancelled
+      }
+      
       console.error('Error loading offer:', err);
+
+      // Si l'utilisateur n'est pas autorisé (401), on le renvoie vers la connexion
+      if (err.response && err.response.status === 401) {
+        navigate(`/login?redirect=/offers/${id}`);
+        clearTimeout(timeoutId);
+        return;
+      }
       
       // Show more detailed error message
-      if (err.response && err.response.data && err.response.data.message) {
+      if (err.response && err.response.status === 404) {
+        setError('Offre non trouvée');
+      } else if (err.response && err.response.data && err.response.data.message) {
         setError(`Erreur lors du chargement de l'offre: ${err.response.data.message}`);
       } else {
         setError('Erreur lors du chargement de l\'offre. Veuillez réessayer.');
       }
-    } finally {
+      
       setLoading(false);
-      clearTimeout(timeoutId); // Clear the timeout when the API call completes
+      clearTimeout(timeoutId);
     }
   };
 
   const loadReviews = async () => {
+    // Validate ID before making API call
+    if (!id || id === 'undefined' || id === 'null') {
+      console.warn('Invalid ID, skipping reviews load');
+      return;
+    }
+    
     // Add a timeout to ensure the function doesn't hang
     const timeoutId = setTimeout(() => {
       console.log('Reviews loading timeout reached');
@@ -152,22 +206,39 @@ export default function OfferDetail() {
 
   // Load property and reviews when component mounts or id changes
   useEffect(() => {
-    // Add a timeout to ensure loading is reset even if the API calls hang
-    const timeoutId = setTimeout(() => {
-      if (loading) {
-        setLoading(false);
-        setError('Le chargement de l\'offre prend trop de temps. Veuillez réessayer.');
-      }
-    }, 15000); // 15 second timeout
+    const abortController = new AbortController();
     
-    loadOffer();
+    loadOffer(abortController.signal);
     loadReviews();
     
-    // Clear the timeout when the effect cleans up
     return () => {
-      clearTimeout(timeoutId);
+      abortController.abort();
     };
   }, [id]);
+  
+  // Load fallback suggestions when the offer is not found or an error occurred
+  useEffect(() => {
+    const controller = new AbortController();
+    const fetchFallback = async () => {
+      if (!error) return;
+      setFallbackLoading(true);
+      setFallbackError('');
+      try {
+        const res = await propertyClient.getAll({ limit: 6, status: 'approved' });
+        const properties = res.properties || res.data?.properties || [];
+        // Pick 3 random suggestions to avoid overload
+        const shuffled = properties.sort(() => 0.5 - Math.random());
+        setFallbackOffers(shuffled.slice(0, 3));
+      } catch (e) {
+        console.error('Error loading fallback offers:', e);
+        setFallbackError("Impossible de charger des suggestions pour le moment.");
+      } finally {
+        setFallbackLoading(false);
+      }
+    };
+    fetchFallback();
+    return () => controller.abort();
+  }, [error]);
 
   const formatPrice = (price, currency) => {
     return new Intl.NumberFormat('fr-FR', {
@@ -388,6 +459,7 @@ export default function OfferDetail() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
+        <SEO title="Chargement de l'annonce" />
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gabon-green"></div>
       </div>
     );
@@ -395,20 +467,73 @@ export default function OfferDetail() {
 
   if (error || !offer) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Offre non trouvée</h2>
-          <p className="mb-4">L'offre que vous recherchez n'existe pas ou n'est plus disponible.</p>
-          <Link to="/offers" className="text-gabon-green hover:text-dark-forest flex items-center justify-center">
-            <i className="fas fa-arrow-left mr-2"></i> Retour aux offres
-          </Link>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <SEO
+          title="Annonce introuvable"
+          description="L'annonce que vous recherchez n'existe pas ou n'est plus disponible sur Kama Immobilier."
+        />
+        <div className="max-w-2xl w-full bg-white rounded-2xl shadow-lg p-8">
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
+              <i className="fas fa-exclamation-triangle text-xl" />
+            </div>
+            <h2 className="text-2xl font-bold mb-3 text-gray-900">Offre non trouvée</h2>
+            <p className="text-gray-600 mb-6">
+              L'annonce que vous recherchez n'existe plus, a été retirée ou l'URL est incorrecte.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+              <Link
+                to="/offers"
+                className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-gabon-green text-white font-semibold hover:bg-dark-forest transition-colors"
+              >
+                <i className="fas fa-search mr-2" />
+                Voir les autres offres
+              </Link>
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-gabon-green text-gabon-green font-semibold hover:bg-green-50 transition-colors"
+              >
+                <i className="fas fa-home mr-2" />
+                Retour à l'accueil
+              </Link>
+            </div>
+          </div>
+
+          {/* Fallback suggestions */}
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold mb-4">Suggestions similaires</h3>
+            {fallbackLoading && (
+              <div className="flex items-center text-gray-600"><i className="fas fa-spinner fa-spin mr-2"></i>Chargement des suggestions...</div>
+            )}
+            {fallbackError && (
+              <div className="bg-red-50 text-red-700 p-3 rounded mb-4">{fallbackError}</div>
+            )}
+            {!fallbackLoading && !fallbackError && fallbackOffers.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {fallbackOffers.map((p) => (
+                  <div key={p._id} className="p-4 border rounded-lg">
+                    <div className="font-medium text-gray-900 truncate">{p.title}</div>
+                    <div className="text-sm text-gray-600">{p.address?.city || 'Gabon'}</div>
+                    <div className="text-gabon-green font-bold mt-2">{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: p.currency || 'XAF', minimumFractionDigits: 0 }).format(p.price)}</div>
+                    <Link to={`/offers/${p._id}`} className="mt-3 inline-flex items-center text-gabon-green hover:text-dark-forest font-medium">
+                      Voir l'offre <i className="fas fa-arrow-right ml-2"></i>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
   }
 
+  const title = `${offer.title} à ${offer.address?.city || 'Gabon'}`;
+  const description = `${offer.surface || 0} m², ${offer.rooms || 0} chambres, ${formatPrice(offer.price, offer.currency)} - ${offer.address?.district || ''} ${offer.address?.city || ''}`.trim();
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <SEO title={title} description={description} />
       <div className="container mx-auto px-4">
         {/* Back button */}
         <div className="mb-6">
@@ -420,6 +545,27 @@ export default function OfferDetail() {
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
 
           <div className="p-6">
+            {/* Fil d'Ariane */}
+            <nav className="text-sm text-gray-500 mb-4" aria-label="Fil d'Ariane">
+              <ol className="flex flex-wrap items-center gap-1">
+                <li>
+                  <Link to="/" className="hover:text-gabon-green">
+                    Accueil
+                  </Link>
+                </li>
+                <li className="mx-1 text-gray-400">/</li>
+                <li>
+                  <Link to="/offers" className="hover:text-gabon-green">
+                    Offres
+                  </Link>
+                </li>
+                <li className="mx-1 text-gray-400">/</li>
+                <li className="font-medium text-gray-700 truncate max-w-[200px] md:max-w-[320px]">
+                  {offer.title}
+                </li>
+              </ol>
+            </nav>
+
             <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">{offer.title}</h1>
@@ -430,11 +576,6 @@ export default function OfferDetail() {
                   {offer.address?.city || 'Gabon'}
                 </p>
                 
-                {/* Enhanced Authority Element - Verified Property */}
-                <div className="inline-flex items-center bg-gabon-green bg-opacity-10 text-gabon-green px-3 py-1 rounded-full text-sm mt-2">
-                  <i className="fas fa-shield-alt mr-1"></i>
-                  <span>Propriété vérifiée</span>
-                </div>
               </div>
               
               <div className="flex items-center space-x-4 mt-4 md:mt-0">
@@ -496,24 +637,25 @@ export default function OfferDetail() {
                   {offer.parking && <span className="ml-2 text-xs bg-gabon-green text-white px-2 py-1 rounded-full">Inclus</span>}
                 </div>
               </div>
-              
-              {/* Authority Element */}
-              <div className="mt-4 p-3 bg-gabon-green bg-opacity-10 rounded-lg border border-gabon-green">
-                <div className="flex items-center">
-                  <i className="fas fa-clipboard-check text-gabon-green mr-2"></i>
-                  <span className="text-sm text-gray-700">Toutes les caractéristiques ont été vérifiées par notre équipe d'experts.</span>
-                </div>
-              </div>
             </div>
 
             {/* Image gallery */}
-            <div className="relative h-96 mb-8">
+            <div className="relative bg-gray-100 rounded-lg overflow-hidden mb-8" style={{ height: '650px', width: '100%' }}>
               {offer && offer.images && offer.images.length > 0 ? (
-                <div className="relative h-full">
+                <div className="relative w-full h-full flex items-center justify-center" style={{ height: '650px', width: '100%' }}>
                   <img
                     src={offer.images[currentImageIndex]?.url}
                     alt={`${offer.title} - Image ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover"
+                    className="object-contain"
+                    style={{ 
+                      maxHeight: '650px',
+                      maxWidth: '100%',
+                      width: 'auto',
+                      height: 'auto',
+                      minWidth: '800px',
+                      minHeight: '600px',
+                      objectFit: 'contain'
+                    }}
                     onError={(e) => {
                       console.log('Image load error for:', offer.images[currentImageIndex]?.url);
                       // Try a different fallback image

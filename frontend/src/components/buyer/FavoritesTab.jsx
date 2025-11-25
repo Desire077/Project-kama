@@ -71,7 +71,7 @@ export default function FavoritesTab() {
         <p className="text-text-secondary mb-6 font-inter">Ajoutez des offres à vos favoris pour les retrouver facilement</p>
         <Link 
           to="/offers" 
-          className="bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white px-6 py-3 rounded-lg font-poppins font-bold hover-lift transition-all duration-300 shadow hover:shadow-lg"
+          className="bg-gradient-to-r from-kama-vert to-kama-gold text-white px-6 py-3 rounded-lg font-poppins font-bold hover-lift transition-all duration-300 shadow hover:shadow-lg"
         >
           <i className="fas fa-search mr-2"></i> Parcourir les offres
         </Link>
@@ -86,12 +86,7 @@ export default function FavoritesTab() {
           <h2 className="text-2xl font-poppins font-bold text-text-primary">Mes Favoris</h2>
           <p className="text-text-secondary font-inter">Retrouvez toutes vos offres favorites</p>
         </div>
-        <Link 
-          to="/offers" 
-          className="bg-white border border-blue-200 text-[#0D6EFD] px-5 py-3 rounded-lg font-poppins font-bold mt-4 md:mt-0 hover-lift transition-all duration-300 shadow hover:shadow-lg"
-        >
-          <i className="fas fa-search mr-2"></i> Découvrir des biens similaires
-        </Link>
+        {/* Removed similar offers discovery button per request */}
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -104,7 +99,7 @@ export default function FavoritesTab() {
                     <img
                       src={offer.images[0].url}
                       alt={offer.title}
-                      className="w-full h-48 object-cover hover-scale transition-all duration-500"
+                      className="w-full h-56 object-cover object-center hover-scale transition-all duration-500"
                       onError={(e) => {
                         e.target.src = 'https://via.placeholder.com/600x400/cccccc/000000?text=Image+Indisponible';
                         e.target.onerror = null;
@@ -143,7 +138,7 @@ export default function FavoritesTab() {
               </div>
               
               <p className="text-text-secondary text-sm mb-4 font-inter">
-                <i className="fas fa-map-marker-alt text-accent-turquoise mr-2"></i>
+                <i className="fas fa-map-marker-alt text-kama-turquoise mr-2"></i>
                 {offer.address?.city}, {offer.address?.district || ''}
               </p>
               
@@ -152,7 +147,7 @@ export default function FavoritesTab() {
                   {formatPrice(offer.price, offer.currency)}
                 </span>
                 <span className="text-sm text-text-secondary font-inter">
-                  <i className="fas fa-ruler-combined mr-2 text-accent-turquoise"></i>
+                  <i className="fas fa-ruler-combined mr-2 text-kama-turquoise"></i>
                   {offer.surface} m²
                 </span>
               </div>
@@ -160,36 +155,25 @@ export default function FavoritesTab() {
               <div className="flex justify-between border-t border-gray-100 pt-4">
                 <div className="flex text-sm text-text-secondary font-inter">
                   <span className="mr-4 flex items-center">
-                    <i className="fas fa-bed mr-2 text-accent-turquoise"></i> {offer.rooms || 0}
+                    <i className="fas fa-bed mr-2 text-kama-turquoise"></i> {offer.rooms || 0}
                   </span>
                   <span className="mr-4 flex items-center">
-                    <i className="fas fa-bath mr-2 text-accent-turquoise"></i> {offer.bathrooms || 0}
+                    <i className="fas fa-bath mr-2 text-kama-turquoise"></i> {offer.bathrooms || 0}
                   </span>
                   <span className="flex items-center">
-                    <i className="fas fa-car mr-2 text-accent-turquoise"></i> {offer.parking ? 'Oui' : 'Non'}
+                    <i className="fas fa-car mr-2 text-kama-turquoise"></i> {offer.parking ? 'Oui' : 'Non'}
                   </span>
                 </div>
               </div>
               
               <Link 
                 to={`/offers/${offer._id}`}
-                className="w-full bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white py-2 rounded-lg font-poppins font-medium mt-4 text-center block hover-lift transition-all duration-300 shadow hover:shadow-lg"
+                className="w-full bg-gradient-to-r from-kama-vert to-kama-gold text-white py-2 rounded-lg font-poppins font-medium mt-4 text-center block hover-lift transition-all duration-300 shadow hover:shadow-lg"
               >
                 Voir les détails
               </Link>
               
-              {/* Suggestion section */}
-              <div className="mt-4 pt-4 border-t border-gray-100">
-                <p className="text-sm text-text-secondary mb-2 font-inter">
-                  <i className="fas fa-lightbulb text-yellow-500 mr-2"></i>
-                  Offres similaires à celle-ci
-                </p>
-                <div className="flex space-x-2">
-                  <div className="w-16 h-16 bg-gray-200 rounded flex-shrink-0"></div>
-                  <div className="w-16 h-16 bg-gray-200 rounded flex-shrink-0"></div>
-                  <div className="w-16 h-16 bg-gray-200 rounded flex-shrink-0"></div>
-                </div>
-              </div>
+              {/* Removed similar offers suggestion section per request */}
             </div>
           </div>
         ))}

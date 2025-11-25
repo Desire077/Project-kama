@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import { Button } from './ui';
 
 /* ------------------ Hook utile : detecte clic en dehors ------------------ */
 function useOutsideClick(ref, handler) {
@@ -26,10 +27,10 @@ function NavItem({ to, children, onClick }) {
       to={to}
       onClick={onClick}
       className={({ isActive }) =>
-        `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-          isActive 
-            ? 'bg-kama-vert text-white shadow-kama' 
-            : 'text-kama-text hover:bg-kama-bg hover:text-kama-vert'
+        `px-4 py-2 rounded-[var(--radius-pill)] text-sm font-medium transition-all duration-300 ${
+          isActive
+            ? 'bg-[var(--color-primary-600)] text-white shadow-[0_8px_20px_rgba(18,51,56,0.2)]'
+            : 'text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-primary-600)]'
         }`
       }
     >
@@ -48,11 +49,11 @@ function KamaLogo({ className = 'w-10 h-10' }) {
           <path d="M14 30L24 14L34 30H14Z" fill="#D4AF37"/>
           <rect x="16" y="30" width="16" height="4" rx="2" fill="#D4AF37" opacity="0.95"/>
         </svg>
-        <div className="absolute -top-1 -right-1 w-3 h-3 bg-kama-dore rounded-full"></div>
+        <div className="absolute -top-1 -right-1 w-3 h-3 bg-[var(--color-accent-gold)] rounded-full"></div>
       </div>
       <div className="flex flex-col leading-tight -mt-0.5">
-        <span className="font-poppins font-bold text-xl tracking-tight text-kama-text">KAMA</span>
-        <span className="text-xs font-medium text-kama-muted">Immobilier Gabon</span>
+        <span className="font-poppins font-bold text-xl tracking-tight text-[var(--color-ink)]">KAMA</span>
+        <span className="text-xs font-medium text-[var(--color-muted)]">Immobilier Gabon</span>
       </div>
     </div>
   );
@@ -69,6 +70,10 @@ export default function Navbar() {
   const mobileRef = useRef(null);
   const userMenuRef = useRef(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const searchInputClasses =
+    'w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-pill)] py-2.5 pl-4 pr-12 text-sm text-[var(--color-ink)] placeholder-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-600)] focus:border-transparent transition-all duration-300 shadow-[0_10px_30px_rgba(6,20,26,0.08)]';
+  const searchIconButtonClasses =
+    'absolute right-1 top-1/2 -translate-y-1/2 bg-[var(--color-accent-gold)] text-[var(--color-primary-900)] rounded-full p-2 hover:scale-105 transition-transform duration-200 shadow-[0_8px_20px_rgba(212,175,55,0.35)]';
 
   useOutsideClick(mobileRef, () => setMobileOpen(false));
   useOutsideClick(userMenuRef, () => setUserMenuOpen(false));
@@ -107,14 +112,14 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed w-full top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+    <header className="fixed w-full top-0 z-50 bg-[var(--color-surface)] border-b border-[var(--color-border)] shadow-[0_6px_24px_rgba(6,20,26,0.08)] backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* gauche : logo + nav desktop */}
           <div className="flex items-center gap-12">
-            <a href="/" className="flex items-center mr-4" aria-label="Kama - Accueil">
+            <Link to="/" className="flex items-center mr-4" aria-label="Kama - Accueil">
               <KamaLogo className="w-10 h-10" />
-            </a>
+            </Link>
 
             <nav className="hidden md:flex items-center gap-2" aria-label="Navigation principale">
               <NavItem to="/offers">Offres</NavItem>
@@ -134,12 +139,12 @@ export default function Navbar() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Ville, quartier, budget..."
-                  className="w-full border border-gray-200 bg-white rounded-full py-2.5 pl-4 pr-12 text-sm placeholder-kama-muted focus:outline-none focus:ring-2 focus:ring-kama-vert focus:border-transparent transition-all duration-300 shadow-sm"
+                  className={searchInputClasses}
                   aria-label="Rechercher ville, quartier ou prix"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 bg-kama-dore text-kama-vert rounded-full p-2 hover:scale-105 transform transition-all duration-300 shadow-sm"
+                  className={searchIconButtonClasses}
                   aria-label="Lancer la recherche"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -156,7 +161,7 @@ export default function Navbar() {
              {/* mobile search toggle */}
              <button
                onClick={() => setSearchOpen(s => !s)}
-               className="md:hidden inline-flex p-2 rounded-lg text-kama-text hover:bg-kama-bg focus:outline-none focus:ring-2 focus:ring-kama-vert transition-all duration-300"
+               className="md:hidden inline-flex p-2 rounded-lg text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-600)] transition-all duration-300"
                aria-label="Rechercher"
              >
                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -166,51 +171,59 @@ export default function Navbar() {
              </button>
 
             {/* CTA publier */}
-            <button
+            <Button
               onClick={handlePublishClick}
-              className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-kama-dore to-kama-gold text-kama-vert px-5 py-2.5 rounded-full text-sm font-poppins font-semibold shadow-kama hover:shadow-kama-hover transition-all duration-300 transform hover:scale-105 floating"
+              variant="gold"
+              size="sm"
+              leftIcon={<i className="fas fa-plus-circle" />}
+              type="button"
+              className="hidden sm:inline-flex"
             >
-              <i className="fas fa-plus-circle"></i>
               {user?.role === 'admin' ? 'Tableau de bord Admin' : 'Publier une annonce'}
-            </button>
+            </Button>
 
             {/* user area */}
             {user ? (
               <div ref={userMenuRef} className="relative">
                 <button
                   onClick={() => setUserMenuOpen(s => !s)}
-                  className="inline-flex items-center gap-2 p-1 rounded-full text-kama-text hover:bg-kama-bg focus:outline-none focus:ring-2 focus:ring-kama-vert transition-all duration-300"
+                  className="inline-flex items-center gap-2 p-1 rounded-full text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-600)] transition-all duration-300"
                   aria-haspopup="menu"
                   aria-expanded={userMenuOpen}
                 >
-                  <div className="w-9 h-9 rounded-full bg-kama-vert flex items-center justify-center text-white font-medium">
+                  <div className="w-9 h-9 rounded-full bg-[var(--color-primary-600)] flex items-center justify-center text-white font-medium">
                     {user.firstName?.charAt(0) || user.email?.charAt(0) || 'U'}
                   </div>
-                  <span className="hidden md:inline-block text-sm font-medium text-kama-text">
+                  <span className="hidden md:inline-block text-sm font-medium text-[var(--color-ink)]">
                     {user.firstName || user.email}
                   </span>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-kama-muted" aria-hidden>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-[var(--color-muted)]" aria-hidden>
                     <path d="M6 9l6 6 6-6" stroke="#606060" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </button>
 
                 {userMenuOpen && (
-                  <div role="menu" aria-label="Menu utilisateur" className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-kama-lg py-2 z-50 ring-1 ring-black ring-opacity-5 border border-gray-100">
-                    <a 
-                      href={user.role === 'admin' ? '/dashboard/admin' : user.role === 'vendeur' ? '/dashboard/seller' : '/dashboard'} 
-                      className="block px-4 py-2 text-sm text-kama-text hover:bg-kama-bg transition-colors duration-200"
+                  <div role="menu" aria-label="Menu utilisateur" className="absolute right-0 mt-2 w-52 bg-[var(--color-surface)] rounded-2xl shadow-[0_20px_40px_rgba(6,20,26,0.15)] py-2 z-50 border border-[var(--color-border)]">
+                    <Link 
+                      to={user.role === 'admin' ? '/dashboard/admin' : user.role === 'vendeur' ? '/dashboard/seller' : '/dashboard'} 
+                      className="block px-4 py-2 text-sm text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] transition-colors duration-200"
+                      onClick={() => setUserMenuOpen(false)}
                     >
                       Tableau de bord
-                    </a>
-                    {user.role !== 'admin' && (
+                    </Link>
+                    {user.role === 'vendeur' && (
                       <>
-                        <a href="/profile" className="block px-4 py-2 text-sm text-kama-text hover:bg-kama-bg transition-colors duration-200">Profil</a>
-                        <a href="/premium" className="block px-4 py-2 text-sm text-kama-text hover:bg-kama-bg transition-colors duration-200">Passer Premium</a>
+                        <Link to="/profile" className="block px-4 py-2 text-sm text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] transition-colors duration-200" onClick={() => setUserMenuOpen(false)}>
+                          Profil
+                        </Link>
+                        <Link to="/premium" className="block px-4 py-2 text-sm text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] transition-colors duration-200" onClick={() => setUserMenuOpen(false)}>
+                          Passer Premium
+                        </Link>
                       </>
                     )}
                     <button 
                       onClick={handleLogout} 
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-kama-bg transition-colors duration-200"
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-[var(--color-surface-muted)] transition-colors duration-200"
                     >
                       Se déconnecter
                     </button>
@@ -219,20 +232,30 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-2">
-                <a href="/login" className="text-sm px-4 py-2 rounded-lg text-kama-text hover:bg-kama-bg focus:outline-none focus:ring-2 focus:ring-kama-vert transition-all duration-300">Connexion</a>
-                <a 
-                  href="/register" 
-                  className="text-sm bg-kama-dore text-kama-vert px-5 py-2.5 rounded-full hover:bg-opacity-90 shadow-kama transition-all duration-300 font-poppins font-semibold"
+                <Button
+                  as={Link}
+                  to="/login"
+                  variant="ghost"
+                  size="sm"
+                >
+                  Connexion
+                </Button>
+                <Button
+                  as={Link}
+                  to="/register"
+                  variant="secondary"
+                  size="sm"
+                  className="font-semibold"
                 >
                   Inscription
-                </a>
+                </Button>
               </div>
             )}
 
             {/* mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(s => !s)}
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-kama-text hover:bg-kama-bg focus:outline-none focus:ring-2 focus:ring-kama-vert transition-all duration-300"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-[var(--color-ink)] hover:bg-[var(--color-surface-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-600)] transition-all duration-300"
               aria-expanded={mobileOpen}
               aria-label="Ouvrir le menu"
             >
@@ -261,13 +284,13 @@ export default function Navbar() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Ville, quartier, budget..."
-                  className="w-full border border-gray-200 bg-white rounded-full py-2.5 pl-4 pr-12 text-sm placeholder-kama-muted focus:outline-none focus:ring-2 focus:ring-kama-vert focus:border-transparent transition-all duration-300 shadow-sm"
+                  className={searchInputClasses}
                   aria-label="Rechercher ville, quartier ou prix"
                   autoFocus
                 />
                 <button
                   type="submit"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 bg-kama-dore text-kama-vert rounded-full p-2 hover:scale-105 transform transition-all duration-300 shadow-sm"
+                  className={searchIconButtonClasses}
                   aria-label="Lancer la recherche"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -287,59 +310,88 @@ export default function Navbar() {
               <NavItem to="/offers" onClick={() => setMobileOpen(false)}>Offres</NavItem>
               <NavItem to="/louer" onClick={() => setMobileOpen(false)}>Louer</NavItem>
               <NavItem to="/vacances" onClick={() => setMobileOpen(false)}>Vacances</NavItem>
-              <button 
-                onClick={handlePublishClick}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-kama-text hover:bg-kama-bg text-left transition-all duration-300"
+              <Button
+                type="button"
+                onClick={(event) => {
+                  handlePublishClick(event);
+                  setMobileOpen(false);
+                }}
+                variant="ghost"
+                size="sm"
+                fullWidth
+                leftIcon={<i className="fas fa-plus-circle" />}
+                className="justify-start"
               >
-                <i className="fas fa-plus-circle mr-2"></i>
                 {user?.role === 'admin' ? 'Tableau de bord Admin' : 'Publier une annonce'}
-              </button>
+              </Button>
             </nav>
             
             {!user && (
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
-                <a 
-                  href="/login" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-kama-text hover:bg-kama-bg transition-all duration-300"
+                <Button
+                  as={Link}
+                  to="/login"
+                  variant="ghost"
+                  size="sm"
+                  fullWidth
                   onClick={() => setMobileOpen(false)}
                 >
                   Connexion
-                </a>
-                <a 
-                  href="/register" 
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-kama-vert to-kama-turquoise text-white text-center shadow-kama transition-all duration-300"
+                </Button>
+                <Button
+                  as={Link}
+                  to="/register"
+                  variant="secondary"
+                  size="sm"
+                  fullWidth
                   onClick={() => setMobileOpen(false)}
                 >
                   Inscription
-                </a>
+                </Button>
               </div>
             )}
             
             {user && (
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
-                <a 
-                  href={user.role === 'admin' ? '/dashboard/admin' : user.role === 'vendeur' ? '/dashboard/seller' : '/dashboard'} 
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-kama-text hover:bg-kama-bg transition-all duration-300"
+                <Button
+                  as={Link}
+                  to={user.role === 'admin' ? '/dashboard/admin' : user.role === 'vendeur' ? '/dashboard/seller' : '/dashboard'}
+                  variant="ghost"
+                  size="sm"
+                  fullWidth
+                  className="justify-start"
                   onClick={() => setMobileOpen(false)}
                 >
                   Tableau de bord
-                </a>
+                </Button>
                 {user.role !== 'admin' && (
                   <>
-                    <a 
-                      href="/profile" 
-                      className="px-4 py-2 rounded-lg text-sm font-medium text-kama-text hover:bg-kama-bg transition-all duration-300"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      Profil
-                    </a>
-                    <a 
-                      href="/premium" 
-                      className="px-4 py-2 rounded-lg text-sm font-medium text-kama-text hover:bg-kama-bg transition-all duration-300"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      Passer Premium
-                    </a>
+                    {user.role === 'vendeur' && (
+                      <Button
+                        as={Link}
+                        to="/profile"
+                        variant="ghost"
+                        size="sm"
+                        fullWidth
+                        className="justify-start"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Profil
+                      </Button>
+                    )}
+                    {user.role === 'vendeur' && (
+                      <Button
+                        as={Link}
+                        to="/premium"
+                        variant="ghost"
+                        size="sm"
+                        fullWidth
+                        className="justify-start"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Passer Premium
+                      </Button>
+                    )}
                   </>
                 )}
                 <button 
@@ -347,7 +399,7 @@ export default function Navbar() {
                     handleLogout();
                     setMobileOpen(false);
                   }}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-kama-bg transition-all duration-300 text-left"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-[var(--color-surface-muted)] transition-all duration-300 text-left"
                 >
                   Se déconnecter
                 </button>

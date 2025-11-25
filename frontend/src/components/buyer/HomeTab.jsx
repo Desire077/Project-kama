@@ -22,113 +22,99 @@ export default function HomeTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Define chart data and colors
-  const COLORS = ['#0D6EFD', '#007BFF', '#00BFA6', '#FFC107'];
+  // Theme-aligned chart colors
+  const COLORS = ['#1A3C40', '#D4AF37', '#00BFA6', '#606060'];
 
   useEffect(() => {
     loadDashboardData();
+    const handler = () => loadDashboardData();
+    window.addEventListener('refreshMatchingProperties', handler);
+    return () => window.removeEventListener('refreshMatchingProperties', handler);
   }, []);
+
+  const computeStatsFromProperties = (props) => {
+    // Compute types distribution
+    const typeCounts = props.reduce((acc, p) => {
+      const t = (p.type || 'Autre').toLowerCase();
+      acc[t] = (acc[t] || 0) + 1;
+      return acc;
+    }, {});
+    const propertyTypesData = Object.entries(typeCounts).map(([name, value]) => ({ name, value }));
+
+    // Compute cities distribution
+    const cityCounts = props.reduce((acc, p) => {
+      const c = p.address?.city || 'Inconnu';
+      acc[c] = (acc[c] || 0) + 1;
+      return acc;
+    }, {});
+    const citiesData = Object.entries(cityCounts).map(([name, value]) => ({ name, value }));
+
+    // Average budget
+    const prices = props.map(p => Number(p.price) || 0).filter(n => n > 0);
+    const averageBudget = prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 0;
+
+    return { propertyTypes: propertyTypesData, cities: citiesData, averageBudget };
+  };
 
   const loadDashboardData = async () => {
     setLoading(true);
     setError('');
-    
     try {
-      // Load recommended properties (mock data for now)
-      const mockRecommended = [
-        {
-          _id: '1',
-          title: 'Villa Moderne à Akanda',
-          price: 15000000,
-          currency: 'XAF',
-          address: { city: 'Libreville', district: 'Akanda' },
-          images: [
-            { url: 'https://images.unsplash.com/photo-1523374547115-7d4d80884098?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80' }
-          ],
-          isFavorite: true
-        },
-        {
-          _id: '2',
-          title: 'Appartement Moderne à Mont-Bouët',
-          price: 8500000,
-          currency: 'XAF',
-          address: { city: 'Libreville', district: 'Mont-Bouët' },
-          images: [
-            { url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80' }
-          ],
-          isFavorite: false
-        },
-        {
-          _id: '3',
-          title: 'Terrain à Owendo',
-          price: 6000000,
-          currency: 'XAF',
-          address: { city: 'Libreville', district: 'Owendo' },
-          images: [
-            { url: 'https://images.unsplash.com/photo-1533933269825-4f1d9dfe4d46?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80' }
-          ],
-          isFavorite: true
-        },
-        {
-          _id: '4',
-          title: 'Maison à Bernabé',
-          price: 12000000,
-          currency: 'XAF',
-          address: { city: 'Libreville', district: 'Bernabé' },
-          images: [
-            { url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80' }
-          ],
-          isFavorite: false
-        },
-        {
-          _id: '5',
-          title: 'Appartement à Ndogbong',
-          price: 7500000,
-          currency: 'XAF',
-          address: { city: 'Libreville', district: 'Ndogbong' },
-          images: [
-            { url: 'https://images.unsplash.com/photo-1575517111839-3a3843ee7f5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80' }
-          ],
-          isFavorite: true
-        }
-      ];
-      
-      // Mock recent searches
-      const mockRecentSearches = [
-        { id: 1, city: 'Libreville', type: 'Maison', budget: '5M - 15M FCFA' },
-        { id: 2, city: 'Port-Gentil', type: 'Appartement', budget: '3M - 8M FCFA' },
-        { id: 3, city: 'Franceville', type: 'Terrain', budget: '2M - 10M FCFA' }
-      ];
-      
-      // Mock stats with Recharts data format
-      const propertyTypesData = [
-        { name: 'Maison', value: 45 },
-        { name: 'Appartement', value: 35 },
-        { name: 'Terrain', value: 15 },
-        { name: 'Vacances', value: 5 }
-      ];
-      
-      const citiesData = [
-        { name: 'Libreville', value: 60 },
-        { name: 'Port-Gentil', value: 20 },
-        { name: 'Franceville', value: 15 },
-        { name: 'Oyem', value: 5 }
-      ];
+      // Get alerts to drive recommendations and recent criteria
+      const alertsRes = await userClient.getAlerts();
+      const alerts = alertsRes.data?.alerts || alertsRes.alerts || [];
 
-      const mockStats = {
-        propertyTypes: propertyTypesData,
-        cities: citiesData,
-        averageBudget: 10500000
-      };
-      
-      setRecommendedProperties(mockRecommended);
-      setRecentSearches(mockRecentSearches);
-      setStats(mockStats);
+      // Recommended properties: matching alerts or fallback to random offers
+      let recommended = [];
+      if (alerts.length > 0) {
+        const matchRes = await userClient.getMatchingPropertiesForAlerts();
+        recommended = matchRes.data?.properties || matchRes.properties || matchRes || [];
+      }
+      if (!recommended || recommended.length === 0) {
+        const allRes = await propertyClient.getAll({ limit: 12, sort: 'recent' });
+        const all = allRes.data?.properties || allRes.properties || allRes || [];
+        // Randomize a subset of offers
+        recommended = all.sort(() => Math.random() - 0.5).slice(0, 9);
+      }
+
+      setRecommendedProperties(recommended);
+
+      // Map alerts to recent searches-like items
+      const recent = alerts.slice(-6).map((a, idx) => ({
+        id: idx + 1,
+        city: a.city || '–',
+        type: a.type || '–',
+        budget: `${a.minPrice ? Number(a.minPrice).toLocaleString('fr-FR') : '–'}${a.minPrice || a.maxPrice ? ' - ' : ''}${a.maxPrice ? Number(a.maxPrice).toLocaleString('fr-FR') : '–'} FCFA`
+      }));
+      setRecentSearches(recent);
+
+      // Compute stats from the recommended properties for realism
+      setStats(computeStatsFromProperties(recommended));
     } catch (err) {
       console.error('Error loading dashboard data:', err);
       setError('Erreur lors du chargement des données du tableau de bord');
+      // Fallback: still show recent offers even if alerts API fails
+      try {
+        const allRes = await propertyClient.getAll({ limit: 12, sort: 'recent' });
+        const all = allRes.data?.properties || allRes.properties || allRes || [];
+        const recommended = all.sort(() => Math.random() - 0.5).slice(0, 9);
+        setRecommendedProperties(recommended);
+        setRecentSearches([]);
+        setStats(computeStatsFromProperties(recommended));
+      } catch (innerErr) {
+        console.error('Fallback load properties failed:', innerErr);
+      }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const toggleFavorite = async (propertyId) => {
+    try {
+      // Simple optimistic toggle for UI (actual API could be integrated if needed)
+      setRecommendedProperties(prev => prev.map(p => p._id === propertyId ? { ...p, isFavorite: !p.isFavorite } : p));
+    } catch (err) {
+      console.error('Error toggling favorite:', err);
     }
   };
 
@@ -138,26 +124,6 @@ export default function HomeTab() {
       currency: currency || 'XAF',
       minimumFractionDigits: 0
     }).format(price);
-  };
-
-  const toggleFavorite = async (propertyId) => {
-    try {
-      const property = recommendedProperties.find(p => p._id === propertyId);
-      if (property.isFavorite) {
-        await userClient.removeFromFavorites(propertyId);
-      } else {
-        await userClient.addToFavorites(propertyId);
-      }
-      
-      setRecommendedProperties(prev => 
-        prev.map(p => 
-          p._id === propertyId ? { ...p, isFavorite: !p.isFavorite } : p
-        )
-      );
-    } catch (err) {
-      console.error('Error toggling favorite:', err);
-      setError('Erreur lors de la mise à jour des favoris');
-    }
   };
 
   if (loading) {
@@ -178,13 +144,13 @@ export default function HomeTab() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Section */}
-      <section className="premium-card rounded-2xl p-6 shadow-lg bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white">
+      {/* Welcome Section - text noir et fond clair */}
+      <section className="premium-card rounded-2xl p-6 shadow-lg bg-white">
         <div className="mb-2">
-          <h1 className="text-3xl font-poppins font-bold">
+          <h1 className="text-3xl font-poppins font-bold text-kama-text">
             Bienvenue, {user.firstName} 👋
           </h1>
-          <p className="text-white opacity-90 mt-2 font-inter">
+          <p className="text-kama-text mt-2 font-inter">
             Découvrez les meilleures opportunités du moment.
           </p>
         </div>
@@ -214,9 +180,9 @@ export default function HomeTab() {
               <div className="premium-card overflow-hidden rounded-xl hover-lift transition-all duration-300 h-full">
                 <div className="relative">
                   <img
-                    src={property.images[0]?.url || 'https://via.placeholder.com/600x400/cccccc/000000?text=Image+Indisponible'}
+                    src={property.images?.[0]?.url || 'https://via.placeholder.com/600x400/cccccc/000000?text=Image+Indisponible'}
                     alt={property.title}
-                    className="w-full h-48 object-cover hover-scale transition-all duration-500"
+                    className="w-full h-56 object-cover object-center hover-scale transition-all duration-500"
                     onError={(e) => {
                       e.target.src = 'https://via.placeholder.com/600x400/cccccc/000000?text=Image+Indisponible';
                       e.target.onerror = null;
@@ -232,7 +198,7 @@ export default function HomeTab() {
                   >
                     <i className={`fas ${property.isFavorite ? 'fa-heart' : 'fa-heart'}`}></i>
                   </button>
-                  <div className="absolute top-3 left-3 bg-secondary-gold text-text-primary text-xs px-2 py-1 rounded-full font-bold font-inter">
+                  <div className="absolute top-3 left-3 bg-kama-gold text-kama-text text-xs px-2 py-1 rounded-full font-bold font-inter">
                     Nouveau
                   </div>
                 </div>
@@ -243,7 +209,7 @@ export default function HomeTab() {
                   </div>
                   
                   <p className="text-text-secondary text-sm mb-4 font-inter">
-                    <i className="fas fa-map-marker-alt text-accent-turquoise mr-2"></i>
+                    <i className="fas fa-map-marker-alt text-kama-turquoise mr-2"></i>
                     {property.address?.city}, {property.address?.district || ''}
                   </p>
                   
@@ -255,7 +221,7 @@ export default function HomeTab() {
                   
                   <Link 
                     to={`/offers/${property._id}`}
-                    className="w-full bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white py-2 rounded-lg font-poppins font-medium text-center block hover-lift transition-all duration-300 shadow hover:shadow-lg"
+                    className="w-full bg-gradient-to-r from-kama-vert to-kama-gold text-white py-2 rounded-lg font-poppins font-medium text-center block hover-lift transition-all duration-300 shadow hover:shadow-lg"
                   >
                     Voir l'offre
                   </Link>
@@ -266,17 +232,17 @@ export default function HomeTab() {
         </Swiper>
       </section>
 
-      {/* Recent Searches */}
+      {/* Recent Searches (based on alerts) */}
       <section className="premium-card rounded-2xl p-6 shadow-lg">
         <h2 className="text-2xl font-poppins font-bold text-text-primary mb-6">
-          Vos recherches récentes
+          Vos critères récents
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {recentSearches.map((search) => (
             <div 
               key={search.id} 
-              className="premium-card p-4 rounded-lg hover-lift cursor-pointer transition-all duration-300 border border-gray-200 hover:border-[#0D6EFD]"
+              className="premium-card p-4 rounded-lg hover-lift cursor-pointer transition-all duration-300 border border-gray-200 hover:border-kama-vert"
               onClick={() => console.log('Recharger la recherche:', search)}
             >
               <div className="flex justify-between items-center">
@@ -307,13 +273,11 @@ export default function HomeTab() {
                 <PieChart>
                   <Pie
                     data={stats.propertyTypes}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    outerRadius={80}
-                    fill="#8884d8"
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    nameKey="name"
+                    innerRadius={50}
+                    outerRadius={80}
+                    paddingAngle={5}
                   >
                     {stats.propertyTypes.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -325,68 +289,31 @@ export default function HomeTab() {
               </ResponsiveContainer>
             </div>
           </div>
-          
+
           <div className="premium-card p-4 rounded-lg">
-            <h3 className="font-poppins font-semibold text-text-primary mb-3">Villes préférées</h3>
+            <h3 className="font-poppins font-semibold text-text-primary mb-3">Répartition par villes</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={stats.cities}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
+                <BarChart data={stats.cities}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis dataKey="name" tick={{ fill: '#1C1C1C' }} />
+                  <YAxis tick={{ fill: '#1C1C1C' }} />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="value" fill="#0D6EFD" name="Pourcentage" />
+                  <Bar dataKey="value" fill="#1A3C40" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
-          
-          <div className="premium-card p-4 rounded-lg flex flex-col items-center justify-center">
-            <h3 className="font-poppins font-semibold text-text-primary mb-2">Budget moyen</h3>
-            <div className="text-2xl font-poppins font-bold text-primary-dark">
-              {formatPrice(stats.averageBudget, 'XAF')}
-            </div>
-            <p className="text-sm text-text-secondary mt-2 text-center font-inter">
-              Basé sur vos recherches récentes
-            </p>
-            
-            <div className="mt-4 w-full">
-              <div className="flex justify-between text-sm mb-1 font-inter">
-                <span className="text-text-secondary">Progression</span>
-                <span className="font-medium text-primary-dark">+12%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-primary-dark to-[#007BFF] h-2 rounded-full" 
-                  style={{ width: '65%' }}
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Help Section */}
-      <section className="premium-card rounded-2xl p-6 shadow-lg bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <div className="mb-4 md:mb-0">
-            <h2 className="text-xl font-poppins font-bold text-text-primary">Besoin d'aide ?</h2>
-            <p className="text-text-secondary mt-1 font-inter">
-              Un conseiller Project-Kama peut vous guider gratuitement.
-            </p>
+          <div className="premium-card p-4 rounded-lg">
+            <h3 className="font-poppins font-semibold text-text-primary mb-3">Budget moyen</h3>
+            <div className="h-64 flex items-center justify-center">
+              <div className="text-3xl font-bold text-primary-dark font-poppins">
+                {formatPrice(stats.averageBudget, 'XAF')}
+              </div>
+            </div>
           </div>
-          <button className="bg-gradient-to-r from-[#0D6EFD] to-[#007BFF] text-white px-6 py-3 rounded-lg font-poppins font-bold hover-lift transition-all duration-300 shadow hover:shadow-lg">
-            <i className="fas fa-headset mr-2"></i> Contacter le support
-          </button>
         </div>
       </section>
     </div>

@@ -4,8 +4,18 @@ export const propertyClient = {
   // Get all properties with filters
   getAll: async (params = {}) => {
     try {
-      console.log('propertyClient.getAll called with params:', params);
-      const response = await api.get('/api/properties', { params });
+      // Ensure arrays are properly serialized for query params
+      const serializedParams = { ...params };
+      if (Array.isArray(serializedParams.type)) {
+        // Axios will serialize arrays correctly, but we ensure it's an array
+        serializedParams.type = serializedParams.type;
+      }
+      const response = await api.get('/api/properties', { 
+        params: serializedParams,
+        paramsSerializer: {
+          indexes: null // Use bracket notation: type[]=value1&type[]=value2
+        }
+      });
       return response.data || response;
     } catch (error) {
       console.error('propertyClient.getAll error:', error);
@@ -16,7 +26,6 @@ export const propertyClient = {
   // Get property by ID
   getById: async (id) => {
     try {
-      console.log('propertyClient.getById called with id:', id);
       const response = await api.get(`/api/properties/${id}`);
       return response.data || response;
     } catch (error) {
@@ -28,9 +37,9 @@ export const propertyClient = {
   // Get properties of current user
   getMyProperties: async () => {
     try {
-      console.log('propertyClient.getMyProperties called');
       const response = await api.get('/api/properties/my-properties');
-      return response.data || response;
+      // Handle response format { properties: [...] }
+      return response.data?.properties || response.data || response;
     } catch (error) {
       console.error('propertyClient.getMyProperties error:', error);
       // Enhanced error handling to provide more details
@@ -59,16 +68,18 @@ export const propertyClient = {
         console.error('Invalid user ID provided to getByUser:', userId);
         throw new Error('ID utilisateur invalide');
       }
-      
-      console.log('propertyClient.getByUser called with userId:', userId);
       const response = await api.get(`/api/properties/user/${userId}`);
-      console.log('Raw response from getByUser:', response);
       // Handle response - should be an array of properties
       const data = response.data || response;
-      console.log('Processed data from getByUser:', data);
       // Ensure we always return an array
-      const result = Array.isArray(data) ? data : (data ? [data] : []);
-      console.log('Final result from getByUser:', result);
+      let result = [];
+      if (Array.isArray(data)) {
+        result = data;
+      } else if (data && data.properties) {
+        result = Array.isArray(data.properties) ? data.properties : [data.properties];
+      } else if (data) {
+        result = [data];
+      }
       return result;
     } catch (error) {
       console.error('propertyClient.getByUser error:', error);
@@ -84,7 +95,6 @@ export const propertyClient = {
   // Create a new property
   create: async (propertyData) => {
     try {
-      console.log('propertyClient.create called with data:', propertyData);
       const response = await api.post('/api/properties', propertyData);
       return response.data || response;
     } catch (error) {
@@ -96,7 +106,6 @@ export const propertyClient = {
   // Update a property
   update: async (id, propertyData) => {
     try {
-      console.log('propertyClient.update called with id:', id, 'and data:', propertyData);
       const response = await api.put(`/api/properties/${id}`, propertyData);
       return response.data || response;
     } catch (error) {
@@ -108,7 +117,6 @@ export const propertyClient = {
   // Delete a property
   delete: async (id) => {
     try {
-      console.log('propertyClient.delete called with id:', id);
       const response = await api.delete(`/api/properties/${id}`);
       return response.data || response;
     } catch (error) {
@@ -120,7 +128,6 @@ export const propertyClient = {
   // Upload images for a property
   uploadImages: async (id, formData) => {
     try {
-      console.log('propertyClient.uploadImages called with id:', id);
       const response = await api.post(`/api/properties/${id}/images`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -136,7 +143,6 @@ export const propertyClient = {
   // Upload documents for a property
   uploadDocuments: async (id, formData) => {
     try {
-      console.log('propertyClient.uploadDocuments called with id:', id);
       const response = await api.post(`/api/properties/${id}/documents`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -152,7 +158,6 @@ export const propertyClient = {
   // Remove an image from a property
   removeImage: async (propertyId, publicId) => {
     try {
-      console.log('propertyClient.removeImage called with propertyId:', propertyId, 'and publicId:', publicId);
       const response = await api.delete(`/api/properties/${propertyId}/images/${publicId}`);
       return response.data || response;
     } catch (error) {
@@ -164,7 +169,6 @@ export const propertyClient = {
   // Get property reviews
   getPropertyReviews: async (id) => {
     try {
-      console.log('propertyClient.getPropertyReviews called with id:', id);
       const response = await api.get(`/api/properties/${id}/reviews`);
       return response.data || response;
     } catch (error) {
@@ -176,7 +180,6 @@ export const propertyClient = {
   // Add a review to a property
   addReview: async (id, reviewData) => {
     try {
-      console.log('propertyClient.addReview called with id:', id, 'and data:', reviewData);
       const response = await api.post(`/api/properties/${id}/reviews`, reviewData);
       return response.data || response;
     } catch (error) {
@@ -188,7 +191,6 @@ export const propertyClient = {
   // Respond to a review
   respondToReview: async (propertyId, reviewId, responseText) => {
     try {
-      console.log('propertyClient.respondToReview called with propertyId:', propertyId, 'reviewId:', reviewId);
       const response = await api.post(`/api/properties/${propertyId}/reviews/${reviewId}/responses`, { responseText });
       return response.data || response;
     } catch (error) {
@@ -200,7 +202,6 @@ export const propertyClient = {
   // Get seller contact info
   getContact: async (id) => {
     try {
-      console.log('propertyClient.getContact called with id:', id);
       const response = await api.get(`/api/properties/${id}/contact`);
       return response.data || response;
     } catch (error) {
@@ -212,7 +213,6 @@ export const propertyClient = {
   // Report a property
   reportProperty: async (id, reportData) => {
     try {
-      console.log('propertyClient.reportProperty called with id:', id, 'and data:', reportData);
       const response = await api.post(`/api/properties/${id}/report`, reportData);
       return response.data || response;
     } catch (error) {
@@ -224,7 +224,6 @@ export const propertyClient = {
   // Report a comment
   reportComment: async (propertyId, commentId, reportData) => {
     try {
-      console.log('propertyClient.reportComment called with propertyId:', propertyId, 'commentId:', commentId, 'and data:', reportData);
       const response = await api.post(`/api/properties/${propertyId}/comments/${commentId}/report`, reportData);
       return response.data || response;
     } catch (error) {

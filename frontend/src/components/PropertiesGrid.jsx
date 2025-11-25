@@ -44,7 +44,7 @@ export default function PropertiesGrid({ properties, onEdit, onDelete, onBoost }
               <img 
                 src={property.images[0].url} 
                 alt={property.title} 
-                className="w-full h-48 object-cover"
+                className="w-full h-56 object-cover object-center"
               />
             ) : (
               <div className="bg-gray-200 border-2 border-dashed rounded-xl w-full h-48 flex items-center justify-center">

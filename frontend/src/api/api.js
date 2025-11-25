@@ -1,20 +1,70 @@
 import axios from 'axios'
 
+const AUTH_STORAGE_KEY = 'kama_auth'
+const LEGACY_AUTH_KEY = 'auth_token'
+
+const persistToken = (token) => {
+  if (typeof window === 'undefined' || !token) return
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY)
+    const parsed = raw ? JSON.parse(raw) : {}
+    parsed.token = token
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(parsed))
+  } catch (err) {
+    // Stockage corrompu : on écrase avec une nouvelle structure saine
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token }))
+  }
+  try {
+    localStorage.setItem(LEGACY_AUTH_KEY, token)
+  } catch (_) {
+    /* noop */
+  }
+}
+
+const clearStoredAuth = () => {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem(AUTH_STORAGE_KEY)
+  localStorage.removeItem(LEGACY_AUTH_KEY)
+}
+
+const getStoredToken = () => {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (parsed?.token) return parsed.token
+    }
+  } catch (err) {
+    // Si le JSON est invalide on nettoie pour éviter de boucler indéfiniment
+    localStorage.removeItem(AUTH_STORAGE_KEY)
+  }
+  try {
+    return localStorage.getItem(LEGACY_AUTH_KEY)
+  } catch (_) {
+    return null
+  }
+}
+
 // baseURL doit pointer vers le host seulement pour éviter le /api/api (les routes client devront utiliser /api/...)
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+const baseURL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:5000' : '')
 
 const api = axios.create({
   baseURL,
   withCredentials: true, // important si backend utilise cookie httpOnly pour refresh tokens
+  timeout: 15000 // 15s pour éviter les requêtes qui pendent en prod
 })
 
 // Met automatiquement Authorization: Bearer <token> si présent dans localStorage
 api.interceptors.request.use(
   (config) => {
     try {
-      const token = localStorage.getItem('auth_token')
-      if (token) {
-        config.headers = { ...config.headers, Authorization: `Bearer ${token}` }
+      if (!config.headers?.Authorization) {
+        const token = getStoredToken()
+        if (token) {
+          config.headers = { ...config.headers, Authorization: `Bearer ${token}` }
+        }
       }
     } catch (e) {
       /* noop */
@@ -28,7 +78,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    // console.error('API error:', err?.response?.status, err?.response?.data);
+    // Enrichir l'erreur sans casser la compatibilité
+    try {
+      err.normalizedMessage = err?.response?.data?.message || err?.message || 'Erreur réseau'
+    } catch (_) {
+      // noop
+    }
     return Promise.reject(err)
   }
 )
@@ -61,7 +116,7 @@ api.interceptors.response.use(
       alert('Votre compte a été banni. Contactez le support pour plus d\'informations.');
       // Clear auth data and redirect to login
       try {
-        localStorage.removeItem('kama_auth')
+        clearStoredAuth()
         window.location.href = '/login'
       } catch (e) {
         console.error('Error clearing auth data:', e)
@@ -86,21 +141,14 @@ api.interceptors.response.use(
       try {
         const res = await api.post('/api/auth/refresh')
         const { token } = res.data
-        // update localStorage
-        try {
-          const raw = localStorage.getItem('kama_auth')
-          const parsed = raw ? JSON.parse(raw) : {}
-          parsed.token = token
-          localStorage.setItem('kama_auth', JSON.stringify(parsed))
-        } catch (e) {}
-
+        persistToken(token)
         processQueue(null, token)
         originalRequest.headers.Authorization = `Bearer ${token}`
         return api(originalRequest)
       } catch (err) {
         processQueue(err, null)
         // if refresh fails, ensure tokens cleared
-        try { localStorage.removeItem('kama_auth') } catch (e) {}
+        clearStoredAuth()
         return Promise.reject(err)
       } finally {
         isRefreshing = false

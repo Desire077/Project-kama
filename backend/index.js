@@ -49,7 +49,9 @@ const upload = multer({
 });
 
 // Middlewares
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+// CORS sécurisé : n'autoriser qu'une origine explicite
 app.use(cors({
   origin: FRONTEND_URL,
   credentials: true
@@ -69,6 +71,13 @@ connectDB();
 
 // API routes
 app.get('/api', (req, res) => res.json({ message: 'Kama API running' }));
+// Simple healthcheck endpoint for monitoring / uptime checks
+app.get('/api/health', (req, res) =>
+  res.json({
+    status: 'ok',
+    env: process.env.NODE_ENV || 'development',
+  })
+);
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 // Add upload middleware to user routes for avatar uploads

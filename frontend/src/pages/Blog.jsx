@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function Blog() {
   const [selectedCategory, setSelectedCategory] = useState('tous');
+  const [openedPost, setOpenedPost] = useState(null);
 
   // Enhanced blog posts data with more detailed real estate content
   const blogPosts = [
@@ -214,13 +215,13 @@ export default function Blog() {
                 </div>
                 <h2 className="text-xl font-bold text-kama-text mb-3">{post.title}</h2>
                 <p className="text-kama-muted mb-4">{post.excerpt}</p>
-                <a 
-                  href="#" 
+                <button 
+                  onClick={() => setOpenedPost(post)}
                   className="text-kama-vert font-medium hover:text-opacity-80 transition flex items-center"
                 >
                   Lire l'article
                   <i className="fas fa-arrow-right ml-2 text-sm"></i>
-                </a>
+                </button>
               </div>
             </article>
           ))}
@@ -244,6 +245,27 @@ export default function Blog() {
           </div>
         </div>
       </div>
+
+      {/* Modal lecture d'article */}
+      {openedPost && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full p-6 overflow-y-auto max-h-[80vh]">
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-2xl font-bold text-kama-text">{openedPost.title}</h3>
+                <div className="text-sm text-kama-muted mt-1">{openedPost.date} • {openedPost.readTime}</div>
+              </div>
+              <button 
+                className="px-3 py-2 rounded-lg bg-gray-200 text-kama-text"
+                onClick={() => setOpenedPost(null)}
+              >
+                Fermer
+              </button>
+            </div>
+            <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: openedPost.content }} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -127,7 +127,7 @@ export default function Louer() {
                           <img
                             src={offer.images[0].url}
                             alt={offer.title}
-                            className="w-full h-48 object-cover hover-scale transition-all duration-500"
+                            className="w-full h-56 object-cover object-center hover-scale transition-all duration-500"
                             onError={(e) => {
                               e.target.src = 'https://via.placeholder.com/600x400/cccccc/000000?text=Image+Indisponible';
                               e.target.onerror = null;

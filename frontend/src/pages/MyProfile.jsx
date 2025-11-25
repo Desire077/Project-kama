@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserProfile } from '../store/slices/authSlice';
+import { fetchUserProfile, setUser } from '../store/slices/authSlice';
 import propertyClient from '../api/propertyClient';
 import userClient from '../api/userClient';
+import { Button } from '../components/ui';
 
 export default function MyProfile() {
   const navigate = useNavigate();
@@ -27,53 +28,55 @@ export default function MyProfile() {
           return;
         }
 
-        // Load user properties using getByUser with current user's ID
+        // Always fetch fresh profile to ensure createdAt and _id are present
+        let effectiveUserId = user?._id
         try {
-          console.log('Loading user properties for user:', user?._id);
-          if (user && user._id) {
-            console.log('Calling propertyClient.getByUser with user ID:', user._id);
-            const propertiesResponse = await propertyClient.getByUser(user._id);
-            console.log('Properties response received:', propertiesResponse);
-            console.log('Properties response type:', typeof propertiesResponse);
-            console.log('Properties response isArray:', Array.isArray(propertiesResponse));
-            // The response should already be an array from the updated propertyClient
-            const propertiesData = Array.isArray(propertiesResponse) ? propertiesResponse : [];
-            console.log('Processed properties data:', propertiesData);
-            console.log('Processed properties data length:', propertiesData.length);
-            setUserProperties(propertiesData);
-          } else {
-            console.log('User or user._id is missing:', { user });
+          const profileResponse = await userClient.getProfile();
+          const profileUser = profileResponse?.data?.user || profileResponse?.data || profileResponse;
+          if (profileUser && profileUser._id) {
+            effectiveUserId = profileUser._id;
+            // sync redux for display fields like createdAt
+            dispatch(setUser(profileUser));
           }
+        } catch (e) {
+          console.error('Failed to fetch profile:', e);
+        }
+
+        // Load user properties using getMyProperties (uses JWT on server side)
+        try {
+          console.log('Calling propertyClient.getMyProperties');
+          const propertiesResponse = await propertyClient.getMyProperties();
+          console.log('Properties response received:', propertiesResponse);
+          const propertiesData = Array.isArray(propertiesResponse) ? propertiesResponse : (propertiesResponse?.properties || []);
+          console.log('Processed properties data length:', propertiesData.length);
+          setUserProperties(propertiesData);
         } catch (propertiesError) {
           console.error('Error loading user properties:', propertiesError);
-          console.error('Error name:', propertiesError.name);
-          console.error('Error message:', propertiesError.message);
-          if (propertiesError.response) {
-            console.error('Error response:', propertiesError.response);
-          }
           setUserProperties([]);
         }
         
-        // Load user comments
+        // Load user comments (requires user id)
         try {
-          console.log('Loading user comments for user:', user?._id);
-          if (user && user._id) {
-            const commentsResponse = await userClient.getUserComments(user._id);
+          if (effectiveUserId) {
+            console.log('Loading user comments for user:', effectiveUserId);
+            const commentsResponse = await userClient.getUserComments(effectiveUserId);
             console.log('Comments response:', commentsResponse);
-            // Handle different response formats
             let commentsData = [];
             if (Array.isArray(commentsResponse)) {
               commentsData = commentsResponse;
             } else if (commentsResponse && commentsResponse.data) {
-              commentsData = commentsResponse.data;
+              commentsData = Array.isArray(commentsResponse.data) ? commentsResponse.data : [commentsResponse.data];
+            } else if (commentsResponse && commentsResponse.comments) {
+              commentsData = Array.isArray(commentsResponse.comments) ? commentsResponse.comments : [commentsResponse.comments];
             } else if (commentsResponse) {
-              // If it's a direct object, wrap it in an array
               commentsData = Array.isArray(commentsResponse) ? commentsResponse : [commentsResponse];
             } else {
               commentsData = commentsResponse || [];
             }
             console.log('Processed comments data:', commentsData);
             setUserComments(commentsData);
+          } else {
+            console.warn('No effective user id available to fetch comments');
           }
         } catch (commentsError) {
           console.error('Error loading user comments:', commentsError);
@@ -112,12 +115,9 @@ export default function MyProfile() {
             <p className="text-text-secondary mb-6">
               {error}
             </p>
-            <Link 
-              to="/" 
-              className="premium-btn-primary px-6 py-3 rounded-lg font-medium"
-            >
+            <Button as={Link} to="/" size="md" className="px-6">
               Retour à l'accueil
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -133,12 +133,9 @@ export default function MyProfile() {
             <p className="text-text-secondary mb-6">
               Impossible de charger le profil.
             </p>
-            <Link 
-              to="/" 
-              className="premium-btn-primary px-6 py-3 rounded-lg font-medium"
-            >
+            <Button as={Link} to="/" size="md" className="px-6">
               Retour à l'accueil
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -270,12 +267,9 @@ export default function MyProfile() {
                       <p className="text-text-secondary mb-4">
                         Publiez votre première annonce immobilière.
                       </p>
-                      <Link 
-                        to="/vendre" 
-                        className="premium-btn-primary px-4 py-2 rounded-lg"
-                      >
+                      <Button as={Link} to="/vendre" size="sm">
                         Créer une annonce
-                      </Link>
+                      </Button>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

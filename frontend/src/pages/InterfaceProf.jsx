@@ -86,6 +86,8 @@ export default function InterfaceProf() {
 }
 
 function PropertiesTab({ properties, loading, error, formatPrice }) {
+  const navigate = useNavigate();
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">

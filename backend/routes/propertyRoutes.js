@@ -29,15 +29,17 @@ const { isAdmin } = require('../middlewares/adminMiddleware');
 // Routes publiques
 router.get('/', getProperties);
 router.get('/user/:userId', getPropertiesByUser);
+// Place the protected specific route BEFORE parameterized ':id' to avoid shadowing
+router.get('/my-properties', protect, getMyProperties);
 router.get('/:id/reviews', getPropertyReviews); // Add this new route
 router.get('/:id/contact', getPropertyContact); // This should be public for contacting sellers
+router.get('/:id', protect, getPropertyById); // Consultation d'une offre réservée aux utilisateurs authentifiés
 
 // Routes protégées
 router.use(protect); // Toutes les routes suivantes nécessitent une authentification
 
 // IMPORTANT: Order matters! Specific routes must come before parameterized routes
-router.get('/my-properties', getMyProperties);
-router.get('/:id', getPropertyById); // This should be protected for viewing offers
+// (Route déplacée en public : consultation des offres est publique)
 router.post('/', createProperty);
 router.put('/:id', updateProperty);
 router.delete('/:id', deleteProperty);

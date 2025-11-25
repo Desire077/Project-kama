@@ -32,7 +32,8 @@ export const fetchUserProfile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await userClient.getProfile();
-      return response.data || response;
+      // Ensure we return the user object directly
+      return response.data?.user || response.data || response;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Erreur lors de la récupération du profil');
     }

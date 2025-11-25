@@ -297,7 +297,7 @@ export default function Offers() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-light py-8">
+      <div className="min-h-screen bg-kama-bg py-8">
         <div className="container mx-auto px-4">
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-dark"></div>
@@ -308,11 +308,11 @@ export default function Offers() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-light py-8">
+    <div className="min-h-screen bg-kama-bg py-8">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-2">{getCategoryTitle()}</h1>
-          <p className="text-text-secondary">{getCategoryDescription()}</p>
+          <h1 className="text-3xl font-bold text-kama-text mb-2">{getCategoryTitle()}</h1>
+          <p className="text-kama-muted">{getCategoryDescription()}</p>
         </div>
 
         {error && (
@@ -323,8 +323,8 @@ export default function Offers() {
 
         {offers.length === 0 ? (
           <div className="premium-card p-12 text-center shadow-lg">
-            <h3 className="text-xl font-medium text-text-primary mb-2">Aucune offre trouvée</h3>
-            <p className="text-text-secondary mb-4">
+            <h3 className="text-xl font-medium text-kama-text mb-2">Aucune offre trouvée</h3>
+            <p className="text-kama-muted mb-4">
               Aucune offre ne correspond à vos critères. Essayez de modifier vos filtres.
             </p>
             <button 
@@ -344,7 +344,7 @@ export default function Offers() {
                       <img
                         src={offer.images[0].url}
                         alt={offer.title}
-                        className="w-full h-48 object-cover hover-scale transition-all duration-500"
+                        className="w-full h-56 object-cover object-center hover-scale transition-all duration-500"
                         onError={(e) => {
                           e.target.src = 'https://via.placeholder.com/600x400/cccccc/000000?text=Image+Indisponible';
                           e.target.onerror = null;
@@ -356,7 +356,7 @@ export default function Offers() {
                         </div>
                       )}
                       
-                      <div className="absolute top-3 left-3 bg-secondary-gold text-text-primary text-xs px-2 py-1 rounded-full font-bold">
+                      <div className="absolute top-3 left-3 bg-secondary-gold text-kama-text text-xs px-2 py-1 rounded-full font-bold">
                         <i className="fas fa-fire mr-1"></i> Nouveau
                       </div>
                       
@@ -372,7 +372,7 @@ export default function Offers() {
                   
                   <div className="p-5">
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-text-primary truncate">{offer.title}</h3>
+                      <h3 className="text-lg font-semibold text-kama-text truncate">{offer.title}</h3>
                       <div className="flex flex-col items-end">
                         <span className="premium-badge">
                           {offer.type}
@@ -392,7 +392,7 @@ export default function Offers() {
                       </div>
                     </div>
                     
-                    <p className="text-text-secondary text-sm mb-4">
+                    <p className="text-kama-muted text-sm mb-4">
                       <i className="fas fa-map-marker-alt text-accent-turquoise mr-2"></i>
                       {offer.address?.city}, {offer.address?.district || ''}
                     </p>
@@ -401,7 +401,7 @@ export default function Offers() {
                       <span className="text-xl font-bold text-primary-dark">
                         {formatPrice(offer.price, offer.currency)}
                       </span>
-                      <div className="flex items-center text-sm text-text-secondary">
+                      <div className="flex items-center text-sm text-kama-muted">
                         <span className="mr-3">
                           <i className="fas fa-bed mr-1 text-accent-turquoise"></i> {offer.rooms || 0}
                         </span>
@@ -412,10 +412,10 @@ export default function Offers() {
                     </div>
                     
                     <div className="flex justify-between items-center">
-                      <div className="flex items-center text-sm text-text-secondary">
+                      <div className="flex items-center text-sm text-kama-muted">
                         <i className="fas fa-ruler-combined mr-1 text-accent-turquoise"></i> {offer.surface || 0} m²
                       </div>
-                      <div className="flex items-center text-sm text-text-secondary">
+                      <div className="flex items-center text-sm text-kama-muted">
                         <i className="fas fa-car mr-1 text-accent-turquoise"></i> {offer.parking ? 'Oui' : 'Non'}
                       </div>
                     </div>

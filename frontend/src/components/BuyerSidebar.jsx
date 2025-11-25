@@ -19,7 +19,6 @@ export default function BuyerSidebar({ activeTab, setActiveTab }) {
     { id: 'home', label: 'Accueil acheteur', icon: 'fas fa-home' },
     { id: 'favorites', label: 'Mes favoris', icon: 'fas fa-heart' },
     { id: 'alerts', label: 'Mes alertes', icon: 'fas fa-bell' },
-    { id: 'comments', label: 'Mes commentaires', icon: 'fas fa-comments' },
     { id: 'profile', label: 'Profil', icon: 'fas fa-user' },
     { id: 'settings', label: 'Paramètres', icon: 'fas fa-cog' }
   ];

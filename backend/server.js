@@ -45,7 +45,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   'https://kama-ga.cloud',
-  'https://www.kama-ga.cloud'
+  'https://www.kama-ga.cloud',
+  'https://api.kama-ga.cloud'
 ];
 
 // Add CORS_ORIGIN from env if defined

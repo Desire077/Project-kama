@@ -114,102 +114,114 @@ exports.getProperties = async (req, res) => {
       city,
       rooms,
       surface,
-      status = 'approved', // Keep this as 'approved' to match our new default
+      availability, // Note: not used in model, but sent by frontend
+      status = 'approved',
       page = 1,
       limit = 10
     } = req.query;
 
-    // Track search patterns for logged in users
-    if (req.user) {
-      try {
-        const searchQuery = [];
-        if (type) searchQuery.push(`type:${type}`);
-        if (minPrice) searchQuery.push(`minPrice:${minPrice}`);
-        if (maxPrice) searchQuery.push(`maxPrice:${maxPrice}`);
-        if (city) searchQuery.push(`city:${city}`);
-        if (rooms) searchQuery.push(`rooms:${rooms}`);
-        if (surface) searchQuery.push(`surface:${surface}`);
-        
-        const User = require('../models/User');
-        await User.findByIdAndUpdate(req.user.id, {
-          $push: {
-            searchHistory: {
-              query: searchQuery.join(', '),
-              timestamp: new Date(),
-              resultsCount: 0 // Will be updated after we get the count
-            }
-          }
-        });
-      } catch (trackError) {
-        console.error('Error tracking search pattern:', trackError);
-      }
-    }
+    console.log('getProperties called with query:', req.query);
 
     // Construction du filtre
     // For public display, accept both 'approved' and 'online' status
-    // This ensures backward compatibility with existing properties
     const filter = {};
-    if (status === 'approved') {
+    if (status === 'approved' || status === 'online') {
       filter.status = { $in: ['approved', 'online'] };
     } else {
       filter.status = status;
     }
     
-    // Handle type filter - can be a string or an array
+    // Handle type filter - can be a string, an array, or comma-separated
     if (type) {
+      let typeArray;
       if (Array.isArray(type)) {
-        // If type is an array, use $in operator to match any of the types
-        filter.type = { $in: type };
+        typeArray = type;
+      } else if (typeof type === 'string' && type.includes(',')) {
+        typeArray = type.split(',').map(t => t.trim());
       } else {
-        // If type is a string, use exact match
-        filter.type = type;
+        typeArray = [type];
+      }
+      
+      // If only one type, use exact match; otherwise use $in
+      if (typeArray.length === 1) {
+        filter.type = typeArray[0];
+      } else {
+        filter.type = { $in: typeArray };
       }
     }
+    
     if (minPrice || maxPrice) {
       filter.price = {};
       if (minPrice) filter.price.$gte = parseInt(minPrice);
       if (maxPrice) filter.price.$lte = parseInt(maxPrice);
     }
-    // Use exact match for city instead of partial match
-    if (city) filter['address.city'] = city;
+    
+    // City filter - case insensitive partial match
+    if (city) {
+      filter['address.city'] = { $regex: new RegExp(city, 'i') };
+    }
+    
     if (rooms) filter.rooms = parseInt(rooms);
     if (surface) filter.surface = { $gte: parseInt(surface) };
 
+    console.log('Filter constructed:', JSON.stringify(filter));
+
     // Pagination
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 10));
+    const skip = (pageNum - 1) * limitNum;
 
     const properties = await Property.find(filter)
       .populate('owner', 'firstName lastName email whatsapp')
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(limitNum);
 
     const total = await Property.countDocuments(filter);
 
-    // Update the search history with results count
+    console.log(`Found ${properties.length} properties, total: ${total}`);
+
+    // Track search patterns for logged in users (non-blocking)
     if (req.user) {
-      try {
-        const User = require('../models/User');
-        const user = await User.findById(req.user.id);
-        if (user && user.searchHistory.length > 0) {
-          user.searchHistory[user.searchHistory.length - 1].resultsCount = total;
-          await user.save();
+      setImmediate(async () => {
+        try {
+          const searchQuery = [];
+          if (type) searchQuery.push(`type:${type}`);
+          if (minPrice) searchQuery.push(`minPrice:${minPrice}`);
+          if (maxPrice) searchQuery.push(`maxPrice:${maxPrice}`);
+          if (city) searchQuery.push(`city:${city}`);
+          if (rooms) searchQuery.push(`rooms:${rooms}`);
+          if (surface) searchQuery.push(`surface:${surface}`);
+          
+          await User.findByIdAndUpdate(req.user.id, {
+            $push: {
+              searchHistory: {
+                $each: [{
+                  query: searchQuery.join(', '),
+                  timestamp: new Date(),
+                  resultsCount: total
+                }],
+                $slice: -50 // Keep only last 50 searches
+              }
+            }
+          });
+        } catch (trackError) {
+          console.error('Error tracking search pattern:', trackError);
         }
-      } catch (updateError) {
-        console.error('Error updating search history with results count:', updateError);
-      }
+      });
     }
 
     res.json({
       properties,
       pagination: {
-        current: parseInt(page),
-        pages: Math.ceil(total / parseInt(limit)),
+        current: pageNum,
+        pages: Math.ceil(total / limitNum),
         total
       }
     });
   } catch (err) {
-    console.error('Get properties error:', err);
+    console.error('Get properties error:', err.message);
+    console.error('Stack:', err.stack);
     res.status(500).json({ message: 'Erreur serveur lors de la récupération des propriétés.' });
   }
 };

@@ -25,12 +25,13 @@ export default function BuyerSidebar({ activeTab, setActiveTab }) {
 
   return (
     <>
-      {/* Mobile menu button */}
+      {/* Mobile menu button - positioned below navbar */}
       <button 
-        className="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded-lg shadow-lg"
+        className="md:hidden fixed top-20 left-4 z-40 bg-white p-3 rounded-full shadow-lg border border-gray-200"
         onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Ouvrir le menu"
       >
-        <i className="fas fa-bars text-xl text-[#1A3C40]"></i>
+        <i className={`fas ${sidebarOpen ? 'fa-times' : 'fa-bars'} text-lg text-[#1A3C40]`}></i>
       </button>
 
       {/* Sidebar Navigation */}

@@ -305,8 +305,8 @@ export default function Navbar() {
 
         {/* mobile menu */}
         {mobileOpen && (
-          <div ref={mobileRef} className="md:hidden py-4 border-t border-gray-100">
-            <nav className="flex flex-col gap-2" aria-label="Navigation mobile">
+          <div ref={mobileRef} className="md:hidden py-4 border-t border-gray-100 max-h-[70vh] overflow-y-auto">
+            <nav className="flex flex-col gap-1 px-2" aria-label="Navigation mobile">
               <NavItem to="/offers" onClick={() => setMobileOpen(false)}>Offres</NavItem>
               <NavItem to="/louer" onClick={() => setMobileOpen(false)}>Louer</NavItem>
               <NavItem to="/vacances" onClick={() => setMobileOpen(false)}>Vacances</NavItem>

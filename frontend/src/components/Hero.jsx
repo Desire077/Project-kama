@@ -47,7 +47,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-[100dvh] min-h-[600px] overflow-hidden">
       {/* Slides container */}
       <div 
         className="absolute inset-0 flex transition-transform duration-1000 ease-in-out"
@@ -64,23 +64,23 @@ export default function Hero() {
             
             {/* Content */}
             <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white px-4 sm:px-6 lg:px-8">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 font-poppins animate-fade-in-up">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 font-poppins animate-fade-in-up leading-tight">
                 {slide.title}
               </h1>
-              <p className="text-xl md:text-2xl mb-10 max-w-3xl font-inter animate-fade-in-up delay-200">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-10 max-w-3xl font-inter animate-fade-in-up delay-200 px-2">
                 {slide.subtitle}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up delay-300">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up delay-300 w-full sm:w-auto px-4 sm:px-0">
                 <button 
                   onClick={handlePublishClick}
-                  className="bg-gradient-to-r from-kama-dore to-white bg-opacity-30 text-kama-vert font-bold py-4 px-8 rounded-2xl transition-all duration-300 hover:shadow-lg transform hover:scale-105 shadow-kama floating flex items-center justify-center"
+                  className="bg-gradient-to-r from-kama-dore to-white bg-opacity-30 text-kama-vert font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl sm:rounded-2xl transition-all duration-300 hover:shadow-lg transform hover:scale-105 active:scale-95 shadow-kama floating flex items-center justify-center text-sm sm:text-base"
                 >
                   <i className="fas fa-plus-circle mr-2"></i>
                   Publier mon bien
                 </button>
                 <Link 
                   to="/offers" 
-                  className="border-2 border-white text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 hover:bg-white hover:text-kama-vert transform hover:scale-105 flex items-center justify-center"
+                  className="border-2 border-white text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl sm:rounded-2xl transition-all duration-300 hover:bg-white hover:text-kama-vert transform hover:scale-105 active:scale-95 flex items-center justify-center text-sm sm:text-base"
                 >
                   <i className="fas fa-search mr-2"></i>
                   Découvrir les offres

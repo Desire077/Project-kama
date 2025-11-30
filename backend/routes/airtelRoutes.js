@@ -1,7 +1,7 @@
 // routes/airtelRoutes.js
 const express = require('express');
 const router = express.Router();
-const { protect, adminOnly } = require('../middlewares/authMiddleware');
+const { protect, authorize } = require('../middlewares/authMiddleware');
 const {
   initiatePayment,
   handleCallback,
@@ -16,7 +16,7 @@ router.get('/status/:reference', protect, checkPaymentStatus);
 router.get('/history', protect, getPaymentHistory);
 
 // Admin only routes
-router.post('/refund/:paymentId', protect, adminOnly, requestRefund);
+router.post('/refund/:paymentId', protect, authorize('admin'), requestRefund);
 
 // Public callback routes (no authentication required)
 // GET for Airtel verification/health check

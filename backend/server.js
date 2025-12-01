@@ -19,6 +19,9 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const emailRoutes = require('./routes/emailRoutes');
 const airtelRoutes = require('./routes/airtelRoutes');
 
+// Middleware pour vérifier la connexion MongoDB
+const checkDbConnection = require('./middlewares/checkDbConnection');
+
 const app = express();
 app.set('trust proxy', 1);
 
@@ -86,9 +89,31 @@ cron.schedule('0 0 * * *', () => {
   checkExpiredSubscriptions();
 });
 
-// API routes
+// Health check route (ne pas utiliser le middleware DB ici)
 app.get('/api', (req, res) => res.json({ message: 'Kama API running' }));
 
+// Health check complet avec état de la DB
+app.get('/api/health', (req, res) => {
+  const mongoose = require('mongoose');
+  const dbState = mongoose.connection.readyState;
+  const states = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+  
+  res.json({ 
+    status: dbState === 1 ? 'healthy' : 'unhealthy',
+    database: states[dbState] || 'unknown',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Appliquer le middleware de vérification DB sur toutes les routes API
+app.use('/api', checkDbConnection);
+
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/users', userRoutes);

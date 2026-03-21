@@ -1,0 +1,41 @@
+$kind: http-request
+name: Modifier propriété
+method: PUT
+url: '{{baseUrl}}/api/properties/{{propertyId}}'
+order: 6000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Appartement moderne à Douala - Mis à jour",
+      "price": 175000,
+      "description": "Bel appartement rénové de 3 chambres avec vue panoramique sur la ville"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Property was updated", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data.price).to.equal(175000);
+      });
+
+      pm.test("Title was updated", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data.title).to.include('Mis à jour');
+      });

@@ -1,0 +1,24 @@
+$kind: collection
+name: Kama API
+description: |-
+  Collection complète pour l'API Kama - Plateforme immobilière
+
+  ## Fonctionnalités couvertes:
+  - Authentification (Register, Login, JWT)
+  - Gestion des propriétés immobilières
+  - Gestion des utilisateurs et profils
+  - Système de paiement et abonnements
+  - Health checks et debugging
+
+  ## Variables requises:
+  - baseUrl: URL de base de l'API
+  - authToken: Token JWT utilisateur
+  - adminToken: Token JWT administrateur
+  - propertyId: ID d'une propriété pour les tests
+  - userId: ID d'un utilisateur pour les tests
+variables:
+  baseUrl: https://www.kama-ga.cloud
+  authToken: ""
+  adminToken: ""
+  propertyId: ""
+  userId: ""

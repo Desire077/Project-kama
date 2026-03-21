@@ -1,0 +1,49 @@
+$kind: http-request
+name: Rechercher propriétés
+method: GET
+url: '{{baseUrl}}/api/properties/search'
+order: 8000
+queryParams:
+  - key: city
+    value: Douala
+    description: Ville de recherche
+  - key: type
+    value: apartment
+    description: Type de propriété
+  - key: minPrice
+    value: '50000'
+    description: Prix minimum
+  - key: maxPrice
+    value: '500000'
+    description: Prix maximum
+  - key: bedrooms
+    value: '2'
+    description: Nombre minimum de chambres
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains data array", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.be.an('array');
+      });
+
+      pm.test("Results match search criteria", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data.length > 0) {
+              jsonData.data.forEach(function(property) {
+                  pm.expect(property.price).to.be.at.least(50000);
+                  pm.expect(property.price).to.be.at.most(500000);
+              });
+          }
+      });

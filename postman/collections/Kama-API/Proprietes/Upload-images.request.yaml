@@ -1,0 +1,32 @@
+$kind: http-request
+name: Upload images propriété
+method: POST
+url: '{{baseUrl}}/api/properties/{{propertyId}}/images'
+order: 9000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+body:
+  type: formdata
+  content:
+    - key: images
+      type: file
+      src: ''
+      description: Images de la propriété (max 10)
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK or 201 Created", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Images were uploaded", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+      });

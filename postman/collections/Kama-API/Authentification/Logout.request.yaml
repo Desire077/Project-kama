@@ -1,0 +1,25 @@
+$kind: http-request
+name: Logout
+method: POST
+url: '{{baseUrl}}/api/auth/logout'
+order: 6000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Logout message is present", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('message');
+      });

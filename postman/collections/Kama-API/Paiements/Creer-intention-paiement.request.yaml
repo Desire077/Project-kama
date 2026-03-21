@@ -1,0 +1,44 @@
+$kind: http-request
+name: Créer intention de paiement
+method: POST
+url: '{{baseUrl}}/api/payments/create-payment-intent'
+order: 1000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "amount": 5000,
+      "currency": "XAF",
+      "description": "Abonnement Premium Kama",
+      "paymentMethod": "mobile_money",
+      "provider": "orange_money"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK or 201 Created", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains payment intent", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+      });
+
+      pm.test("Payment intent has ID", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data) {
+              pm.expect(jsonData.data).to.have.property('_id');
+          }
+      });

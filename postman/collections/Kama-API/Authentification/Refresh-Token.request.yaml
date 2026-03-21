@@ -1,0 +1,31 @@
+$kind: http-request
+name: Refresh Token
+method: POST
+url: '{{baseUrl}}/api/auth/refresh-token'
+order: 4000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains new token", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('token');
+          if (jsonData.token) {
+              pm.collectionVariables.set("authToken", jsonData.token);
+              console.log("Token refreshed successfully");
+          }
+      });

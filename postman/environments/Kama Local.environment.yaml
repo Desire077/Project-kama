@@ -1,0 +1,17 @@
+name: Kama Local
+values:
+  - key: baseUrl
+    value: 'https://www.kama-ga.cloud'
+    enabled: true
+  - key: authToken
+    value: ''
+    enabled: true
+  - key: adminToken
+    value: ''
+    enabled: true
+  - key: propertyId
+    value: ''
+    enabled: true
+  - key: userId
+    value: ''
+    enabled: true

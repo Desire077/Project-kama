@@ -1,0 +1,48 @@
+$kind: http-request
+name: Créer alerte
+method: POST
+url: '{{baseUrl}}/api/users/alerts'
+order: 9000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Appartements à Douala",
+      "criteria": {
+        "city": "Douala",
+        "type": "apartment",
+        "minPrice": 50000,
+        "maxPrice": 300000,
+        "minBedrooms": 2
+      },
+      "frequency": "daily",
+      "active": true
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Alert was created", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.have.property('_id');
+      });
+
+      pm.test("Alert has correct name", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data.name).to.equal('Appartements à Douala');
+      });

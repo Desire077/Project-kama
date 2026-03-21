@@ -1,0 +1,32 @@
+$kind: http-request
+name: Vérifier accès
+method: GET
+url: '{{baseUrl}}/api/payments/verify-access'
+order: 3000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains access status", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+      });
+
+      pm.test("Access status has hasAccess field", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data) {
+              pm.expect(jsonData.data).to.have.property('hasAccess');
+          }
+      });

@@ -1,0 +1,33 @@
+$kind: http-request
+name: Propriété par ID
+method: GET
+url: "{{baseUrl}}/api/properties/{{propertyId}}"
+headers:
+  Authorization: Bearer {{authToken}}
+order: 5000
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains property data", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.have.property('_id');
+          pm.expect(jsonData.data).to.have.property('title');
+          pm.expect(jsonData.data).to.have.property('price');
+      });
+
+      pm.test("Property ID matches requested ID", function () {
+          const jsonData = pm.response.json();
+          const requestedId = pm.collectionVariables.get("propertyId");
+          pm.expect(jsonData.data._id).to.equal(requestedId);
+      });
+    language: text/javascript

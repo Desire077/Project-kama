@@ -1,0 +1,4 @@
+$kind: collection
+name: Propriétés
+description: Gestion des propriétés immobilières - CRUD, recherche, avis, images
+order: 2000

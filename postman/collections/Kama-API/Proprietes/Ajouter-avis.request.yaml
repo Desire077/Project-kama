@@ -1,0 +1,41 @@
+$kind: http-request
+name: Ajouter avis
+method: POST
+url: '{{baseUrl}}/api/properties/{{propertyId}}/reviews'
+order: 7000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "rating": 5,
+      "comment": "Excellent appartement, très bien situé et propre. Je recommande vivement!"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Review was created", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+      });
+
+      pm.test("Rating is valid", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data.rating) {
+              pm.expect(jsonData.data.rating).to.be.within(1, 5);
+          }
+      });

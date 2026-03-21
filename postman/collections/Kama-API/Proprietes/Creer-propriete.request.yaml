@@ -1,0 +1,66 @@
+$kind: http-request
+name: Créer propriété
+method: POST
+url: "{{baseUrl}}/api/properties"
+order: 4000
+headers:
+  Authorization: Bearer {{authToken}}
+  Content-Type: application/json
+body:
+  type: json
+  content: |2
+    
+            {
+                "address": {
+                    "country": "Gabon",
+                    "city": "Libreville",
+                    "district": "Owendo",
+                    "street": "",
+                    "postalCode": ""
+                },
+                "title": "La plus belle maison de Owendo",
+                "description": "Belle maison en bordure de route à Owendo",
+                "type": "maison",
+                "price": 3500000,
+                "currency": "XAF",
+                "surface": 180,
+                "rooms": 4,
+                "bathrooms": 2,
+                "kitchens": 1,
+                "livingRooms": 2,
+                "terrace": true,
+                "pool": false,
+                "parking": false,
+                "status": "online"
+            }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains property data", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.have.property('_id');
+          pm.expect(jsonData.data).to.have.property('title');
+      });
+
+      pm.test("Save created property ID", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data._id) {
+              pm.collectionVariables.set("propertyId", jsonData.data._id);
+              console.log("Created property ID: " + jsonData.data._id);
+          }
+      });
+
+      pm.test("Property has correct type", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data.type).to.equal('apartment');
+      });

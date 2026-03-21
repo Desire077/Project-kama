@@ -1,0 +1,24 @@
+$kind: http-request
+name: Stats propriétés
+method: GET
+url: "{{baseUrl}}/api/properties/stats"
+headers:
+  Authorization: Bearer {{authToken}}
+  propertyId: 69bedf72efad5cfaafe847fa
+order: 2000
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains statistics data", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+      });

@@ -1,0 +1,4 @@
+$kind: collection
+name: Santé et Debug
+description: Endpoints de santé et debugging - Health check, API root
+order: 5000

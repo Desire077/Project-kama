@@ -1,0 +1,36 @@
+$kind: http-request
+name: API Root
+method: POST
+url: "{{baseUrl}}/api"
+order: 2000
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("API responds correctly", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.be.an('object');
+      });
+
+      pm.test("API version is present", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.version) {
+              pm.expect(jsonData.version).to.be.a('string');
+              console.log("API Version: " + jsonData.version);
+          }
+      });
+
+      pm.test("API name is Kama", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.name) {
+              pm.expect(jsonData.name.toLowerCase()).to.include('kama');
+          }
+      });
+
+      pm.test("Response time is acceptable", function () {
+          pm.expect(pm.response.responseTime).to.be.below(500);
+      });
+    language: text/javascript

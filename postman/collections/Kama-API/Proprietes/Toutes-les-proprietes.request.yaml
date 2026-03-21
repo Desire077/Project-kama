@@ -1,0 +1,43 @@
+$kind: http-request
+name: Toutes les propriétés
+method: GET
+url: '{{baseUrl}}/api/properties'
+order: 1000
+queryParams:
+  - key: page
+    value: '1'
+    description: Numéro de page
+  - key: limit
+    value: '10'
+    description: Nombre de résultats par page
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains data array", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.be.an('array');
+      });
+
+      pm.test("Response contains pagination info", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('count');
+      });
+
+      pm.test("Save first property ID if available", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data.length > 0) {
+              pm.collectionVariables.set("propertyId", jsonData.data[0]._id);
+              console.log("Property ID saved: " + jsonData.data[0]._id);
+          }
+      });

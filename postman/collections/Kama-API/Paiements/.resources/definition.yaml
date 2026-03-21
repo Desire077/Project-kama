@@ -1,0 +1,4 @@
+$kind: collection
+name: Paiements
+description: Système de paiement - Intentions, abonnements, accès premium
+order: 4000

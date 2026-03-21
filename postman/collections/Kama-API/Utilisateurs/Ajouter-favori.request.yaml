@@ -1,0 +1,25 @@
+$kind: http-request
+name: Ajouter favori
+method: POST
+url: '{{baseUrl}}/api/users/favorites/{{propertyId}}'
+order: 6000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK or 201 Created", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Favorite was added", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('message');
+      });

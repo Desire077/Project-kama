@@ -1,0 +1,39 @@
+$kind: http-request
+name: Modifier profil
+method: PUT
+url: "{{baseUrl}}/api/users/profile"
+order: 2000
+headers:
+  Authorization: Bearer {{authToken}}
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "firstName": "Test",
+      "lastName": "User Updated",
+      "whatsapp": "+237611111111"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Profile was updated", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data.name).to.equal('Test User Updated');
+      });
+
+      pm.test("Phone was updated", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data.phone).to.equal('+237611111111');
+      });
+    language: text/javascript

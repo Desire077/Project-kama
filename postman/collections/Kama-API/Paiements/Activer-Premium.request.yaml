@@ -1,0 +1,41 @@
+$kind: http-request
+name: Activer Premium
+method: POST
+url: '{{baseUrl}}/api/payments/activate-premium'
+order: 4000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "transactionId": "TXN123456789",
+      "paymentProof": "receipt_url_or_reference"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Premium was activated", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('message');
+      });
+
+      pm.test("Response contains updated user data", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data) {
+              pm.expect(jsonData.data).to.have.property('isPremium');
+          }
+      });

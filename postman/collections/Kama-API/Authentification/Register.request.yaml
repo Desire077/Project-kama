@@ -1,0 +1,45 @@
+$kind: http-request
+name: Register
+method: POST
+url: "{{baseUrl}}/api/auth/register"
+order: 1000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "firstName": "test",
+        "lastName": "sellman",
+        "password": "MotDePasse123!",
+        "email": "test@vendre.com",
+        "role": "vendeur",
+        "whatsapp": "+24177221003"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains token", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('token');
+          if (jsonData.token) {
+              pm.collectionVariables.set("authToken", jsonData.token);
+          }
+      });
+
+      pm.test("Response contains user data", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          if (jsonData.data && jsonData.data._id) {
+              pm.collectionVariables.set("userId", jsonData.data._id);
+          }
+      });

@@ -1,0 +1,4 @@
+$kind: collection
+name: Utilisateurs
+description: Gestion des utilisateurs - Profil, favoris, alertes, abonnements
+order: 3000

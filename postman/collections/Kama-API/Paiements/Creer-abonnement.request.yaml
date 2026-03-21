@@ -1,0 +1,44 @@
+$kind: http-request
+name: Créer abonnement
+method: POST
+url: '{{baseUrl}}/api/payments/subscribe'
+order: 2000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "plan": "premium",
+      "duration": "monthly",
+      "paymentMethod": "mobile_money",
+      "provider": "mtn_momo",
+      "phoneNumber": "+237600000000"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK or 201 Created", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains subscription data", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+      });
+
+      pm.test("Subscription has plan info", function () {
+          const jsonData = pm.response.json();
+          if (jsonData.data) {
+              pm.expect(jsonData.data).to.have.property('plan');
+          }
+      });

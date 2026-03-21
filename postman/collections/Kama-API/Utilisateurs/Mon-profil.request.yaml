@@ -1,0 +1,33 @@
+$kind: http-request
+name: Mon profil
+method: GET
+url: '{{baseUrl}}/api/users/profile'
+order: 1000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains user profile", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.have.property('email');
+          pm.expect(jsonData.data).to.have.property('name');
+      });
+
+      pm.test("Profile has required fields", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data).to.have.property('_id');
+          pm.expect(jsonData.data).to.have.property('createdAt');
+      });

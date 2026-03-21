@@ -1,0 +1,4 @@
+$kind: collection
+name: Authentification
+description: Endpoints d'authentification - Register, Login, JWT, Logout
+order: 1000

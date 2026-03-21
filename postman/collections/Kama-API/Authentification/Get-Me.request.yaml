@@ -1,0 +1,34 @@
+$kind: http-request
+name: Get Me
+method: GET
+url: "{{baseUrl}}/api/auth/me"
+order: 3000
+headers:
+  Authorization: Bearer {{authToken}}
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has success property", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('success', true);
+      });
+
+      pm.test("Response contains user data", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('data');
+          pm.expect(jsonData.data).to.have.property('email');
+          pm.expect(jsonData.data).to.have.property('name');
+      });
+
+      pm.test("User ID matches stored userId", function () {
+          const jsonData = pm.response.json();
+          const storedUserId = pm.collectionVariables.get("userId");
+          if (storedUserId) {
+              pm.expect(jsonData.data._id).to.equal(storedUserId);
+          }
+      });
+    language: text/javascript
